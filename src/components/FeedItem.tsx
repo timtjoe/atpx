@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import * as S from '../styles';
 
-export const FeedItem = ({ item, type }: any) => {
+export const FeedItem = ({ item }: any) => {
   const [showModal, setShowModal] = useState(false);
 
   const url = item.uri?.startsWith('at://') 
