@@ -2,7 +2,7 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [main]
+    branches: [main] # Runs every time you push to main
 
 permissions:
   contents: read
@@ -13,8 +13,9 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
         with:
@@ -24,11 +25,12 @@ jobs:
         run: bun install
 
       - name: Build
+        # This is where the Vite magic happens. 
+        # We map GitHub Secrets to Environment Variables for the build.
         run: bun run build
         env:
-          # Inject your env vars during build for the production site
-          VITE_BSKY_USER: ${{ secrets.BSKY_USER }}
-          VITE_BSKY_PASS: ${{ secrets.BSKY_PASS }}
+          VITE_BSKY_USER: ${{ secrets.VITE_BSKY_USER }}
+          VITE_BSKY_PASS: ${{ secrets.VITE_BSKY_PASS }}
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
