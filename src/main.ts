@@ -1,19 +1,50 @@
 import '@/style.css';
-import { authenticate, fetchEntries } from '@/api';
+import { authenticate, fetchPopular, fetchTrending } from '@/api';
 import { render } from '@/ui';
 
 const root = document.querySelector<HTMLElement>('#app')!;
+const tabs = document.querySelectorAll('.nav-tab');
+const loadMoreBtn = document.createElement('button');
+loadMoreBtn.className = 'hn-more-arrow';
+loadMoreBtn.innerHTML = '&#9660;';
 
-async function init() {
-  root.innerHTML = '<div class="status">Loading...</div>';
-  
+let currentTab = 'popular';
+
+async function loadData(append = false) {
   try {
-    await authenticate();
-    const data = await fetchEntries();
-    render(root, data);
+    const data = currentTab === 'popular' ? await fetchPopular(append) : await fetchTrending();
+    render(root, data, append);
+    
+    // Only show Load More for Popular (Trending is a static snapshot)
+    if (currentTab === 'popular') {
+      root.appendChild(loadMoreBtn);
+    } else if (loadMoreBtn.parentElement) {
+      loadMoreBtn.remove();
+    }
   } catch (err) {
-    root.innerHTML = `<div class="status error">Update failed: ${err}</div>`;
+    root.innerHTML = `<div class="hn-status">error: ${err}</div>`;
   }
 }
 
-init();
+tabs.forEach(tab => {
+  tab.addEventListener('click', async (e) => {
+    const target = e.target as HTMLElement;
+    tabs.forEach(t => t.classList.remove('active'));
+    target.classList.add('active');
+    currentTab = target.dataset.tab!;
+    root.innerHTML = '<div class="hn-status">loading...</div>';
+    await loadData();
+  });
+});
+
+loadMoreBtn.addEventListener('click', async () => {
+  loadMoreBtn.disabled = true;
+  await loadData(true);
+  loadMoreBtn.disabled = false;
+});
+
+(async () => {
+  root.innerHTML = '<div class="hn-status">authenticating...</div>';
+  await authenticate();
+  await loadData();
+})();

@@ -1,20 +1,33 @@
 import { AtpAgent } from '@atproto/api';
 
-// Configurable service endpoint
-const SERVICE_URL = 'https://bsky.social'; 
-const agent = new AtpAgent({ service: SERVICE_URL });
+export const agent = new AtpAgent({ service: 'https://bsky.social' });
+let nextCursor: string | undefined = undefined;
 
 export async function authenticate() {
   await agent.login({
-    identifier: import.meta.env.VITE_BSKY_USER || '',
-    password: import.meta.env.VITE_BSKY_PASS || '',
+    identifier: import.meta.env.VITE_BSKY_USER as string,
+    password: import.meta.env.VITE_BSKY_PASS as string,
   });
 }
 
-export async function fetchEntries(limit = 30) {
-  // Using the 'unspecced' generic endpoint for global discovery
+export async function fetchPopular(isLoadMore = false) {
+  if (!isLoadMore) nextCursor = undefined;
   const { data } = await agent.app.bsky.unspecced.getPopularFeedGenerators({
-    limit,
+    limit: 30,
+    cursor: nextCursor,
   });
-  return data.feeds;
+  nextCursor = data.cursor;
+  return data.feeds.map(f => ({ ...f, type: 'popular' }));
+}
+
+export async function fetchTrending() {
+  const { data } = await agent.app.bsky.unspecced.getTrendingTopics();
+  return data.topics.map((t: any) => ({
+    uri: t.link,
+    displayName: t.topic,
+    description: t.description,
+    avatar: t.avatar,
+    likeCount: t.activeItemCount,
+    type: 'trending'
+  }));
 }
