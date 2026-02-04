@@ -2,12 +2,12 @@ import styled from 'styled-components';
 
 export const SiteWrapper = styled.div`
   width: var(--iphone-width);
-  min-width: var(--iphone-width);
-  min-height: 100vh;
+  max-width: 100%; 
+  min-height: calc(100vh - 120px); /* Adjust based on header/footer height */
   padding: 10px;
   display: flex;
   flex-direction: column;
-  /* Ensure no view-transition-name is here */
+  margin: 0 auto; /* Centers the wrapper horizontally */
 `;
 
 export const ItemContainer = styled.li`
