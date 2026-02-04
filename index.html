@@ -1,22 +1,25 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ATProto Explorer</title>
-    <!-- <link rel="stylesheet" href="/src/style.css"> -->
+    <link rel="stylesheet" href="/src/style.css" />
   </head>
   <body>
-    <div id="app">
-      <h1>ATProto Explorer</h1>
-      <div class="controls">
-        <input type="text" id="handle" placeholder="username.bsky.social" value="bsky.app">
-        <button id="fetchBtn">Fetch Profile</button>
+    <header class="site-header">
+      <div class="header-content">
+        <span class="logo-box">A</span>
+        <nav class="nav-links">
+          <span class="site-title"
+            >curated list of trending communities on @atproto.com</span>
+        </nav>
       </div>
-      
-      <div id="status">Checking session...</div>
-      <pre id="jsonOutput">Results will appear here...</pre>
-    </div>
+    </header>
+
+    <main id="app">
+      <div class="status-msg">Checking session...</div>
+    </main>
 
     <script type="module" src="/src/main.ts"></script>
   </body>

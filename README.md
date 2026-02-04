@@ -22,7 +22,7 @@ This project demonstrates how to interface with decentralized social protocols u
 
 1. **Clone the repo:**
 ```bash
-git clone https://github.com/yourusername/atproto-explorer.git
+git clone https://github.com/timtjoe/atprotosy.git
 cd atproto-explorer
 
 ```
