@@ -4,160 +4,37 @@
   --iphone-width: 430px;
   --fb-blue: #0078FF;
   --visited-purple: #551A8B;
-  --title-font-size: 13px;
-  --desc-font-size: 9px;
 }
 
-
-
+/* 1. Global Reset & Typography */
 body {
   background-color: var(--hn-bg);
   font-family: Verdana, Geneva, sans-serif;
   margin: 0;
   display: flex;
   justify-content: center;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-.site-wrapper {
+/* 2. Inherit fonts for UI elements */
+button, 
+input, 
+select, 
+textarea {
+  font-family: inherit;
+}
+
+/* 3. Main Container */
+#app {
   width: 100%;
-  max-width: var(--iphone-width);
-  min-height: 100vh;
-  padding: 10px;
-  display: flex;
-  flex-direction: column;
 }
 
-.site-header {
-  font-size: 13px;
-  font-weight: bold;
-  padding-bottom: 10px;
-  margin-bottom: 10px;
-  margin-top: 15px;
-  border-bottom: 1px solid #000;
-  display: flex;
-  justify-content: space-between;
-}
-
-.site-nav {
-  margin-top: 5px;
-  display: flex;
-  gap: 5px;
-  align-items: center;
-}
-.nav-tab {
-  background: none;
-  border: none;
-  padding: 0;
-  font: inherit;
-  color: inherit;
-  cursor: pointer;
-  text-decoration: none;
-}
-.nav-tab.active {
-  color: #000;
-  text-decoration: underline;
-}
-
-.logo-box {
-  background: #ff6600;
-  color: white;
-  padding: 0 4px;
-  margin-right: 5px;
-}
-
-.hn-list {
-  padding-left: 28px;
-  margin: 0;
-  list-style: decimal outside; 
-}
-
-.hn-item {
-  display: list-item;
-  margin-bottom: 15px;
+/* 4. Common Status Styles */
+.hn-status {
+  font-size: 14px;
   color: var(--hn-gray);
-}
-
-/* Flexbox layout to prevent wrapping */
-.hn-article-box {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 10px;
-}
-
-.hn-text-content {
-  flex: 1; /* Takes all available space on the left */
-}
-
-.hn-title-link {
-  text-decoration: none;
-  color: var(--fb-blue);
-  font-size: var(--title-font-size);
-  font-weight: bold;
-}
-
-.hn-title-link:visited { color: var(--visited-purple); }
-.hn-title-link:hover, .hn-creator-link:hover, .site-footer a:hover { text-decoration: underline; }
-
-.hn-creator-box, .hn-creator-link, .hn-sep, .hn-stats-link {
-  color: var(--hn-gray);
-  font-size: var(--desc-font-size);
-  text-decoration: none;
-}
-
-.hn-description {
-  font-size: var(--desc-font-size);
-  color: var(--hn-gray);
-  line-height: 1.4;
-  margin-top: 2px;
-}
-
-/* Image no longer floats; it is a flex item */
-.hn-feed-img {
-  width: 39px;
-  height: 39px;
-  flex-shrink: 0; /* Prevents image from squishing */
-  border-radius: 35%;
-  object-fit: cover;
-  border: 0.5px solid rgba(0,0,0,0.1);
-  margin-top:4px;
-}
-
-.hn-more-arrow {
-  background: none;
-  border: none;
-  color: var(--hn-gray);
-  font-size: 12px;
-  padding: 20px 0;
-  cursor: pointer;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-}
-
-.site-footer {
-  margin-top: auto;
-  padding: 30px 0 20px;
   text-align: center;
-  font-size: 8pt;
-}
-
-.footer-line {
-  height: 1px;
-  background-color: var(--hn-gray);
-  opacity: 0.3;
-  margin-bottom: 15px;
-}
-
-.badges {
-  margin-top: 10px;
-  display: flex;
-  justify-content: center;
-  gap: 5px;
-}
-
-.site-footer a {
-  color: #000;
-  text-decoration: none;
-  font-weight: bold;
+  padding: 20px;
 }
