@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -7,19 +7,30 @@
     <link rel="stylesheet" href="/src/style.css" />
   </head>
   <body>
-    <header class="site-header">
-      <div class="header-content">
-        <span class="logo-box">A</span>
-        <nav class="nav-links">
-          <span class="site-title"
-            >curated list of trending communities on @atproto.com</span>
-        </nav>
-      </div>
-    </header>
+    <div class="site-wrapper">
+      <header class="site-header">
+        <div class="header-content">
+          <span class="logo-box">A</span>
+          <span class="site-title">Trending on @atproto.com</span>
+        </div>
+      </header>
 
-    <main id="app">
-      <div class="status-msg">Checking session...</div>
-    </main>
+      <main id="app">
+        <div class="status-msg">Checking session...</div>
+      </main>
+
+      <footer class="site-footer">
+        <div class="footer-line"></div>
+        <p>Made with ❤️ by <a href="https://github.com/timtjoe" target="_blank">timtjoe</a> &copy; 2026</p>
+        
+        <div class="badges">
+          <img src="https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white" alt="TypeScript">
+          <img src="https://img.shields.io/badge/Bun-000000?style=flat-square&logo=bun&logoColor=white" alt="Bun">
+          <img src="https://img.shields.io/badge/Vite-646CFF?style=flat-square&logo=vite&logoColor=white" alt="Vite">
+          <img src="https://img.shields.io/badge/ATProto-0085FF?style=flat-square&logo=bluesky&logoColor=white" alt="ATProto">
+        </div>
+      </footer>
+    </div>
 
     <script type="module" src="/src/main.ts"></script>
   </body>
