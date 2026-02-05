@@ -78,13 +78,13 @@ export const SectionTitle = styled.div`
   } */
 `;
 
-export const Grid = styled.div`
+ const Grid = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 15px;
 `;
 
-export const TrendItem = styled.div`
+ const TrendItem = styled.div`
   display: flex;
   align-items: flex-start;
   gap: 10px;
@@ -92,20 +92,20 @@ export const TrendItem = styled.div`
   padding: 5px 0;
 `;
 
-export const Rank = styled.span`
+ const Rank = styled.span`
   font-size: 11px;
   color: #ccc;
   font-weight: bold;
   margin-top: 2px;
 `;
 
-export const TrendInfo = styled.div`
+ const TrendInfo = styled.div`
   display: flex;
   flex-direction: column;
   min-width: 0;
 `;
 
-export const TrendLink = styled.a`
+ const TrendLink = styled.a`
   text-decoration: none;
   color: var(--fb-blue); /* Blue for links */
   font-size: 12px;
@@ -119,7 +119,7 @@ export const TrendLink = styled.a`
   }
 `;
 
-export const Tagline = styled.span`
+const Tagline = styled.span`
   color: var(--hn-gray);
   font-size: 9px;
   margin-top: 2px;
@@ -128,7 +128,7 @@ export const Tagline = styled.span`
   gap: 4px;
 `;
 
-export const Badge = styled.span`
+const Badge = styled.span`
   background: #f0f0f0;
   color: #666;
   padding: 1px 4px;

@@ -3,11 +3,11 @@ import styled from 'styled-components';
 export const SiteWrapper = styled.div`
   width: var(--width-sm);
   max-width: 100%; 
-  min-height: calc(100vh - 120px); /* Adjust based on header/footer height */
+  min-height: calc(100vh - 120px);
   padding: 10px;
   display: flex;
   flex-direction: column;
-  margin: 0 auto; /* Centers the wrapper horizontally */
+  margin: 0 auto; 
 `;
 
 export const ItemContainer = styled.li`

@@ -26,7 +26,7 @@ const RootStyles = createGlobalStyle`
     /* Border radius */
     --radius-xs: 4px;
     --radius-sm: 8px;
-    --radius-md: 12px;
+    --radius-md: 17px;
     --radius-lg: 35%;
     --round: 50%;
     --squicle: 20px/20px;
@@ -45,6 +45,10 @@ const RootStyles = createGlobalStyle`
     --text-blue: #0078FF;
     --text-purple: #551A8B;
     --text-orange: #ff6600;
+    --text-green: #3c963c;
+    --text-gray: var(--bg-gray);
+    --text-dark: #222222;
+    --text-black: #000000;
   }
 `;
 

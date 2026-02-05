@@ -5,7 +5,7 @@ import { Footer } from "@/components/Footer";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { SiteWrapper } from "@/components/styles.comp";
 import RootStyles from "@/components/root.styles";
-import { Appbar } from "@/components/Appbar";
+import { Appbar } from "@/components/appbar";
 
 export default function App() {
   return (
