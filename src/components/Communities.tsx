@@ -111,8 +111,8 @@ export const Communities = () => {
 
 export const CommunitiesWrapper = styled.div`
   width: 100%;
-  /* border-top: 2px solid #ff6600; */
   margin-top: 10px;
+  max-width: var(--width-sm);
 `;
 
 export const SectionHeader = styled.div`
