@@ -161,4 +161,9 @@ export const NavButton = styled.button<{ left?: boolean }>`
   svg {
     color: #333;
   }
+
+  /* Hide on mobile - users can swipe */
+  @media (max-width: 768px) {
+    display: none;
+  }
 `;

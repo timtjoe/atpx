@@ -13,6 +13,23 @@ export const People = () => {
   const [isAtStart, setIsAtStart] = useState(true);
   const [isAtEnd, setIsAtEnd] = useState(false);
 
+  const onScroll = () => {
+    const el = containerRef.current;
+    if (!el) return;
+    setIsAtStart(el.scrollLeft <= 4);
+    setIsAtEnd(el.scrollLeft + el.clientWidth >= el.scrollWidth - 4);
+  };
+
+  const scroll = (dir: "left" | "right") => {
+    const el = containerRef.current;
+    if (!el) return;
+    const amount = el.clientWidth * 0.8;
+    el.scrollBy({
+      left: dir === "left" ? -amount : amount,
+      behavior: "smooth",
+    });
+  };
+
   useEffect(() => {
     let unsub: any = null;
     const init = async () => {
@@ -47,25 +64,6 @@ export const People = () => {
     setTimeout(() => onScroll(), 120);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [people]);
-
-  if (loading || people.length === 0) return null;
-
-  const scroll = (dir: "left" | "right") => {
-    const el = containerRef.current;
-    if (!el) return;
-    const amount = el.clientWidth * 0.8;
-    el.scrollBy({
-      left: dir === "left" ? -amount : amount,
-      behavior: "smooth",
-    });
-  };
-
-  const onScroll = () => {
-    const el = containerRef.current;
-    if (!el) return;
-    setIsAtStart(el.scrollLeft <= 4);
-    setIsAtEnd(el.scrollLeft + el.clientWidth >= el.scrollWidth - 4);
-  };
 
   // loadMore removed — carousel will be populated by service updates
 
@@ -172,6 +170,11 @@ const NavButton = styled.button`
   &:disabled {
     opacity: 0.35;
     cursor: default;
+  }
+
+  /* Hide on mobile - users can swipe */
+  @media (max-width: 768px) {
+    display: none;
   }
 `;
 
