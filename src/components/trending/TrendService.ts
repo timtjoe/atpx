@@ -30,18 +30,55 @@ export const TrendingService = {
 
   listMastodon: async () => {
     try {
-      const response = await fetch("https://mastodon.social/api/v1/trends/tags");
+      const response = await fetch(
+        "https://mastodon.social/api/v1/trends/tags",
+      );
       const tags = await response.json();
-      return tags.slice(0, 10).map((tag: any) => ({
-        topic: tag.name,
-        displayName: tag.name,
-        postCount: parseInt(tag.history?.[0]?.uses || 0),
-        actors: [],
-        reactions: [],
-        status: "trending",
-        active: false,
-        source: "mastodon",
-      }));
+      const top = (tags || []).slice(0, 10);
+
+      // For each top tag try to fetch a few sample accounts to show as avatars.
+      const results = await Promise.all(
+        top.map(async (tag: any) => {
+          try {
+            const acctRes = await fetch(
+              `https://mastodon.social/api/v2/search?q=${encodeURIComponent(tag.name)}&type=accounts&limit=3`,
+            );
+            const acctData = await acctRes.json();
+            const actors = (acctData.accounts || []).map((a: any) => ({
+              id: a.id,
+              handle: a.acct,
+              displayName: a.display_name || a.username,
+              avatar: a.avatar,
+              url: a.url,
+            }));
+
+            return {
+              topic: tag.name,
+              displayName: tag.name,
+              postCount: parseInt(tag.history?.[0]?.uses || 0),
+              actors,
+              reactions: [],
+              reactionCount: 0,
+              status: "trending",
+              active: false,
+              source: "mastodon",
+            };
+          } catch (err) {
+            return {
+              topic: tag.name,
+              displayName: tag.name,
+              postCount: parseInt(tag.history?.[0]?.uses || 0),
+              actors: [],
+              reactions: [],
+              status: "trending",
+              active: false,
+              source: "mastodon",
+            };
+          }
+        }),
+      );
+
+      return results;
     } catch (err) {
       console.error("Mastodon trends error:", err);
       return [];
@@ -63,11 +100,12 @@ export const TrendingService = {
   getBlueskyDetails: async (trend: any) => {
     try {
       // 1. Fetch Posts
-      const { data: searchData } = await Agents.public.app.bsky.feed.searchPosts({
-        q: trend.displayName,
-        sort: "top",
-        limit: 4,
-      });
+      const { data: searchData } =
+        await Agents.public.app.bsky.feed.searchPosts({
+          q: trend.displayName,
+          sort: "top",
+          limit: 4,
+        });
 
       // 2. Fetch Actors (using your existing working Bsky logic)
       const actors = await TrendingService.getActorsBsky(trend);
@@ -87,13 +125,13 @@ export const TrendingService = {
     try {
       // 1. Fetch Posts from Tag Timeline
       const postRes = await fetch(
-        `https://mastodon.social/api/v1/timelines/tag/${encodeURIComponent(trend.topic)}?limit=4`
+        `https://mastodon.social/api/v1/timelines/tag/${encodeURIComponent(trend.topic)}?limit=4`,
       );
       const statuses = await postRes.json();
 
       // 2. Fetch Actors (Accounts) using the search API for that tag
       const actorRes = await fetch(
-        `https://mastodon.social/api/v2/search?q=${encodeURIComponent(trend.topic)}&type=accounts&limit=5`
+        `https://mastodon.social/api/v2/search?q=${encodeURIComponent(trend.topic)}&type=accounts&limit=5`,
       );
       const accountData = await actorRes.json();
 
@@ -110,11 +148,11 @@ export const TrendingService = {
           url: s.url,
         })),
         actors: (accountData.accounts || []).map((a: any) => ({
-          did: a.id, // using did as a generic key
+          id: a.id,
           handle: a.acct,
           displayName: a.display_name || a.username,
           avatar: a.avatar,
-          url: a.url
+          url: a.url,
         })),
       };
     } catch (err) {

@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { TrendLive } from "./TrendLive";
 
 interface Actor {
   id?: string | number;
@@ -16,6 +17,52 @@ interface TrendCardProps {
 export const TrendCard = ({ topic, rank, onClick }: TrendCardProps) => {
   const actors: Actor[] = topic?.actors || [];
   const reactions: string[] = topic?.reactions || [];
+  const [liveCount, setLiveCount] = useState<number | undefined>(
+    topic?.postCount,
+  );
+  const [animatedCount, setAnimatedCount] = useState<number | undefined>(
+    topic?.postCount,
+  );
+
+  useEffect(() => {
+    if (!topic?.topic) return;
+    let mounted = true;
+    const cb = (_topic: string, count?: number) => {
+      if (!mounted) return;
+      if (typeof count === "number") setLiveCount(count);
+    };
+    const unsub = TrendLive.subscribe(topic.topic, cb);
+    return () => {
+      mounted = false;
+      unsub();
+    };
+  }, [topic?.topic]);
+
+  // animate number changes
+  useEffect(() => {
+    if (typeof liveCount !== "number") return;
+    let start = performance.now();
+    const from =
+      typeof animatedCount === "number"
+        ? animatedCount
+        : (topic?.postCount ?? 0);
+    const to = liveCount;
+    if (from === to) {
+      setAnimatedCount(to);
+      return;
+    }
+    const duration = 600;
+    let raf = 0;
+    const step = (ts: number) => {
+      const t = Math.min(1, (ts - start) / duration);
+      const eased = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t; // easeInOut
+      const val = Math.round(from + (to - from) * eased);
+      setAnimatedCount(val);
+      if (t < 1) raf = requestAnimationFrame(step);
+    };
+    raf = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(raf);
+  }, [liveCount]);
 
   return (
     <CardItem onClick={onClick}>
@@ -28,7 +75,13 @@ export const TrendCard = ({ topic, rank, onClick }: TrendCardProps) => {
         <TrendInfo>
           <Meta>
             <Badge $status={topic.status}>{topic.status}</Badge>
-            <PostCount>{topic.postCount?.toLocaleString()} posts</PostCount>
+            <PostCount>
+              {(typeof animatedCount === "number"
+                ? animatedCount
+                : (liveCount ?? topic.postCount)
+              ).toLocaleString()}{" "}
+              posts
+            </PostCount>
           </Meta>
 
           {actors.length > 0 && (
@@ -50,7 +103,8 @@ export const TrendCard = ({ topic, rank, onClick }: TrendCardProps) => {
                     <Reaction key={i}>{r}</Reaction>
                   ))}
                   <ReactionCount>
-                    + {Math.max(0, (topic.reactionCount || 0) - reactions.length)}
+                    +{" "}
+                    {Math.max(0, (topic.reactionCount || 0) - reactions.length)}
                   </ReactionCount>
                 </ReactionGroup>
               )}
@@ -70,7 +124,9 @@ const CardItem = styled.div`
   padding: var(--spacing-sm);
   border-radius: var(--radius-xs);
   transition: background 0.2s;
-  &:hover { background: #fafafa; }
+  &:hover {
+    background: #fafafa;
+  }
 `;
 
 const CardHeader = styled.div`
@@ -125,7 +181,8 @@ const Badge = styled.span<{ $status?: string }>`
   font-size: 7px;
   padding: 1px 3px;
   border-radius: 2px;
-  background: ${(props) => (props.$status === "hot" ? "var(--text-orange)" : "var(--text-blue)")};
+  background: ${(props) =>
+    props.$status === "hot" ? "var(--text-orange)" : "var(--text-blue)"};
   color: white;
   text-transform: uppercase;
   font-weight: 700;
