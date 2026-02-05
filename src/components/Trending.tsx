@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { authenticate, fetchTrending } from "../utils/api";
+import { authenticate, fetchTrending } from "@/utils/api";
 import styled from "styled-components";
 
 export const Trending = () => {
