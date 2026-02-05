@@ -15,7 +15,6 @@ export const ItemContainer = styled.li`
   align-items: flex-start;
   gap: 12px;
   padding: 10px 0;
-  // border-bottom: 1px solid rgba(0,0,0,0.05);
   list-style: none;
 `;
 

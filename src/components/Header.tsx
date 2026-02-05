@@ -1,6 +1,18 @@
 import styled from "styled-components";
 import logo from "/atpx_sm.jpg";
 
+export const Header = () => (
+  <FullWidthHeader>
+    <CenteredContent>
+      <Logo src={logo} alt="Logo" />
+      <Tagline>
+        find out what's happening in the fediverse
+      </Tagline>
+    </CenteredContent>
+  </FullWidthHeader>
+);
+
+// Styled components for the header
 const FullWidthHeader = styled.header`
   width: 100%;
   background-color: #fff;
@@ -35,14 +47,3 @@ const Tagline = styled.p`
   max-width: 80%; /* Keeps the long text from hitting the edges */
   line-height: 1.4;
 `;
-
-export const Header = () => (
-  <FullWidthHeader>
-    <CenteredContent>
-      <Logo src={logo} alt="Logo" />
-      <Tagline>
-        find out what's happening in the fediverse
-      </Tagline>
-    </CenteredContent>
-  </FullWidthHeader>
-);

@@ -2,7 +2,6 @@ import { AtpAgent } from '@atproto/api';
 
 export const agent = new AtpAgent({ service: 'https://bsky.social' });
 let nextCursor: string | undefined = undefined;
-// api.ts
 
 let loginPromise: Promise<void> | null = null;
 
@@ -31,14 +30,6 @@ export async function authenticate() {
 
   return loginPromise;
 }
-
-// export async function authenticate() {
-//   if (agent.hasSession) return;
-//   await agent.login({
-//     identifier: import.meta.env.VITE_BSKY_USER as string,
-//     password: import.meta.env.VITE_BSKY_PASS as string,
-//   });
-// }
 
 export async function fetchPopular(isLoadMore = false) {
   if (!isLoadMore) nextCursor = undefined;
