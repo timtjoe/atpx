@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { Trending } from "@/components/trending";
-import { Communities } from "@/components/Communities";
+import { Communities } from "@/components/community";
 import { Footer } from "@/components/Footer";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import RootStyles from "@/components/root.styles";
