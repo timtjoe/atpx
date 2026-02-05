@@ -1,0 +1,141 @@
+import { Agents } from "@/utils/agents";
+
+export const TrendingService = {
+  list: async () => {
+    const [bskyTrends, mastodonTrends] = await Promise.all([
+      TrendingService.listBsky(),
+      TrendingService.listMastodon(),
+    ]);
+
+    // Combine and sort by post count
+    const allTrends = [...bskyTrends, ...mastodonTrends].sort(
+      (a, b) => (b.postCount || 0) - (a.postCount || 0),
+    );
+
+    return allTrends;
+  },
+
+  listBsky: async () => {
+    try {
+      const { data } = await Agents.public.app.bsky.unspecced.getTrends();
+      return data.trends.map((t: any) => ({
+        ...t,
+        source: "bluesky",
+      }));
+    } catch (err) {
+      console.error("Bluesky trends error:", err);
+      return [];
+    }
+  },
+
+  listMastodon: async () => {
+    try {
+      const response = await fetch("https://mastodon.social/api/v1/trends/tags");
+      const tags = await response.json();
+      return tags.slice(0, 10).map((tag: any) => ({
+        topic: tag.name,
+        displayName: tag.name,
+        postCount: parseInt(tag.history?.[0]?.uses || 0),
+        actors: [],
+        reactions: [],
+        status: "trending",
+        active: false,
+        source: "mastodon",
+      }));
+    } catch (err) {
+      console.error("Mastodon trends error:", err);
+      return [];
+    }
+  },
+
+  get: async (topicName: string) => {
+    const trends = await TrendingService.list();
+    const trend = trends.find((t) => t.topic === topicName);
+    if (!trend) return null;
+
+    // Route to the correct detail fetcher based on source
+    if (trend.source === "mastodon") {
+      return await TrendingService.getMastodonDetails(trend);
+    }
+    return await TrendingService.getBlueskyDetails(trend);
+  },
+
+  getBlueskyDetails: async (trend: any) => {
+    try {
+      // 1. Fetch Posts
+      const { data: searchData } = await Agents.public.app.bsky.feed.searchPosts({
+        q: trend.displayName,
+        sort: "top",
+        limit: 4,
+      });
+
+      // 2. Fetch Actors (using your existing working Bsky logic)
+      const actors = await TrendingService.getActorsBsky(trend);
+
+      return {
+        ...trend,
+        posts: searchData.posts,
+        actors: actors, // This ensures they show up in the Modal list
+      };
+    } catch (err) {
+      console.error("Error fetching Bluesky details:", err);
+      return trend;
+    }
+  },
+
+  getMastodonDetails: async (trend: any) => {
+    try {
+      // 1. Fetch Posts from Tag Timeline
+      const postRes = await fetch(
+        `https://mastodon.social/api/v1/timelines/tag/${encodeURIComponent(trend.topic)}?limit=4`
+      );
+      const statuses = await postRes.json();
+
+      // 2. Fetch Actors (Accounts) using the search API for that tag
+      const actorRes = await fetch(
+        `https://mastodon.social/api/v2/search?q=${encodeURIComponent(trend.topic)}&type=accounts&limit=5`
+      );
+      const accountData = await actorRes.json();
+
+      return {
+        ...trend,
+        posts: statuses.map((s: any) => ({
+          uri: s.id,
+          author: {
+            handle: s.account.acct,
+            displayName: s.account.display_name,
+            avatar: s.account.avatar,
+          },
+          record: { text: s.content.replace(/<[^>]*>/g, "") },
+          url: s.url,
+        })),
+        actors: (accountData.accounts || []).map((a: any) => ({
+          did: a.id, // using did as a generic key
+          handle: a.acct,
+          displayName: a.display_name || a.username,
+          avatar: a.avatar,
+          url: a.url
+        })),
+      };
+    } catch (err) {
+      console.error("Error fetching Mastodon details:", err);
+      return trend;
+    }
+  },
+
+  // Keep your working getActorsBsky logic here
+  getActorsBsky: async (trend: any) => {
+    const { data: searchData } = await Agents.public.app.bsky.feed.searchPosts({
+      q: trend.displayName,
+      sort: "top",
+      limit: 10,
+    });
+    const actorMap = new Map();
+    searchData.posts.forEach((post: any) => {
+      if (post.author && !actorMap.has(post.author.did)) {
+        actorMap.set(post.author.did, post.author);
+      }
+    });
+    return Array.from(actorMap.values()).slice(0, 5);
+  },
+};

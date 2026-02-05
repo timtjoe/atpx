@@ -19,6 +19,9 @@
   },
   "dependencies": {
     "@atproto/api": "^0.18.20",
+    "@headlessui/react": "^2.2.9",
+    "jotai": "^2.17.1",
+    "lucide-react": "^0.563.0",
     "react": "^19.0.0-rc.1",
     "react-dom": "^19.0.0-rc.1",
     "react-router-dom": "^7.13.0",

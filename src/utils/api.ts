@@ -6,15 +6,12 @@ let nextCursor: string | undefined = undefined;
 let loginPromise: Promise<void> | null = null;
 
 export async function authenticate() {
-  // 1. If we already have a session, we're good.
   if (agent.hasSession) return;
 
-  // 2. If a login is ALREADY in progress, return that existing promise.
   if (loginPromise) {
     return loginPromise;
   }
 
-  // 3. Otherwise, start the login and store the promise.
   loginPromise = (async () => {
     try {
       await agent.login({
@@ -22,7 +19,6 @@ export async function authenticate() {
         password: import.meta.env.VITE_BSKY_PASS as string,
       });
     } catch (err) {
-      // Clear the promise if it fails so we can try again
       loginPromise = null;
       throw err;
     }
@@ -58,6 +54,7 @@ export async function fetchPopular(isLoadMore = false) {
 
 export async function fetchTrending() {
   const { data } = await agent.app.bsky.unspecced.getTrendingTopics();
+  console.log("Fetched trending topics:", JSON.stringify(data, null, 2));
   const items = data.topics.map((t: any) => ({
     uri: t.link,
     displayName: t.topic,

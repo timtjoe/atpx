@@ -1,37 +1,37 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 export const SiteWrapper = styled.div`
-  width: var(--width-sm);
-  max-width: 100%; 
+  width: 100%;
+  max-width: 100%;
   min-height: calc(100vh - 120px);
-  padding: 10px;
+  padding: 0;
   display: flex;
   flex-direction: column;
-  margin: 0 auto; 
+  margin: 0 auto;
 `;
 
 export const ItemContainer = styled.li`
   display: flex;
   align-items: flex-start;
-  gap: 12px;
-  padding: 10px 0;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md) 0;
   list-style: none;
 `;
 
 export const Avatar = styled.img`
   width: 48px;
   height: 48px;
-  border-radius: 20px/20px;
+  border-radius: var(--squicle);
   object-fit: cover;
-  border: 1px solid rgba(0,0,0,0.1);
+  border: 1px solid rgba(0, 0, 0, 0.1);
 `;
 
 export const MidSection = styled.div`
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  min-width: 0; 
+  gap: var(--spacing-xs);
+  min-width: 0;
 `;
 
 export const RightSection = styled.div`
@@ -40,34 +40,38 @@ export const RightSection = styled.div`
 `;
 
 export const Title = styled.a`
-  font-size: 14px;
+  font-size: var(--font-sm);
   font-weight: 600;
-  color: var(--fb-blue);
+  color: var(--text-blue);
   text-decoration: none;
-  
   word-break: break-word;
   overflow-wrap: break-word;
 
-  &:visited { color: var(--visited-purple); }
+  &:visited {
+    color: var(--text-purple);
+  }
 `;
 
 export const Meta = styled.div`
-  font-size: 11px;
-  color: var(--hn-gray);
+  font-size: var(--font-xs);
+  color: var(--bg-gray);
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: var(--spacing-xs);
 `;
 
 export const IconButton = styled.button`
   background: none;
   border: none;
-  color: var(--hn-gray);
+  color: var(--bg-gray);
   cursor: pointer;
-  padding: 8px;
+  padding: var(--spacing-sm);
   font-size: 18px;
-  border-radius: 50%;
+  border-radius: var(--round);
   width: 32px;
   height: 32px;
-  &:hover { background: rgba(0,0,0,0.05); }
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.05);
+  }
 `;

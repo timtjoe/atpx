@@ -57,10 +57,6 @@ export const Communities = () => {
                 </PlaceholderBox>
               )}
 
-              <OptionsButton onClick={() => setShowModal(item.uri)}>
-                ⋮
-              </OptionsButton>
-
               <CardContent>
                 <Title href={feedUrl} target="_blank" title={item.displayName}>
                   {item.displayName}
@@ -77,6 +73,10 @@ export const Communities = () => {
                   </ActiveCount>
                 </MetaRow>
               </CardContent>
+
+              <OptionsButton onClick={() => setShowModal(item.uri)}>
+                ⋮
+              </OptionsButton>
 
               {/* Modal Logic */}
               {showModal === item.uri && (
@@ -112,7 +112,7 @@ export const Communities = () => {
 export const CommunitiesWrapper = styled.div`
   width: 100%;
   margin-top: 10px;
-  max-width: var(--width-sm);
+  max-width: 100%;
 `;
 
 export const SectionHeader = styled.div`
@@ -220,6 +220,9 @@ export const OptionsButton = styled.button`
   padding: 4px;
   font-size: 14px;
   margin-right: 4px;
+  width: 24px;
+  height: 24px;
+  border: thin solid blue;
   &:hover {
     color: #000;
   }
