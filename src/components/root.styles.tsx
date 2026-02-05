@@ -39,6 +39,7 @@ const RootStyles = createGlobalStyle`
     /* Background colors */
     --bg-berge: #f6f6ef;
     --bg-gray: #828282;
+    --bg-white: #fff;
 
     /* Text colors */
     --text-blue: #0078FF;

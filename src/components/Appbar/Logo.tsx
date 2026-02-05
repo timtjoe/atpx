@@ -24,5 +24,6 @@ const Box = styled.a`
   flex-direction: column;
   align-items: center;
   max-width: 100%;
+  margin: var(--spacing-sm) 0;
   text-align: center;
 `;

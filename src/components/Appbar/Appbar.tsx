@@ -13,7 +13,7 @@ export const Appbar = () => (
 // Styled components for Header
 const Container = styled.header`
   width: 100%;
-  background-color: #fff;
+  background-color: var(--bg-white);
   display: flex;
   justify-content: center;
 `;
