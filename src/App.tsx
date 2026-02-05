@@ -1,11 +1,11 @@
 import styled from "styled-components";
 import { Trending } from "@/components/trending";
-import { People } from "@/components/People";
 import { Communities } from "@/components/Communities";
 import { Footer } from "@/components/Footer";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import RootStyles from "@/components/root.styles";
 import { Appbar } from "@/components/appbar";
+import { People } from "@/components/people";
 
 export default function App() {
   return (

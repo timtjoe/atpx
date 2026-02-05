@@ -1,6 +1,6 @@
-import { AtpAgent } from '@atproto/api';
+import { AtpAgent } from "@atproto/api";
 
-export const agent = new AtpAgent({ service: 'https://bsky.social' });
+export const agent = new AtpAgent({ service: "https://bsky.social" });
 let nextCursor: string | undefined = undefined;
 
 let loginPromise: Promise<void> | null = null;
@@ -29,26 +29,26 @@ export async function authenticate() {
 
 export async function fetchPopular(isLoadMore = false) {
   if (!isLoadMore) nextCursor = undefined;
-  
+
   const { data } = await agent.app.bsky.unspecced.getPopularFeedGenerators({
     limit: 30,
     cursor: nextCursor,
   });
-  
+
   nextCursor = data.cursor;
 
   return {
     // Ensure we are mapping 'feeds' correctly
-    items: data.feeds.map(f => ({
+    items: data.feeds.map((f) => ({
       uri: f.uri,
       displayName: f.displayName,
       description: f.description,
       avatar: f.avatar,
       creator: f.creator,
       likeCount: f.likeCount,
-      type: 'popular'
+      type: "popular",
     })),
-    cursor: data.cursor
+    cursor: data.cursor,
   };
 }
 
@@ -61,29 +61,20 @@ export async function fetchTrending() {
     description: t.description,
     avatar: t.avatar,
     likeCount: t.activeItemCount,
-    type: 'trending'
+    type: "trending",
   }));
 
   // Return an object structure identical to fetchPopular
   return {
     items: items,
-    cursor: undefined // Trending doesn't support pagination yet
+    cursor: undefined, // Trending doesn't support pagination yet
   };
 }
 
 export async function fetchPeople() {
-  const { data } = await agent.app.bsky.actor.getSuggestions({ limit: 30 });
-  
-  return {
-    items: data.actors.map((actor: any) => ({
-      uri: actor.did, // Use DID as the unique key
-      displayName: actor.displayName || actor.handle,
-      description: actor.description,
-      avatar: actor.avatar,
-      handle: actor.handle,
-      type: 'person', // Important for conditional rendering
-      likeCount: 0 // Placeholder to match your feed structure
-    })),
-    cursor: undefined // Suggestions usually don't paginate via cursor
-  };
+  // People fetching has been moved to a dedicated PeopleService.
+  // Keep this stub for backward compatibility if something still imports it.
+  throw new Error(
+    "fetchPeople removed from utils/api - use PeopleService.list() instead",
+  );
 }
