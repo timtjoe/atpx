@@ -1,71 +1,48 @@
-import styled from 'styled-components';
+import styled from "styled-components";
+import logo from "/atpx_sm.jpg";
 
-const StyledHeader = styled.header`
-  font-size: 13px;
-  font-weight: bold;
-  padding-bottom: 10px;
-  margin-bottom: 10px;
-  margin-top: 15px;
-  border-bottom: 1px solid #000;
+const FullWidthHeader = styled.header`
+  width: 100%;
+  background-color: #fff;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid #eee;
+  padding: 15px 0; /* Vertical padding for breathing room */
 `;
 
-const Nav = styled.nav`
+const CenteredContent = styled.div`
+  width: var(--iphone-width);
+  max-width: 100%;
   display: flex;
-  gap: 8px;
-  align-items: center;
+  flex-direction: column; /* Stack logo and text vertically */
+  align-items: center;    /* Center them horizontally */
+  text-align: center;
 `;
 
-const TabButton = styled.button<{ $active: boolean }>`
-  background: none;
-  border: none;
-  padding: 0;
-  font: inherit;
-  cursor: pointer;
-  color: ${props => (props.$active ? '#000' : 'var(--hn-gray)')};
-  text-decoration: ${props => (props.$active ? 'underline' : 'none')};
-  font-weight: ${props => (props.$active ? 'bold' : 'normal')};
-
-  &:hover {
-    color: #000;
-  }
+const Logo = styled.img`
+  height: 28px;
+  width: auto;
+  display: block;
+  margin-bottom: 6px; /* Space between logo and tagline */
 `;
 
-const LogoBox = styled.span`
-  background: #ff6600;
-  color: white;
-  padding: 0 5px;
-  margin-right: 8px;
-  font-family: monospace;
+const Tagline = styled.p`
+  margin: 0;
+  font-size: 11px;
+  color: var(--hn-gray);
+  font-weight: 400;
+  letter-spacing: -0.2px;
+  max-width: 80%; /* Keeps the long text from hitting the edges */
+  line-height: 1.4;
 `;
 
-interface HeaderProps {
-  currentTab: 'popular' | 'trending';
-  onTabChange: (tab: 'popular' | 'trending') => void;
-}
-
-export const Header = ({ currentTab, onTabChange }: HeaderProps) => (
-  <StyledHeader>
-    <div style={{ display: 'flex', alignItems: 'center' }}>
-      <LogoBox>A</LogoBox>
-      <span>ATProto Explorer</span>
-    </div>
-    <Nav>
-      <TabButton 
-        $active={currentTab === 'popular'} 
-        onClick={() => onTabChange('popular')}
-      >
-        popular
-      </TabButton>
-      <span style={{ color: 'var(--hn-gray)' }}>|</span>
-      <TabButton 
-        $active={currentTab === 'trending'} 
-        onClick={() => onTabChange('trending')}
-      >
-        trending
-      </TabButton>
-    </Nav>
-  </StyledHeader>
+export const Header = () => (
+  <FullWidthHeader>
+    <CenteredContent>
+      <Logo src={logo} alt="Logo" />
+      <Tagline>
+        find out what's happening in the fediverse
+      </Tagline>
+    </CenteredContent>
+  </FullWidthHeader>
 );

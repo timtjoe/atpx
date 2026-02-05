@@ -1,4 +1,4 @@
-import React, { Component, ReactNode } from 'react';
+import { Component, ReactNode } from 'react';
 
 export class ErrorBoundary extends Component<{children: ReactNode}, {hasError: boolean}> {
   state = { hasError: false };

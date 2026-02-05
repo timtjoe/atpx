@@ -1,40 +1,30 @@
+/* Update your CSS to this */
+
 :root {
   --hn-bg: #f6f6ef;
   --hn-gray: #828282;
   --iphone-width: 430px;
   --fb-blue: #0078FF;
   --visited-purple: #551A8B;
+  --orange: #ff6600;
 }
 
-/* 1. Global Reset & Typography */
+*, html {
+  box-sizing: border-box;
+}
+
 body {
   background-color: var(--hn-bg);
   font-family: Verdana, Geneva, sans-serif;
   margin: 0;
-  display: flex;
-  justify-content: center;
+  /* REMOVED: display flex and justify-center */
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-size: 13px;
 }
 
-/* 2. Inherit fonts for UI elements */
-button, 
-input, 
-select, 
-textarea {
-  font-family: inherit;
-}
-
-/* 3. Main Container */
+/* Ensure the wrapper that holds your trending/people/communities is centered */
 #app {
   width: 100%;
-}
-
-/* 4. Common Status Styles */
-.hn-status {
-  font-size: 14px;
-  color: var(--hn-gray);
-  text-align: center;
-  padding: 20px;
 }

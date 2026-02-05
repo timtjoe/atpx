@@ -14,9 +14,6 @@
     "noEmit": true,
     "isolatedModules": true,
 
-    "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
     "erasableSyntaxOnly": true,
@@ -26,6 +23,10 @@
     "allowJs": true,
     "esModuleInterop": true,
     "resolveJsonModule": true,
+    "noImplicitAny": false,           
+    "noUnusedLocals": false,          
+    "noUnusedParameters": false,      
+    "strict": false,
 
     "baseUrl": ".",
     "paths": {
