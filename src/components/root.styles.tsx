@@ -10,11 +10,11 @@ const RootStyles = createGlobalStyle`
     --width-lg: 1208px;
 
     /* Font sizes */
-    --font-xs: 12px;
-    --font-sm: 14px;
-    --font-md: 16px;
-    --font-lg: 18px;
-    --font-xl: 20px;
+    --font-xs: 0.75em;      /* 12px / 16 */
+    --font-sm: 0.875em;     /* 14px / 16 */
+    --font-md: 1.0625em;    /* 17px / 16 */
+    --font-lg: 1.25em;      /* 20px / 16 */
+    --font-xl: 1.75em;      /* 28px / 16 */
 
     /* Spacing */
     --spacing-xs: 4px;
@@ -39,7 +39,12 @@ const RootStyles = createGlobalStyle`
     /* Background colors */
     --bg-berge: #f6f6ef;
     --bg-gray: #828282;
-    --bg-white: #fff;
+    --bg-white: #ffffff;
+    --bg-light: #ffffff99;
+    --bg-subtle: #ffffff66;
+    --bg-glass: #ffffff33;
+    --bg-soft: #FAFAFA;
+    /* --bg-v-soft: #f9f9fb; */
 
     /* Text colors */
     --text-blue: #0078FF;
@@ -47,8 +52,23 @@ const RootStyles = createGlobalStyle`
     --text-orange: #ff6600;
     --text-green: #3c963c;
     --text-gray: var(--bg-gray);
-    --text-dark: #222222;
     --text-black: #000000;
+    --text-white: #e2e5e9;
+    --text-muted: #465a6a;    /* Accessible gray/blue for descriptions */
+  --text-main: #333333;     /* Standard body text */
+  --text-deep: #1e2151;     /* Brand/Navy for headers */
+  --text-dark: #1d2733;     /* UI text for labels */
+  --text-bold: #161525;     /* High-contrast headings */
+  --text-glass: #16161633;  /* Low-opacity text for watermarks/placeholders */
+  --text-black: #000000;    /* Pure black */
+
+    /* Border colors */
+  --border-white: #ffffff;
+  --border-light: #EEE;
+  --border-subtle: #e0e2ec;
+  --border-gray: #dddddd;
+  --border-blue: #4086ce;
+  --border-muted: #66667536;
   }
 `;
 

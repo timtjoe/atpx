@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { TrendLive } from "./TrendLive";
 
@@ -8,13 +8,13 @@ interface Actor {
   avatar?: string;
 }
 
-interface TrendCardProps {
+interface ITrend {
   topic: any;
   rank: number;
   onClick: () => void;
 }
 
-export const TrendCard = ({ topic, rank, onClick }: TrendCardProps) => {
+export const TrendCard = ({ topic, rank, onClick }: ITrend) => {
   const actors: Actor[] = topic?.actors || [];
   const reactions: string[] = topic?.reactions || [];
   const [liveCount, setLiveCount] = useState<number | undefined>(
@@ -65,14 +65,14 @@ export const TrendCard = ({ topic, rank, onClick }: TrendCardProps) => {
   }, [liveCount]);
 
   return (
-    <CardItem onClick={onClick}>
-      <CardHeader>
+    <Card onClick={onClick}>
+      <Header>
         <Rank>{rank}</Rank>
-        <TrendTitle>{topic.displayName}</TrendTitle>
-      </CardHeader>
+        <Title>{topic.displayName}</Title>
+      </Header>
 
-      <CardContent>
-        <TrendInfo>
+      <Content>
+        <Info>
           <Meta>
             <Badge $status={topic.status}>{topic.status}</Badge>
             <PostCount>
@@ -96,7 +96,7 @@ export const TrendCard = ({ topic, rank, onClick }: TrendCardProps) => {
                   />
                 ))}
               </AvatarStack>
-
+              {/* TODO: Test the reaction display */}
               {reactions.length > 0 && (
                 <ReactionGroup>
                   {reactions.slice(0, 3).map((r, i) => (
@@ -108,15 +108,16 @@ export const TrendCard = ({ topic, rank, onClick }: TrendCardProps) => {
                   </ReactionCount>
                 </ReactionGroup>
               )}
+              
             </ActorRow>
           )}
-        </TrendInfo>
-      </CardContent>
-    </CardItem>
+        </Info>
+      </Content>
+    </Card>
   );
 };
 
-const CardItem = styled.div`
+const Card = styled.div`
   display: flex;
   flex-direction: column;
   gap: var(--spacing-xs);
@@ -129,7 +130,7 @@ const CardItem = styled.div`
   }
 `;
 
-const CardHeader = styled.div`
+const Header = styled.div`
   display: flex;
   align-items: center;
   gap: var(--spacing-xs);
@@ -142,22 +143,24 @@ const Rank = styled.span`
   min-width: 12px;
 `;
 
-const TrendTitle = styled.span`
-  font-size: 11px;
+const Title = styled.span`
+  font-size: var(--font-sm);
   font-weight: 600;
   color: var(--text-blue);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  //add fallback for long topic names
+  max-width: 200px;
 `;
 
-const CardContent = styled.div`
+const Content = styled.div`
   display: flex;
   flex-direction: column;
   gap: var(--spacing-xs);
 `;
 
-const TrendInfo = styled.div`
+const Info = styled.div`
   display: flex;
   flex-direction: column;
   min-width: 0;
@@ -165,16 +168,14 @@ const TrendInfo = styled.div`
 `;
 
 const Meta = styled.div`
-  font-size: 8px;
-  color: var(--bg-gray);
   display: flex;
   align-items: center;
   gap: var(--spacing-xs);
 `;
 
 const PostCount = styled.span`
-  color: var(--bg-gray);
-  font-size: 8px;
+  color: var(--text-muted);
+  font-size: var(--font-sm);
 `;
 
 const Badge = styled.span<{ $status?: string }>`

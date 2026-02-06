@@ -6,9 +6,8 @@
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-    'Helvetica Neue', Arial, sans-serif;
-  background-color: var(--bg-berge);
+  font-family: Roboto, 'Segoe UI', 'Helvetica Neue', sans-serif;
+  background-color: var(--bg-white);
   color: var(--text-gray);
   font-size: 14px;
 }
