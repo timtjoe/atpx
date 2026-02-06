@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useAtom } from "jotai";
 import styled, { keyframes, css } from "styled-components";
 import { RotateCw, TrendingUp, AlertCircle } from "lucide-react";
@@ -177,7 +177,7 @@ const RotateIcon = styled.svg<{ $isSpinning: boolean }>`
 const Container = styled.div`
   border: 1px solid var(--border-light);
   padding: var(--spacing-md);
-  border-radius: var(--radius-md);
+  border-radius: calc(var(--radius-md) + 4px);
   background-color: var(--bg-soft);
   min-height: 380px;
 
@@ -185,7 +185,6 @@ const Container = styled.div`
     padding: var(--spacing-md);
     border: unset;
     border-radius: unset;
-    margin-top: var(--spacing-md);
   }
 `;
 
@@ -195,8 +194,7 @@ const Grid = styled.div`
   gap: var(--spacing-md);
   margin-top: var(--spacing-lg);
 
-  @media (max-width: 768px){
-  }
+
 `;
 
 const ErrorState = styled.div`
@@ -230,6 +228,12 @@ const Title = styled.h2`
   font-weight: 700;
   font-size: var(--font-lg);
   color: var(--text-dark);
+  text-transform: capitalize;
+
+  @media (max-width: 768px) {
+    font-size: var(--font-md);
+  }
+
 `;
 
 const Icon = styled.svg` color: var(--text-muted); `;
@@ -237,6 +241,10 @@ const Icon = styled.svg` color: var(--text-muted); `;
 const Tagline = styled.span`
   font-size: var(--font-md);
   color: var(--text-muted);
+
+  @media (max-width: 768px) {
+    display: none !important;
+  }
 `;
 
 export default Trending;

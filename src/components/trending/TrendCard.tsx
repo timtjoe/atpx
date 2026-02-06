@@ -137,8 +137,8 @@ const Header = styled.div`
 `;
 
 const Rank = styled.span`
-  font-size: 10px;
-  color: var(--bg-gray);
+  font-size: var(--font-xs);
+  color: var(--text-muted);
   font-weight: 700;
   min-width: 12px;
 `;
@@ -146,7 +146,7 @@ const Rank = styled.span`
 const Title = styled.span`
   font-size: var(--font-sm);
   font-weight: 600;
-  color: var(--text-blue);
+  color: var(--text-bold);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

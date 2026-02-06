@@ -5,23 +5,24 @@ import { motion } from "framer-motion";
 import { PeopleService, Person } from "./PeopleService";
 import PeopleLive from "./PeopleLive";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { IconButton } from "@/components/IconButton";
 
 export const People = () => {
   const [people, setPeople] = useState<Person[]>([]);
   const [loading, setLoading] = useState(true);
-  const containerRef = useRef<HTMLDivElement | null>(null);
-  const [isAtStart, setIsAtStart] = useState(true);
-  const [isAtEnd, setIsAtEnd] = useState(false);
+  const container = useRef<HTMLDivElement | null>(null);
+  const [isStart, setStart] = useState(true);
+  const [isEnd, setEnd] = useState(false);
 
   const onScroll = () => {
-    const el = containerRef.current;
+    const el = container.current;
     if (!el) return;
-    setIsAtStart(el.scrollLeft <= 4);
-    setIsAtEnd(el.scrollLeft + el.clientWidth >= el.scrollWidth - 4);
+    setStart(el.scrollLeft <= 4);
+    setEnd(el.scrollLeft + el.clientWidth >= el.scrollWidth - 4);
   };
 
   const scroll = (dir: "left" | "right") => {
-    const el = containerRef.current;
+    const el = container.current;
     if (!el) return;
     const amount = el.clientWidth * 0.8;
     el.scrollBy({
@@ -37,7 +38,7 @@ export const People = () => {
         setLoading(true);
         const { items } = await PeopleService.list(30);
         // apply removal filter from localStorage
-        const removed = await import("../../utils/peopleDb")
+        const removed = await import("@/utils/peopleDb")
           .then((m) => m.getRemovedUris())
           .catch(() => [] as string[]);
         const filtered = (items || []).filter((i) => !removed.includes(i.uri));
@@ -68,20 +69,32 @@ export const People = () => {
   // loadMore removed — carousel will be populated by service updates
 
   return (
-    <PeopleSection>
-      <SectionTitle>popular creators</SectionTitle>
-
-      <CarouselWrap>
-        <NavButton
-          disabled={isAtStart}
-          onClick={() => scroll("left")}
-          aria-label="left"
-        >
-          <ChevronLeft size={20} />
-        </NavButton>
-        <Carousel ref={containerRef} onScroll={onScroll}>
+    <Container>
+      <Header>
+        <Title>popular creators</Title>
+        <Actions>
+          <IconButton
+            disabled={isStart}
+            onClick={() => scroll("left")}
+            aria-label="left"
+            variant="trans"
+          >
+            <ChevronLeft size={16} />
+          </IconButton>
+          <IconButton
+            onClick={() => scroll("right")}
+            disabled={isEnd}
+            aria-label="right"
+            variant="trans"
+          >
+            <ChevronRight size={16} />
+          </IconButton>
+        </Actions>
+      </Header>
+      <Content>
+        <Carousel ref={container} onScroll={onScroll}>
           {people.map((p, idx) => (
-            <ItemWrap key={p.uri}>
+            <Item key={p.uri}>
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -92,7 +105,7 @@ export const People = () => {
                   position={idx + 1}
                   onRemove={(uri) => {
                     // persist removal
-                    import("../../utils/peopleDb")
+                    import("@/utils/peopleDb")
                       .then((m) => m.addRemovedUri(uri))
                       .catch(() => {});
                     // update service cache and ui
@@ -101,108 +114,82 @@ export const People = () => {
                   }}
                 />
               </motion.div>
-            </ItemWrap>
+            </Item>
           ))}
         </Carousel>
-        <NavButton
-          onClick={() => scroll("right")}
-          disabled={isAtEnd}
-          aria-label="right"
-        >
-          <ChevronRight size={20} />
-        </NavButton>
-      </CarouselWrap>
+      </Content>
 
       {/* live merger: update counts/info without reordering */}
       <PeopleLive people={people} setPeople={setPeople} />
-    </PeopleSection>
+    </Container>
   );
 };
 
-export const PeopleSection = styled.section`
-  padding: 15px;
-  background-color: var(--hn-bg);
-  border-bottom: 1px solid #ddd;
+const Container = styled.section`
+  padding: var(--spacing-md) 0;
+  margin-top: var(--spacing-md);
+  background-color: var(--bg-white);
   position: relative;
 `;
 
-export const SectionTitle = styled.h2`
-  font-size: 13px;
-  font-weight: bold;
-  margin: 0 0 12px 0;
-  color: #ff6600;
-  text-transform: lowercase;
+const Header = styled.header`
+  display: flex;
+  gap: var(--spacing-xs);
+  margin-bottom: var(--spacing-md);
+  align-items: center;
+
+  & > section {
+    margin-left: auto;
+  }
+
+  @media (max-width: 768px) {
+    padding: 0 var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+  }
 `;
 
-export const Grid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
-`;
-
-const CarouselWrap = styled.div`
+const Actions = styled.section`
   display: flex;
   align-items: center;
+  gap: var(--spacing-sm);
+
+  @media (max-width: 768px) {
+    display: none;
+  }
+`;
+
+const Title = styled.h2`
+  margin: 0;
+  font-size: var(--font-lg);
+  font-weight: 700;
+  color: var(--text-dark);
+  text-transform: capitalize;
+
+  @media (max-width: 768px) {
+    font-size: var(--font-md);
+  }
+`;
+
+const Content = styled.div`
+  display: flex;
+  align-items: center;
+  margin-top: var(--spacing-md);
 `;
 
 const Carousel = styled.div`
   display: flex;
   overflow-x: auto;
   scroll-behavior: smooth;
-  padding: 6px;
-  gap: 10px;
+  padding: 0 var(--spacing-sm);
+  gap: var(--spacing-xs);
   &::-webkit-scrollbar {
     display: none;
   }
 `;
 
-const NavButton = styled.button`
-  background: none;
-  border: none;
-  font-size: 20px;
-  cursor: pointer;
-  padding: 6px 8px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--hn-gray);
-
-  &:disabled {
-    opacity: 0.35;
-    cursor: default;
-  }
-
-  /* Hide on mobile - users can swipe */
-  @media (max-width: 768px) {
-    display: none;
-  }
-`;
-
-const ItemWrap = styled.div`
+const Item = styled.div`
   margin-right: 8px;
   flex: 0 0 auto;
-`;
-
-/* FloatingLoad removed */
-
-export const PersonCard = styled.a`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-decoration: none;
-  color: inherit;
-  text-align: center;
-  min-width: 0;
-  padding: 10px 4px; /* Internal spacing for the background */
-  background: #fff; /* White background for the card */
-  border-radius: 8px;
-  border: 1px solid rgba(0, 0, 0, 0.05);
-  transition: transform 0.1s ease-in-out;
-
-  &:hover {
-    transform: translateY(-2px);
-    border-color: #ddd;
-  }
 `;
 
 export const Avatar = styled.img`
