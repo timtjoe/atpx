@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { CommunityService } from "./CommunityService";
 import { CommunityCard } from "./CommunityCard";
 import { CommunityLive } from "./CommunityLive";
-import * as communityDb from "../../utils/communityDb";
+import * as communityDb from "@/utils/communityDb";
 
 export const Community = () => {
   const [communities, setCommunities] = useState<any[]>([]);
@@ -58,7 +58,7 @@ export const Community = () => {
       <Content>
         {!isStart && (
           <NavButton left onClick={() => scroll("left")}>
-            <ChevronLeft size={18} />
+            <ChevronLeft size={16} />
           </NavButton>
         )}
 
@@ -81,7 +81,7 @@ export const Community = () => {
 
         {!isEnd && (
           <NavButton onClick={() => scroll("right")}>
-            <ChevronRight size={18} />
+            <ChevronRight size={16} />
           </NavButton>
         )}
       </Content>

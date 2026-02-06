@@ -70,7 +70,7 @@ export const People = () => {
     <Container>
       <Head>
         <Title>popular creators</Title>
-        <HeadActions>
+        <HeadActions style={{ marginLeft: "auto" }}>
           <IconButton
             disabled={isStart}
             onClick={() => scroll("left")}

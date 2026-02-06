@@ -60,7 +60,7 @@ export const Trending = () => {
     <Container>
       <TrendHead>
         <span>
-          <Title>Trending</Title>
+          <Title>Trending Topics</Title>
           <Icon as={TrendingUp} size={16} />
           <IconButton
             style={{ marginLeft: "auto" }}
@@ -218,6 +218,7 @@ const TrendHead = styled(Header)`
   align-items: unset;
   & > span {
     display: flex;
+    gap: var(--spacing-md);
   }
 `;
 
