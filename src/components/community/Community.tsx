@@ -6,6 +6,8 @@ import { CommunityService } from "./CommunityService";
 import { CommunityCard } from "./CommunityCard";
 import { CommunityLive } from "./CommunityLive";
 import * as communityDb from "@/utils/communityDb";
+import { HeadActions, Header, Title } from "@components/Headers";
+import { IconButton } from "../IconButton";
 
 export const Community = () => {
   const [communities, setCommunities] = useState<any[]>([]);
@@ -53,15 +55,34 @@ export const Community = () => {
 
   return (
     <Container>
-      <Header>popular communities</Header>
+      <Header>
+        <Title>popular creators</Title>
+        <HeadActions style={{ marginLeft: "auto" }}>
+          {!isStart && (
+            <IconButton
+              left
+              disabled={isStart}
+              onClick={() => scroll("left")}
+              aria-label="left"
+              variant="trans"
+            >
+              <ChevronLeft size={16} />
+            </IconButton>
+          )}
+          {!isEnd && (
+            <IconButton
+              onClick={() => scroll("right")}
+              disabled={isEnd}
+              aria-label="right"
+              variant="trans"
+            >
+              <ChevronRight size={16} />
+            </IconButton>
+          )}
+        </HeadActions>
+      </Header>
 
       <Content>
-        {!isStart && (
-          <NavButton left onClick={() => scroll("left")}>
-            <ChevronLeft size={16} />
-          </NavButton>
-        )}
-
         <Carousel ref={carousel} onScroll={handleScroll}>
           {communities.map((community, idx) => (
             <motion.div
@@ -78,12 +99,6 @@ export const Community = () => {
             </motion.div>
           ))}
         </Carousel>
-
-        {!isEnd && (
-          <NavButton onClick={() => scroll("right")}>
-            <ChevronRight size={16} />
-          </NavButton>
-        )}
       </Content>
 
       <CommunityLive
@@ -98,14 +113,6 @@ const Container = styled.div`
   width: 100%;
   margin-top: 10px;
   padding: 0 10px;
-`;
-
-const Header = styled.div`
-  padding: 10px 0;
-  font-weight: bold;
-  font-size: 13px;
-  color: #ff6600;
-  text-transform: lowercase;
 `;
 
 const Content = styled.div`

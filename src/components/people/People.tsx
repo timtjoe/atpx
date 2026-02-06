@@ -70,23 +70,28 @@ export const People = () => {
     <Container>
       <Head>
         <Title>popular creators</Title>
-        <HeadActions style={{ marginLeft: "auto" }}>
-          <IconButton
-            disabled={isStart}
-            onClick={() => scroll("left")}
-            aria-label="left"
-            variant="trans"
-          >
-            <ChevronLeft size={16} />
-          </IconButton>
-          <IconButton
-            onClick={() => scroll("right")}
-            disabled={isEnd}
-            aria-label="right"
-            variant="trans"
-          >
-            <ChevronRight size={16} />
-          </IconButton>
+       <HeadActions style={{ marginLeft: "auto" }}>
+          {!isStart && (
+            <IconButton
+              left
+              disabled={isStart}
+              onClick={() => scroll("left")}
+              aria-label="left"
+              variant="trans"
+            >
+              <ChevronLeft size={16} />
+            </IconButton>
+          )}
+          {!isEnd && (
+            <IconButton
+              onClick={() => scroll("right")}
+              disabled={isEnd}
+              aria-label="right"
+              variant="trans"
+            >
+              <ChevronRight size={16} />
+            </IconButton>
+          )}
         </HeadActions>
       </Head>
       <Content>
