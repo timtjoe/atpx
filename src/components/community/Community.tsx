@@ -7,11 +7,11 @@ import { CommunityCard } from "./CommunityCard";
 import { CommunityLive } from "./CommunityLive";
 import * as communityDb from "../../utils/communityDb";
 
-export const Communities = () => {
+export const Community = () => {
   const [communities, setCommunities] = useState<any[]>([]);
-  const [isAtStart, setIsAtStart] = useState(true);
-  const [isAtEnd, setIsAtEnd] = useState(false);
-  const carouselRef = useRef<HTMLDivElement>(null);
+  const [isStart, setStart] = useState(true);
+  const [isEnd, setEnd] = useState(false);
+  const carousel = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const loadAndSubscribe = async () => {
@@ -30,16 +30,16 @@ export const Communities = () => {
   }, []);
 
   const handleScroll = () => {
-    if (!carouselRef.current) return;
-    const { scrollLeft, scrollWidth, clientWidth } = carouselRef.current;
-    setIsAtStart(scrollLeft === 0);
-    setIsAtEnd(Math.abs(scrollWidth - clientWidth - scrollLeft) < 5);
+    if (!carousel.current) return;
+    const { scrollLeft, scrollWidth, clientWidth } = carousel.current;
+    setStart(scrollLeft === 0);
+    setEnd(Math.abs(scrollWidth - clientWidth - scrollLeft) < 5);
   };
 
   const scroll = (direction: "left" | "right") => {
-    if (!carouselRef.current) return;
+    if (!carousel.current) return;
     const scrollAmount = 300;
-    carouselRef.current.scrollBy({
+    carousel.current.scrollBy({
       left: direction === "left" ? -scrollAmount : scrollAmount,
       behavior: "smooth",
     });
@@ -52,17 +52,17 @@ export const Communities = () => {
   };
 
   return (
-    <CommunitiesWrapper>
-      <SectionHeader>popular communities</SectionHeader>
+    <Container>
+      <Header>popular communities</Header>
 
-      <CarouselContainer>
-        {!isAtStart && (
+      <Content>
+        {!isStart && (
           <NavButton left onClick={() => scroll("left")}>
             <ChevronLeft size={18} />
           </NavButton>
         )}
 
-        <Carousel ref={carouselRef} onScroll={handleScroll}>
+        <Carousel ref={carousel} onScroll={handleScroll}>
           {communities.map((community, idx) => (
             <motion.div
               key={community.uri}
@@ -79,28 +79,28 @@ export const Communities = () => {
           ))}
         </Carousel>
 
-        {!isAtEnd && (
+        {!isEnd && (
           <NavButton onClick={() => scroll("right")}>
             <ChevronRight size={18} />
           </NavButton>
         )}
-      </CarouselContainer>
+      </Content>
 
       <CommunityLive
         communities={communities}
         setCommunities={setCommunities}
       />
-    </CommunitiesWrapper>
+    </Container>
   );
 };
 
-export const CommunitiesWrapper = styled.div`
+const Container = styled.div`
   width: 100%;
   margin-top: 10px;
   padding: 0 10px;
 `;
 
-export const SectionHeader = styled.div`
+const Header = styled.div`
   padding: 10px 0;
   font-weight: bold;
   font-size: 13px;
@@ -108,14 +108,14 @@ export const SectionHeader = styled.div`
   text-transform: lowercase;
 `;
 
-export const CarouselContainer = styled.div`
+const Content = styled.div`
   position: relative;
   display: flex;
   align-items: center;
   gap: 8px;
 `;
 
-export const Carousel = styled.div`
+const Carousel = styled.div`
   display: flex;
   gap: 10px;
   overflow-x: auto;
@@ -137,7 +137,7 @@ export const Carousel = styled.div`
   }
 `;
 
-export const NavButton = styled.button<{ left?: boolean }>`
+const NavButton = styled.button<{ left?: boolean }>`
   background: #fff;
   border: 1px solid #ccc;
   border-radius: 50%;
@@ -167,3 +167,5 @@ export const NavButton = styled.button<{ left?: boolean }>`
     display: none;
   }
 `;
+
+export default Community;

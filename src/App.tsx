@@ -1,12 +1,11 @@
 import styled from "styled-components";
-import { Trending } from "@/components/trending";
-import { Communities } from "@/components/community";
-import { Posts } from "@/components/post";
-import { Footer } from "@/components/Footer";
-import { ErrorBoundary } from "@/components/ErrorBoundary";
-import RootStyles from "@/components/root.styles";
-import { Appbar } from "@/components/appbar";
-import { People } from "@/components/people";
+import { Trending } from "@components/trending";
+import { Community as Communities } from "@components/community";
+import { Posts } from "@components/post";
+import { Footer } from "@components/Footer";
+import RootStyles from "@components/root.styles";
+import { Appbar } from "@components/appbar";
+import { People } from "@components/people";
 
 export default function App() {
   return (

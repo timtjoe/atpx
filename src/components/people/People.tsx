@@ -1,11 +1,12 @@
 import { useState, useEffect, useRef } from "react";
-import styled, { keyframes } from "styled-components";
+import styled from "styled-components";
 import PeopleCard from "./PeopleCard";
 import { motion } from "framer-motion";
 import { PeopleService, Person } from "./PeopleService";
 import PeopleLive from "./PeopleLive";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { IconButton } from "@/components/IconButton";
+import { IconButton } from "@components/IconButton";
+import { HeadActions, Header , Title} from "@components/Headers";
 
 export const People = () => {
   const [people, setPeople] = useState<Person[]>([]);
@@ -63,16 +64,13 @@ export const People = () => {
   // update scroll state when people list changes
   useEffect(() => {
     setTimeout(() => onScroll(), 120);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [people]);
-
-  // loadMore removed — carousel will be populated by service updates
 
   return (
     <Container>
-      <Header>
+      <Head>
         <Title>popular creators</Title>
-        <Actions>
+        <HeadActions>
           <IconButton
             disabled={isStart}
             onClick={() => scroll("left")}
@@ -89,8 +87,8 @@ export const People = () => {
           >
             <ChevronRight size={16} />
           </IconButton>
-        </Actions>
-      </Header>
+        </HeadActions>
+      </Head>
       <Content>
         <Carousel ref={container} onScroll={onScroll}>
           {people.map((p, idx) => (
@@ -132,44 +130,6 @@ const Container = styled.section`
   position: relative;
 `;
 
-const Header = styled.header`
-  display: flex;
-  gap: var(--spacing-xs);
-  margin-bottom: var(--spacing-md);
-  align-items: center;
-
-  & > section {
-    margin-left: auto;
-  }
-
-  @media (max-width: 768px) {
-    padding: 0 var(--spacing-md);
-    margin-bottom: var(--spacing-lg);
-  }
-`;
-
-const Actions = styled.section`
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-sm);
-
-  @media (max-width: 768px) {
-    display: none;
-  }
-`;
-
-const Title = styled.h2`
-  margin: 0;
-  font-size: var(--font-lg);
-  font-weight: 700;
-  color: var(--text-dark);
-  text-transform: capitalize;
-
-  @media (max-width: 768px) {
-    font-size: var(--font-md);
-  }
-`;
-
 const Content = styled.div`
   display: flex;
   align-items: center;
@@ -191,6 +151,10 @@ const Item = styled.div`
   margin-right: 8px;
   flex: 0 0 auto;
 `;
+
+const Head = styled(Header)`
+  padding-left: var(--spacing-md);
+`
 
 export const Avatar = styled.img`
   width: 44px; /* Slightly adjusted to fit padding */

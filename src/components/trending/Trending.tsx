@@ -6,7 +6,9 @@ import { trendingAtom, fetchTrendsAction } from "./TrendStore";
 import { TrendingService } from "./TrendService";
 import { TrendCard } from "./TrendCard";
 import { TrendDialog } from "./TrendDialog";
-import { IconButton } from "../IconButton";
+import { IconButton } from "@components/IconButton";
+import { Title, Header, Tagline } from "@components/Headers";
+import { Icon } from "@components/index";
 
 export const Trending = () => {
   const [topics] = useAtom(trendingAtom);
@@ -56,7 +58,7 @@ export const Trending = () => {
 
   return (
     <Container>
-      <Header>
+      <TrendHead>
         <span>
           <Title>Trending</Title>
           <Icon as={TrendingUp} size={16} />
@@ -71,7 +73,7 @@ export const Trending = () => {
           </IconButton>
         </span>
         <Tagline>What people are discussing in the fediverse.</Tagline>
-      </Header>
+      </TrendHead>
 
       {error ? (
         <ErrorState>
@@ -82,15 +84,19 @@ export const Trending = () => {
       ) : (
         <Grid>
           {isRefreshing && topics.length === 0
-            ? Array.from({ length: 12 }).map((_, i) => <SkeletonTrend key={i} />)
-            : topics.slice(0, 12).map((topic, i) => (
-                <TrendCard
-                  key={topic.topic}
-                  topic={topic}
-                  rank={i + 1}
-                  onClick={() => openDetail(topic.topic)}
-                />
-              ))}
+            ? Array.from({ length: 12 }).map((_, i) => (
+                <SkeletonTrend key={i} />
+              ))
+            : topics
+                .slice(0, 12)
+                .map((topic, i) => (
+                  <TrendCard
+                    key={topic.topic}
+                    topic={topic}
+                    rank={i + 1}
+                    onClick={() => openDetail(topic.topic)}
+                  />
+                ))}
         </Grid>
       )}
 
@@ -106,7 +112,6 @@ export const Trending = () => {
 };
 
 /* --- ANIMATIONS --- */
-
 const spin = keyframes`
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
@@ -118,7 +123,7 @@ const shimmer = keyframes`
   100% { opacity: 0.5; }
 `;
 
-// 
+//
 const SkeletonTrend = () => (
   <SkeletonCard>
     <div className="skeleton-header">
@@ -145,16 +150,36 @@ const SkeletonCard = styled.div`
     display: flex;
     align-items: center;
     gap: var(--spacing-xs);
-    .skeleton-rank { width: 12px; height: 10px; background: var(--border-subtle); border-radius: 2px; }
-    .skeleton-title { width: 60%; height: 12px; background: var(--border-subtle); border-radius: 2px; }
+    .skeleton-rank {
+      width: 12px;
+      height: 10px;
+      background: var(--border-subtle);
+      border-radius: 2px;
+    }
+    .skeleton-title {
+      width: 60%;
+      height: 12px;
+      background: var(--border-subtle);
+      border-radius: 2px;
+    }
   }
 
   .skeleton-meta {
     display: flex;
     align-items: center;
     gap: var(--spacing-xs);
-    .skeleton-badge { width: 20px; height: 10px; background: var(--border-light); border-radius: 2px; }
-    .skeleton-text { width: 30px; height: 8px; background: var(--border-light); border-radius: 2px; }
+    .skeleton-badge {
+      width: 20px;
+      height: 10px;
+      background: var(--border-light);
+      border-radius: 2px;
+    }
+    .skeleton-text {
+      width: 30px;
+      height: 8px;
+      background: var(--border-light);
+      border-radius: 2px;
+    }
   }
 
   .skeleton-actors {
@@ -188,13 +213,19 @@ const Container = styled.div`
   }
 `;
 
+const TrendHead = styled(Header)`
+  flex-direction: column;
+  align-items: unset;
+  & > span {
+    display: flex;
+  }
+`;
+
 const Grid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
   gap: var(--spacing-md);
   margin-top: var(--spacing-lg);
-
-
 `;
 
 const ErrorState = styled.div`
@@ -212,38 +243,6 @@ const ErrorState = styled.div`
     color: var(--border-blue);
     cursor: pointer;
     font-weight: 600;
-  }
-`;
-
-const Header = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-xs);
-  margin-bottom: var(--spacing-md);
-  & > span { display: flex; align-items: center; gap: var(--spacing-sm); }
-`;
-
-const Title = styled.h2`
-  margin: 0;
-  font-weight: 700;
-  font-size: var(--font-lg);
-  color: var(--text-dark);
-  text-transform: capitalize;
-
-  @media (max-width: 768px) {
-    font-size: var(--font-md);
-  }
-
-`;
-
-const Icon = styled.svg` color: var(--text-muted); `;
-
-const Tagline = styled.span`
-  font-size: var(--font-md);
-  color: var(--text-muted);
-
-  @media (max-width: 768px) {
-    display: none !important;
   }
 `;
 
