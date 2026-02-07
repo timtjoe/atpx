@@ -6,7 +6,7 @@ import { PeopleService, Person } from "./PeopleService";
 import PeopleLive from "./PeopleLive";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { IconButton } from "@components/IconButton";
-import { HeadActions, Header , Title} from "@components/Headers";
+import { Header, Title } from "@components/Headers";
 
 export const People = () => {
   const [people, setPeople] = useState<Person[]>([]);
@@ -70,31 +70,19 @@ export const People = () => {
     <Container>
       <PeoHead>
         <Title>popular creators</Title>
-       <HeadActions style={{ marginLeft: "auto" }}>
-          {!isStart && (
-            <IconButton
-              left
-              disabled={isStart}
-              onClick={() => scroll("left")}
-              aria-label="left"
-              variant="trans"
-            >
-              <ChevronLeft size={16} />
-            </IconButton>
-          )}
-          {!isEnd && (
-            <IconButton
-              onClick={() => scroll("right")}
-              disabled={isEnd}
-              aria-label="right"
-              variant="trans"
-            >
-              <ChevronRight size={16} />
-            </IconButton>
-          )}
-        </HeadActions>
       </PeoHead>
       <Content>
+        {!isStart && (
+          <IconButton
+            left
+            disabled={isStart}
+            onClick={() => scroll("left")}
+            aria-label="left"
+            variant="trans"
+          >
+            <ChevronLeft size={16} />
+          </IconButton>
+        )}
         <Carousel ref={container} onScroll={onScroll}>
           {people.map((p, idx) => (
             <Item key={p.uri}>
@@ -120,6 +108,16 @@ export const People = () => {
             </Item>
           ))}
         </Carousel>
+        {!isEnd && (
+          <IconButton
+            onClick={() => scroll("right")}
+            disabled={isEnd}
+            aria-label="right"
+            variant="trans"
+          >
+            <ChevronRight size={16} />
+          </IconButton>
+        )}
       </Content>
 
       {/* live merger: update counts/info without reordering */}
@@ -129,11 +127,11 @@ export const People = () => {
 };
 
 const Container = styled.section`
-  padding:0;
+  padding: 0;
   margin-top: var(--spacing-md);
   background-color: var(--bg-white);
   position: relative;
-  border: solid red;
+  /* border: solid red; */
 `;
 
 const Content = styled.div`
@@ -156,57 +154,9 @@ const Carousel = styled.div`
 const Item = styled.div`
   margin-right: 8px;
   flex: 0 0 auto;
+  border: solid red;
 `;
 
 const PeoHead = styled(Header)`
   padding-left: var(--spacing-md);
-`
-
-export const Avatar = styled.img`
-  width: 44px; /* Slightly adjusted to fit padding */
-  height: 44px;
-  border-radius: 8px;
-  background-color: #eee;
-  object-fit: cover;
-  margin-bottom: 6px;
-  border: 1px solid rgba(0, 0, 0, 0.05);
-`;
-
-export const Name = styled.span`
-  font-size: 10px;
-  font-weight: 600;
-  color: #000;
-  width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  display: block;
-  margin-bottom: 2px;
-`;
-
-export const Handle = styled.span`
-  font-size: 8px; /* Shrunk slightly to fit within 4 columns */
-  color: var(--fb-blue); /* Handle is now blue */
-  width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  display: block;
-  font-weight: 500;
-`;
-
-export const MoreButton = styled.button`
-  background: none;
-  border: none;
-  color: var(--hn-gray);
-  font-size: 11px;
-  margin-top: 15px;
-  cursor: pointer;
-  width: 100%;
-  text-align: center;
-
-  &:hover {
-    text-decoration: underline;
-    color: #ff6600;
-  }
 `;

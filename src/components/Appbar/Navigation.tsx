@@ -2,17 +2,15 @@ import React from "react";
 import styled from "styled-components";
 import { NavLink, useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
-import { IconButton } from "@components";
 
 interface INavigation {
-  title: string;
+  title?: string;
   showBack?: boolean;
   tabs?: { label: string; path: string }[];
 }
-/* ... existing imports ... */
 
 export const Navigation = ({
-  title,
+  title = "",
   showBack,
   tabs = [],
 }: INavigation): React.JSX.Element => {
@@ -21,76 +19,83 @@ export const Navigation = ({
 
   return (
     <Container>
-      {!hasTabs && (
-        <TopRow>
-          {showBack && (
-            <IconButton
-              size="medium"
-              variant="trans"
-              onClick={() => navigate(-1)}
-            >
-              <ArrowLeft size={22} />
-            </IconButton>
-          )}
-          <Title>{title}</Title>
-        </TopRow>
-      )}
+      <NavContent>
+        {showBack && (
+          <BackButton onClick={() => navigate(-1)}>
+            <ArrowLeft size={22} />
+          </BackButton>
+        )}
+        
+        {/* If there are no tabs, show the title. If there are tabs, the title is hidden/optional */}
+        {!hasTabs && <Title>{title}</Title>}
 
-      {hasTabs && (
-        <Tabs>
-          {showBack && (
-            <IconButton variant="trans" onClick={() => navigate(-1)}>
-              <ArrowLeft size={22} />
-            </IconButton>
-          )}
-          {tabs.map((tab) => (
-            <TabItem key={tab.path} to={tab.path}>
-              <span>{tab.label}</span>
-            </TabItem>
-          ))}
-        </Tabs>
-      )}
+        {hasTabs && (
+          <TabsList>
+            {tabs.map((tab) => (
+              <TabItem key={tab.path} to={tab.path}>
+                <span>{tab.label}</span>
+              </TabItem>
+            ))}
+          </TabsList>
+        )}
+      </NavContent>
     </Container>
   );
 };
 
-/* --- Styled Components --- */
+/* --- Simplified Styled Components --- */
 
-const Container = styled.div`
+const Container = styled.nav`
   position: sticky;
   top: 0;
-  z-index: 100;
-  display: flex;
-  flex-direction: column;
+  z-index: 1000;
   width: 100%;
-  background: var(--bg-subtle);
-  backdrop-filter: blur(12px) saturate(180%);
-  -webkit-backdrop-filter: blur(12px) saturate(180%);
+  
+  /* "Liquid Glass" effect: background alpha + heavy blur */
+  background: var(--bg-page-alpha, rgba(255, 255, 255, 0.8));
+  backdrop-filter: blur(15px) saturate(160%);
+  -webkit-backdrop-filter: blur(15px) saturate(160%);
+  
   border-bottom: 1px solid var(--border-subtle);
-  margin-bottom: var(--spacing-md);
 `;
 
-const TopRow = styled.div`
+const NavContent = styled.div`
   display: flex;
   align-items: center;
+  height: 54px;
+  padding: 0 16px;
   gap: 12px;
-  padding: 0 var(--spacing-md);
-  height: 55px;
 `;
 
 const Title = styled.h2`
   margin: 0;
-  font-size: 1.1rem;
+  font-size: 1.15rem;
   font-weight: 800;
+  letter-spacing: -0.02em;
   color: var(--text-bold);
-  transition: opacity 0.1s ease-in-out;
-  opacity: ${(props) => (props.children ? 1 : 0)};
 `;
 
-const Tabs = styled.div`
+const BackButton = styled.button`
+  background: none;
+  border: none;
+  padding: 8px;
+  margin-left: -8px;
+  cursor: pointer;
+  color: var(--text-main);
   display: flex;
-  align-items: stretch;
-  height: 55px;
+  align-items: center;
+  border-radius: 50%;
+  transition: background 0.2s;
+
+  &:active {
+    background: var(--bg-soft);
+  }
+`;
+
+const TabsList = styled.div`
+  display: flex;
+  height: 100%;
+  flex: 1;
 `;
 
 const TabItem = styled(NavLink)`
@@ -99,37 +104,32 @@ const TabItem = styled(NavLink)`
   align-items: center;
   justify-content: center;
   text-decoration: none;
-  color: var(--text-black);
-  font-size: var(--font-md);
+  color: var(--text-muted, #666);
+  font-size: 0.95rem;
   font-weight: 600;
   position: relative;
-  transition: background 0.2s ease;
-
-  &:hover {
-    background: var(--bg-trans);
-  }
-
+  
   span {
+    height: 100%;
     display: flex;
     align-items: center;
-    justify-content: center;
-    height: 100%;
-    width: 70px;
     position: relative;
   }
 
+  /* Active State Underline */
   &.active {
-    color: var(--text-black);
+    color: var(--text-bold);
     font-weight: 700;
+
     span::after {
       content: "";
       position: absolute;
       bottom: 0;
       left: 0;
       right: 0;
-      height: 3px;
-      background: var(--bg-black);
-      border-radius: 2px 2px 0 0;
+      height: 4px;
+      background: var(--brand-primary);
+      border-radius: 10px 10px 0 0;
     }
   }
 `;

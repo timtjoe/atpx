@@ -52,14 +52,13 @@ const RootStyles = createGlobalStyle`
 
     /* Text colors */
     --text-blue: #0078FF;
-    --text-orange: #ff6600;
     --text-red: #eb3b5a;
-
     --text-black: var(--bg-black);
     --text-bold: #161525;
-
-    --text-white: #e2e5e9;
     --text-muted: #465a6a;
+    
+    --text-orange: #ff6600;
+    --text-white: #e2e5e9;
     --text-main: #333333;
     --text-deep: #1e2151;
     --text-dark: #1d2733;

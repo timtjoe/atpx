@@ -1,15 +1,9 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Outlet, useMatches, UIMatch } from "react-router-dom";
-import { Logo, Navigation, Footer } from "@components";
+import { Navigation, Footer, Pane, MobileNav } from "@components";
 import { RouteHandle, NavConfig, RootContextType } from "@types";
-
-const HOME_TABS = [
-  { label: "For You", path: "/" },
-  { label: "Following", path: "/following" },
-  { label: "Trends", path: "/trends" },
-  { label: "Discovery", path: "/discovery" },
-];
+import { HOME_TABS } from "@constants";
 
 export const Root = (): React.JSX.Element => {
   const matches = useMatches() as UIMatch<unknown, RouteHandle>[];
@@ -28,65 +22,108 @@ export const Root = (): React.JSX.Element => {
       showBack: routeHandle.showBack || false,
       tabs: routeHandle.showTabs ? HOME_TABS : [],
     });
-  }, [routeHandle.title, routeHandle.showBack, routeHandle.showTabs]);
+  }, [routeHandle.title, routeHandle.showBack, routeHandle.showTabs, currentMatch?.pathname]);
 
   return (
-    <Body>
-      <Pane>
-        <Logo />
-      </Pane>
+<Body vaul-drawer-wrapper="">
+      <SidePane>
+        <StickyWrapper><Pane /></StickyWrapper>
+      </SidePane>
+
       <Main id="app">
         <Navigation
-          title={navConfig.title}
+          title={navConfig.title ?? ""}
           showBack={navConfig.showBack}
           tabs={navConfig.tabs}
         />
         <Outlet context={{ setNavConfig } satisfies RootContextType} />
       </Main>
+
       <Sidebar>
-        <Footer />
+        <StickyWrapper><Footer /></StickyWrapper>
       </Sidebar>
+
+      {/* FIXED: Move this OUTSIDE of Main so it can sit 
+          correctly in the global stacking context */}
+      <MobileNavWrapper>
+        <MobileNav />
+      </MobileNavWrapper>
     </Body>
   );
 };
 
 /* --- Styled Components --- */
+
 const Body = styled.div`
-  position: relative;
+  display: flex;
+  justify-content: center;
+  width: 100%;
   max-width: var(--width-lg);
   margin: 0 auto;
-  display: flex;
-  justify-content: space-between;
 `;
 
-const Pane = styled.div`
-  position: sticky;
-  top: 0;
+const SidePane = styled.aside`
+  width: 275px;
+  flex-shrink: 0; 
   display: flex;
-  flex-direction: column;
-  width: 200px;
-  height: 100vh;
-  align-items: flex-end;
-  padding-top: var(--spacing-md);
-  border-right: thin solid var(--border-subtle);
-`;
+  justify-content: flex-end;
+  border-right: 1px solid var(--border-subtle);
 
-const Main = styled.main`
-  position: relative;
-  width: 500px;
-  max-width: 500px;
-  min-height: 100vh;
-
-  @media (max-width: 430px) {
-    width: auto;
+  @media (max-width: 768px) {
+    display: none;
   }
 `;
 
-const Sidebar = styled(Pane)`
-  width: 400px;
-  align-items: unset;
-  border-right: unset;
-  border-left: thin solid var(--border-subtle);
+const Sidebar = styled.aside`
+  width: 350px;
+  flex-shrink: 0;
+  border-left: 1px solid var(--border-subtle);
+
+  @media (max-width: 1100px) {
+    display: none;
+  }
+`;
+
+const StickyWrapper = styled.div`
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  width: 100%;
+  padding: 0 12px;
+  overflow-y: auto;
+  
+  &::-webkit-scrollbar { display: none; }
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+`;
+
+const Main = styled.main`
+  width: 600px;
+  min-height: 100vh;
+  flex-shrink: 0; 
+  /* Important: Do NOT use overflow: hidden here, 
+     it will break the sticky Navigation component.
+  */
+
+  @media (max-width: 768px) {
+    width: 100%;
+    max-width: 100%;
+    /* padding-bottom ensures the last piece of content isn't under the fixed nav */
+    padding-bottom: 80px; 
+  }
+`;
+
+const MobileNavWrapper = styled.div`
+  display: none;
+
+  @media (max-width: 768px) {
+    display: block;
+    position: fixed; /* Fixes it to the glass/screen */
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 9999; /* Ensure it is above the content and Navigation */
+  }
 `;
 
 export default Root;

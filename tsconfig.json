@@ -45,7 +45,10 @@
       "@store/*": ["./src/store/*"],
 
       "@utils": ["./src/utils/index.ts"],
-      "@utils/*": ["./src/utils/*"]
+      "@utils/*": ["./src/utils/*"],
+
+      "@constants": ["./src/constants/index.ts"],
+      "@constants/*": ["./src/constants/*"]
     }
   },
   "include": ["src", "env.d.ts"],

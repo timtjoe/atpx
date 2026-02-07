@@ -10,7 +10,6 @@ export * from "./Root";
 export * from "./Middot";
 
 // Folder export 
-export * from "./pane";
 export * from "./post"
 export * from "./trending"
 export * from "./community"
