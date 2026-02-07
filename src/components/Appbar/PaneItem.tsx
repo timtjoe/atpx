@@ -13,14 +13,13 @@ export const PaneItem = ({ uri, label, icon: Icon, badge }: IPaneItem) => {
   return (
     <StyledLink to={uri} title={label}>
       <IconContainer>
-        <Icon size={26} />
+        <Icon size={28} />
         {badge !== undefined && badge !== false && (
           <Badge $isDot={badge === true}>
             {typeof badge === "number" && badge > 0 ? badge : ""}
           </Badge>
         )}
       </IconContainer>
-      <Label>{label}</Label>
     </StyledLink>
   );
 };
@@ -30,13 +29,14 @@ const IconContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0; /* Prevents icon from squishing when text is long */
+  /* Ensure icon itself is black as requested */
+  color: var(--bg-black, #000); 
 `;
 
 const Badge = styled.div<{ $isDot: boolean }>`
   position: absolute;
   top: -2px;
-  right: -4px;
+  right: -2px;
   background-color: var(--brand-primary, #1d9bf0);
   color: white;
   border: 2px solid var(--bg-page, #fff);
@@ -48,31 +48,32 @@ const Badge = styled.div<{ $isDot: boolean }>`
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: ${(props) => (props.$isDot ? "0" : "2px")};
-`;
-
-const Label = styled.span`
-  font-size: 1.2rem;
-  font-weight: 500;
-  margin-left: 15px;
-  white-space: nowrap; /* Prevents text from wrapping to a second line */
-  /* Media query removed: Text will now stay visible on all screens */
 `;
 
 const StyledLink = styled(NavLink)`
   display: flex;
   align-items: center;
-  padding: 12px 16px; /* Slightly increased horizontal padding */
-  border-radius: 999px;
+  justify-content: center;
+  
+  /* Fixed 60x60 size */
+  width: 60px;
+  height: 60px;
+  
+  /* Squicle-like border radius */
+  border-radius: 20px; 
+  
   text-decoration: none;
-  color: var(--text-bold);
-  transition: background 0.2s ease;
+  transition: all 0.2s ease;
 
   &:hover {
-    background: var(--bg-soft);
+    background: var(--bg-trans, rgba(0, 0, 0, 0.05));
   }
+  
   &.active {
-    font-weight: 800;
-    color: var(--brand-primary);
+    background: var(--bg-trans, rgba(0, 0, 0, 0.08));
+    /* Active icon can stay black or switch to brand color */
+    ${IconContainer} {
+       color: var(--brand-primary);
+    }
   }
 `;

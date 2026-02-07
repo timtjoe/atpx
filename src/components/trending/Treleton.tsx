@@ -20,11 +20,9 @@ const shimmer = keyframes`
 `;
 
 const Frame = styled.div`
-  max-width: 500px;
+  max-width: 100%;
   min-height: 33px;
   background-color: var(--bg-soft);
-  border: 1px solid var(--border-light);
-  border-radius: var(--radius-md);
   padding: var(--spacing-md);
   animation: ${shimmer} 1.5s infinite;
 `;

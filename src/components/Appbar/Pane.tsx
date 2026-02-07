@@ -23,16 +23,37 @@ export const Pane = () => (
 const Container = styled.div`
   display: flex;
   flex-direction: column;
+  height: 100%;
+  
+  /* This ensures the items stack against the right border */
+  align-items: flex-end; 
+
   @media (max-width: 768px) {
     display: none;
-  } /* Hide sidebar on mobile */
+  }
 `;
 
 const LogoWrapper = styled.div`
-  padding: 10px 0 20px 12px;
+  /* Border for debugging - you can remove this later */
+  border: 1px solid transparent; 
+  
+  display: flex;
+  justify-content: center; /* Center the logo inside its 60px box */
+  align-items: center;
+  
+  /* Pushes the wrapper itself to the right of the sidebar */
+  align-self: flex-end; 
+  
+  padding: 10px 0 20px 0;
+  width: 60px;
+  height: auto;
 `;
+
 const NavList = styled.nav`
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  /* Ensures all icons are pushed to the right edge */
+  align-items: flex-end; 
+  gap: 8px;
+  width: 100%;
 `;

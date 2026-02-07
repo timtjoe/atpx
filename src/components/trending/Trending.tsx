@@ -6,17 +6,19 @@ import { TrendingUp, Cloud, Globe } from "lucide-react";
 
 import { withTrend, trendActions } from "./TrendStore";
 import { Treleton } from "./Treleton";
-import { TechnicalError } from "@components/TechnicalError";
+import { Title, TechnicalError, Header, ErrorBoundary } from "@components";
 import { TrendCard } from "./TrendCard";
-import { Title, Header } from "@components/Headers";
-import { Icon } from "@components/index";
+import { Icon } from "@components";
 import { Trend } from "@types";
 
-export const Trending = (): React.JSX.Element => {
+// Rename the inner component so we can wrap the export
+const TrendingContent = (): React.JSX.Element => {
   const [topics] = useAtom(withTrend);
   const [, fetchTrends] = useAtom(trendActions);
   const navigate = useNavigate();
-  
+  // TODO: remove
+  // const forcedError = (undefined as any).crash();
+
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<boolean>(false);
 
@@ -32,7 +34,9 @@ export const Trending = (): React.JSX.Element => {
     }
   };
 
-  useEffect(() => { handleFetch(); }, []);
+  useEffect(() => {
+    handleFetch();
+  }, []);
 
   if (loading && topics.length === 0) return <Treleton />;
   if (error) return <TechnicalError onRetry={handleFetch} />;
@@ -45,18 +49,26 @@ export const Trending = (): React.JSX.Element => {
           <Icon as={TrendingUp} size={16} color="var(--text-muted)" />
         </TitleGroup>
         <SourceLegend>
-          <SourceItem><Cloud size={10} /> Bluesky</SourceItem>
-          <SourceItem><Globe size={10} /> Mastodon</SourceItem>
+          <SourceItem>
+            <Cloud size={10} /> Bluesky
+          </SourceItem>
+          <SourceItem>
+            <Globe size={10} /> Mastodon
+          </SourceItem>
         </SourceLegend>
       </TrendHead>
 
       <Grid>
         {topics.slice(0, 12).map((item: Trend, i: number) => (
-          <TrendCard 
-            key={`${item.source}-${item.topic}`} 
-            topic={item} 
-            rank={i + 1} 
-            onClick={() => navigate(`/trend/${encodeURIComponent(item.topic)}?source=${item.source}`)} 
+          <TrendCard
+            key={`${item.source}-${item.topic}`}
+            topic={item}
+            rank={i + 1}
+            onClick={() =>
+              navigate(
+                `/trend/${encodeURIComponent(item.topic)}?source=${item.source}`,
+              )
+            }
           />
         ))}
       </Grid>
@@ -64,14 +76,32 @@ export const Trending = (): React.JSX.Element => {
   );
 };
 
+export const Trending = () => {
+  const [key, setKey] = useState(0);
+
+  const handleRetry = () => setKey((prev) => prev + 1);
+
+  return (
+    <ErrorBoundary
+      key={key}
+      fallback={
+        <TechnicalError
+          message="Trending is temporarily unavailable."
+          onRetry={handleRetry}
+          autoRetrySeconds={5}
+        />
+      }
+    >
+      <TrendingContent />
+    </ErrorBoundary>
+  );
+};
+
 /* --- Styled Components --- */
 
 const Container = styled.div`
-  max-width: 500px;
-  padding: var(--spacing-md);
+  padding: var(--spacing-md) var(--spacing-lg);
   background-color: var(--bg-grey);
-  border: 1px solid var(--border-light);
-  border-radius: var(--radius-md);
 `;
 
 const TrendHead = styled(Header)`

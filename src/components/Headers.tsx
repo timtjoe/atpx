@@ -24,10 +24,10 @@ export const Headbar = HeadActions;
 
 export const Title = styled.h2`
   margin: 0;
-  font-size: var(--font-lg);
-  font-weight: 700;
+  font-size: var(--font-xs);
+  font-weight: 800;
   color: var(--text-dark);
-  text-transform: capitalize;
+  text-transform: uppercase;
 
   @media (max-width: 768px) {
     font-size: var(--font-md);

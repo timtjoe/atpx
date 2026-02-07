@@ -1,14 +1,13 @@
-import { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
-import PeopleCard from "./PeopleCard";
 import { motion } from "framer-motion";
-import { PeopleService, Person } from "./PeopleService";
-import PeopleLive from "./PeopleLive";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { IconButton } from "@components/IconButton";
-import { Header, Title } from "@components/Headers";
+import { IconButton, Header, Title, ErrorBoundary, TechnicalError } from "@components";
+import PeopleCard from "./PeopleCard";
+import PeopleLive from "./PeopleLive";
+import { PeopleService, Person } from "./PeopleService";
 
-export const People = () => {
+const PeopleContent = () => {
   const [people, setPeople] = useState<Person[]>([]);
   const [loading, setLoading] = useState(true);
   const container = useRef<HTMLDivElement | null>(null);
@@ -26,45 +25,32 @@ export const People = () => {
     const el = container.current;
     if (!el) return;
     const amount = el.clientWidth * 0.8;
-    el.scrollBy({
-      left: dir === "left" ? -amount : amount,
-      behavior: "smooth",
-    });
+    el.scrollBy({ left: dir === "left" ? -amount : amount, behavior: "smooth" });
   };
 
   useEffect(() => {
-    let unsub: any = null;
     const init = async () => {
       try {
         setLoading(true);
         const { items } = await PeopleService.list(30);
-        // apply removal filter from localStorage
-        const removed = await import("@/utils/peopleDb")
-          .then((m) => m.getRemovedUris())
-          .catch(() => [] as string[]);
+        const removed = await import("@/utils/peopleDb").then((m) => m.getRemovedUris()).catch(() => []);
         const filtered = (items || []).filter((i) => !removed.includes(i.uri));
-        setPeople(filtered || []);
+        setPeople(filtered);
       } catch (e) {
         console.error("People fetch failed", e);
       } finally {
         setLoading(false);
       }
     };
-
     init();
-
-    // ensure scroll flags are correct after first paint
-    setTimeout(() => onScroll(), 200);
-
-    return () => {
-      if (unsub) unsub();
-    };
+    setTimeout(onScroll, 200);
   }, []);
 
-  // update scroll state when people list changes
   useEffect(() => {
-    setTimeout(() => onScroll(), 120);
+    setTimeout(onScroll, 120);
   }, [people]);
+
+  if (loading && people.length === 0) return null;
 
   return (
     <Container>
@@ -73,13 +59,7 @@ export const People = () => {
       </PeoHead>
       <Content>
         {!isStart && (
-          <IconButton
-            left
-            disabled={isStart}
-            onClick={() => scroll("left")}
-            aria-label="left"
-            variant="trans"
-          >
+          <IconButton left onClick={() => scroll("left")} variant="trans">
             <ChevronLeft size={16} />
           </IconButton>
         )}
@@ -95,11 +75,7 @@ export const People = () => {
                   person={p}
                   position={idx + 1}
                   onRemove={(uri) => {
-                    // persist removal
-                    import("@/utils/peopleDb")
-                      .then((m) => m.addRemovedUri(uri))
-                      .catch(() => {});
-                    // update service cache and ui
+                    import("@/utils/peopleDb").then((m) => m.addRemovedUri(uri)).catch(() => {});
                     PeopleService.remove(uri);
                     setPeople((prev) => prev.filter((x) => x.uri !== uri));
                   }}
@@ -109,29 +85,40 @@ export const People = () => {
           ))}
         </Carousel>
         {!isEnd && (
-          <IconButton
-            onClick={() => scroll("right")}
-            disabled={isEnd}
-            aria-label="right"
-            variant="trans"
-          >
+          <IconButton onClick={() => scroll("right")} variant="trans">
             <ChevronRight size={16} />
           </IconButton>
         )}
       </Content>
-
-      {/* live merger: update counts/info without reordering */}
       <PeopleLive people={people} setPeople={setPeople} />
     </Container>
   );
 };
 
+export const People = () => {
+  const [key, setKey] = useState(0);
+  const handleRetry = () => setKey((prev) => prev + 1);
+
+  return (
+    <ErrorBoundary
+      key={key}
+      fallback={
+        <TechnicalError 
+          message="Failed to load creators." 
+          onRetry={handleRetry} 
+          autoRetrySeconds={5} 
+        />
+      }
+    >
+      <PeopleContent />
+    </ErrorBoundary>
+  );
+};
+
 const Container = styled.section`
-  padding: 0;
   margin-top: var(--spacing-md);
   background-color: var(--bg-white);
   position: relative;
-  /* border: solid red; */
 `;
 
 const Content = styled.div`
@@ -146,15 +133,12 @@ const Carousel = styled.div`
   scroll-behavior: smooth;
   padding: 0 var(--spacing-sm);
   gap: var(--spacing-xs);
-  &::-webkit-scrollbar {
-    display: none;
-  }
+  &::-webkit-scrollbar { display: none; }
 `;
 
 const Item = styled.div`
   margin-right: 8px;
   flex: 0 0 auto;
-  border: solid red;
 `;
 
 const PeoHead = styled(Header)`

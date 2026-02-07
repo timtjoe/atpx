@@ -1,14 +1,10 @@
 import {
   Home,
-  Search,
   Bell,
-  Mail,
-  Video,
+  MessageCircle,
   Bookmark,
   User,
   Settings,
-  Hash,
-  Users,
 } from "lucide-react";
 
 /**
@@ -16,15 +12,13 @@ import {
  */
 export const NAV_ITEMS = [
   { id: "home", uri: "/", label: "Home", icon: Home },
-  { id: "search", uri: "/search", label: "Search", icon: Search },
   {
     id: "notifications",
     uri: "/notifications",
     label: "Notifications",
     icon: Bell,
   },
-  { id: "chat", uri: "/chat", label: "Chat", icon: Mail },
-  { id: "media", uri: "/media", label: "Media", icon: Video },
+  { id: "chat", uri: "/chat", label: "Chat", icon: MessageCircle },
   { id: "bookmarks", uri: "/bookmarks", label: "Bookmarks", icon: Bookmark },
   { id: "profile", uri: "/profile", label: "Profile", icon: User },
   { id: "settings", uri: "/settings", label: "Settings", icon: Settings },
@@ -36,7 +30,7 @@ export const NAV_ITEMS = [
 export const HOME_TABS = [
   { label: "Your Feed", path: "/" },
   { label: "Communities", path: "/communities" },
-  { label: "Posts", path: "/posts" },
+  { label: "Actors", path: "/actors" },
   { label: "Trending", path: "/trendings" },
 ];
 

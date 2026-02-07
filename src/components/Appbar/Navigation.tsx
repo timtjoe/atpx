@@ -104,16 +104,22 @@ const TabItem = styled(NavLink)`
   align-items: center;
   justify-content: center;
   text-decoration: none;
-  color: var(--text-muted, #666);
-  font-size: 0.95rem;
+  color: var(--text-muted);
+  font-size: var(--font-md);
   font-weight: 600;
   position: relative;
+  transition: background .1s ease-in-out;
   
   span {
     height: 100%;
     display: flex;
     align-items: center;
     position: relative;
+  }
+
+  &:hover {
+    background-color: var(--bg-trans);
+    
   }
 
   /* Active State Underline */
@@ -128,7 +134,7 @@ const TabItem = styled(NavLink)`
       left: 0;
       right: 0;
       height: 4px;
-      background: var(--brand-primary);
+      background: var(--bg-black);
       border-radius: 10px 10px 0 0;
     }
   }

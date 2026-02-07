@@ -8,6 +8,7 @@ export * from "./TechnicalError";
 export * from "./root.styles";
 export * from "./Root";
 export * from "./Middot";
+export * from "./Buttons";
 
 // Folder export 
 export * from "./post"
