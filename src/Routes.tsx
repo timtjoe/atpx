@@ -1,12 +1,9 @@
 import { HomePage, TrendPage } from "@pages";
 import { Root } from "@components";
-import { RouteConfig } from "@types";
 
 /**
  * Main application routing configuration.
- * Defines the layout wrapper (Root) and nested page views.
  */
-// In AppRoutes.tsx (or wherever you define routes)
 export const AppRoutes = [
   {
     path: "/",
@@ -15,7 +12,11 @@ export const AppRoutes = [
       {
         index: true,
         element: <HomePage />,
-        handle: { title: "Home", showBack: false, showHomeTabs: true },
+        handle: {
+          title: "Home",
+          showBack: false,
+          showTabs: true,
+        },
       },
       {
         path: "trend/:id",

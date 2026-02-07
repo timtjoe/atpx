@@ -1,29 +1,43 @@
 import React from "react";
 import styled from "styled-components";
-import logoSrc from "/logo.jpg";
+import image from "/logo.svg";
 
 interface ILogo {
   link?: string;
-  children?: string;
 }
 
-export const Logo = ({ link, children }: ILogo): React.JSX.Element => {
+export const Logo = ({ link }: ILogo): React.JSX.Element => {
   return (
-    <Link href={link ? link : "/"} aria-label="Home">
-      <Image src={logoSrc} />
+    <Link href={link || "/"} aria-label="Home">
+      <Icon src={image} alt="Logo" />
     </Link>
   );
 };
 
+/* --- Styled Components --- */
+
 const Link = styled.a`
-width: 76px;
-padding: var(--spacing-xs);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100px;
+  height: 55px;
+  text-decoration: none;
+  overflow: hidden;
 `;
 
-const Image = styled.img`
+const Icon = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+
   display: block;
-  height: 34px;
-  width: auto;
+  opacity: 0.8;
+  transition: opacity 0.2s ease;
+
+  ${Link}:hover & {
+    opacity: 1;
+  }
 `;
 
 export default Logo;

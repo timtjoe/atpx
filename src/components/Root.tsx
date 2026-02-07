@@ -17,14 +17,14 @@ export const Root = (): React.JSX.Element => {
   const routeHandle: RouteHandle = currentMatch?.handle || {};
 
   const [navConfig, setNavConfig] = useState<NavConfig>({
-    title: routeHandle.title || "Home",
+    title: routeHandle.title || null,
     showBack: routeHandle.showBack || false,
     tabs: routeHandle.showTabs ? HOME_TABS : [],
   });
 
   useEffect(() => {
     setNavConfig({
-      title: routeHandle.title || "Home",
+      title: routeHandle.title || null,
       showBack: routeHandle.showBack || false,
       tabs: routeHandle.showTabs ? HOME_TABS : [],
     });
@@ -51,7 +51,6 @@ export const Root = (): React.JSX.Element => {
 };
 
 /* --- Styled Components --- */
-
 const Body = styled.div`
   position: relative;
   max-width: var(--width-lg);

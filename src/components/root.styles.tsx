@@ -15,6 +15,7 @@ const RootStyles = createGlobalStyle`
     --width-lg: 1366px;
 
     /* Font sizes */
+    --font-xxs: 8px;      /*...*/
     --font-xs: 0.75em;    /* 12px / 16 */
     --font-sm: 0.875em;   /* 14px / 16 */
     --font-md: 1.0625em;  /* 17px / 16 */
@@ -42,23 +43,26 @@ const RootStyles = createGlobalStyle`
     --bg-white: #FFFFFF;
     --bg-grey: #FAFAFA;
     --bg-black: #0C1015;
-
     --bg-subtle: #ffffff66;
+
     --bg-light: #ffffff99;
     --bg-glass: #ffffff33;
+    --bg-trans: rgba(0, 0, 0, 0.05);
 
 
     /* Text colors */
     --text-blue: #0078FF;
     --text-orange: #ff6600;
     --text-red: #eb3b5a;
-    --text-black: #000000;
+
+    --text-black: var(--bg-black);
+    --text-bold: #161525;
+
     --text-white: #e2e5e9;
     --text-muted: #465a6a;
     --text-main: #333333;
     --text-deep: #1e2151;
     --text-dark: #1d2733;
-    --text-bold: #161525;
     --text-glass: #16161633;
 
     /* Border colors */

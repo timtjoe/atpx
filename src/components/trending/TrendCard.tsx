@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
 import { ITrendCard, Actor } from "@types";
 import { TrendLive } from "./TrendLive";
+import { Middot } from "@components";
 
 export const TrendCard = ({
   topic,
@@ -59,7 +60,7 @@ export const TrendCard = ({
         <Info>
           <Meta>
             <Badge $type={label.toLowerCase()}>{label}</Badge>
-
+            <Middot />
             <CountLabel>
               <AnimatePresence
                 mode="popLayout"
@@ -102,25 +103,27 @@ export const TrendCard = ({
 
 /* --- Styled Components --- */
 const Badge = styled.span<{ $type: string }>`
-  font-size: 7px;
-  padding: 1px 4px;
-  border-radius: 2px;
+  font-size: var(--font-xxs);
+  padding: 0 2px;
   text-transform: uppercase;
   font-weight: 800;
   color: white;
-  background: ${({ $type }) => {
-    if ($type === "hot" || $type === "viral") return "var(--text-orange)";
+  color: ${({ $type }) => {
+    if ($type === "hot" || $type === "viral") return "var(--text-red)";
     if ($type === "breaking") return "var(--text-red)";
-    if ($type === "fediverse") return "var(--text-purple)";
-    return "var(--text-blue)";
+    if ($type === "fediverse") return "var(--text-black)";
+    return "var(--text-muted)";
   }};
+
+
 `;
 
 const CountLabel = styled.div`
   display: flex;
   align-items: center;
-  gap: 4px;
-  font-size: var(--font-sm);
+  gap: 3px;
+  font-size: var(--font-xxs);
+  font-weight: 800;
   color: var(--text-muted);
   height: 1.2em;
   overflow: hidden;
@@ -172,7 +175,7 @@ const Info = styled.div`
 const Meta = styled.div`
   display: flex;
   align-items: center;
-  gap: var(--spacing-xs);
+  gap: 2px;
 `;
 const ActorRow = styled.div`
   display: flex;

@@ -7,6 +7,7 @@ export * from "./ErrorBoundary";
 export * from "./TechnicalError";
 export * from "./root.styles";
 export * from "./Root";
+export * from "./Middot";
 
 // Folder export 
 export * from "./pane";
