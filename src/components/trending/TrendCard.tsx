@@ -122,12 +122,9 @@ const Card = styled.div`
   flex-direction: column;
   gap: var(--spacing-xs);
   cursor: pointer;
-  padding: var(--spacing-sm);
+  padding: 0;
   border-radius: var(--radius-xs);
-  transition: background 0.2s;
-  &:hover {
-    background: #fafafa;
-  }
+  height: 58px;
 `;
 
 const Header = styled.div`

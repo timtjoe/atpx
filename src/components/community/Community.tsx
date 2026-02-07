@@ -55,7 +55,7 @@ export const Community = () => {
 
   return (
     <Container>
-      <Header>
+      <ComHead>
         <Title>popular creators</Title>
         <HeadActions style={{ marginLeft: "auto" }}>
           {!isStart && (
@@ -80,7 +80,7 @@ export const Community = () => {
             </IconButton>
           )}
         </HeadActions>
-      </Header>
+      </ComHead>
 
       <Content>
         <Carousel ref={carousel} onScroll={handleScroll}>
@@ -111,15 +111,21 @@ export const Community = () => {
 
 const Container = styled.div`
   width: 100%;
-  margin-top: 10px;
-  padding: 0 10px;
-`;
+  /* TODO: make all section container have this margin top
+  except the very first one */
+  margin-top: var(--spacing-xl);
+  `;
+
+  const ComHead = styled(Header)`
+    padding: var(--spacing-xs) var(--spacing-sm);
+  `
 
 const Content = styled.div`
   position: relative;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--spacing-sm);
+  padding: 0 var(--spacing-sm);
 `;
 
 const Carousel = styled.div`
@@ -128,7 +134,7 @@ const Carousel = styled.div`
   overflow-x: auto;
   scroll-behavior: smooth;
   flex: 1;
-  padding: 10px 0;
+  padding:  0;
   scroll-padding: 0;
 
   /* Hide scrollbar */

@@ -68,7 +68,7 @@ export const People = () => {
 
   return (
     <Container>
-      <Head>
+      <PeoHead>
         <Title>popular creators</Title>
        <HeadActions style={{ marginLeft: "auto" }}>
           {!isStart && (
@@ -93,7 +93,7 @@ export const People = () => {
             </IconButton>
           )}
         </HeadActions>
-      </Head>
+      </PeoHead>
       <Content>
         <Carousel ref={container} onScroll={onScroll}>
           {people.map((p, idx) => (
@@ -129,10 +129,11 @@ export const People = () => {
 };
 
 const Container = styled.section`
-  padding: var(--spacing-md) 0;
+  padding:0;
   margin-top: var(--spacing-md);
   background-color: var(--bg-white);
   position: relative;
+  border: solid red;
 `;
 
 const Content = styled.div`
@@ -157,7 +158,7 @@ const Item = styled.div`
   flex: 0 0 auto;
 `;
 
-const Head = styled(Header)`
+const PeoHead = styled(Header)`
   padding-left: var(--spacing-md);
 `
 

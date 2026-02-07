@@ -3,12 +3,10 @@ import styled from "styled-components";
 export const Header = styled.header`
   display: flex;
   gap: var(--spacing-xs);
-  margin-bottom: var(--spacing-md);
   align-items: center;
 
   @media (max-width: 768px) {
     padding: 0;
-    margin-bottom: var(--spacing-lg);
   }
 `;
 
@@ -22,14 +20,7 @@ export const HeadActions = styled.section`
   }
 `;
 
-export const Tagline = styled.span`
-  font-size: var(--font-md);
-  color: var(--text-muted);
-
-  @media (max-width: 768px) {
-    display: none !important;
-  }
-`;
+export const Headbar = HeadActions;
 
 export const Title = styled.h2`
   margin: 0;
@@ -42,3 +33,14 @@ export const Title = styled.h2`
     font-size: var(--font-md);
   }
 `;
+
+export const Tagline = styled.span`
+  font-size: var(--font-md);
+  color: var(--text-muted);
+
+  @media (max-width: 768px) {
+    display: none !important;
+  }
+`;
+
+export const Subtitle = Tagline;

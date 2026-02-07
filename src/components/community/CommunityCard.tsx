@@ -40,9 +40,7 @@ export const CommunityCard: React.FC<Props> = ({
       <RemoveButton onClick={handleRemove} aria-label="remove">
         <XIcon size={14} />
       </RemoveButton>
-      {typeof position === "number" && (
-        <PositionBadge>{position}</PositionBadge>
-      )}
+      
       <Avatar
         src={community.avatar || "https://via.placeholder.com/100"}
         alt={community.displayName}
@@ -52,6 +50,7 @@ export const CommunityCard: React.FC<Props> = ({
         <Description>{community.description}</Description>
       )}
       <Source>
+      {community.activeCount}
         {community.source === "bsky" ? "🦋 Bluesky" : "🐘 Mastodon"}
       </Source>
       <OpenButton onClick={handleOpen} aria-label="open-feed">
@@ -73,7 +72,7 @@ const Card = styled.a`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 140px;
+  width: 280px;
   height: 200px;
   text-decoration: none;
   color: inherit;
@@ -81,16 +80,7 @@ const Card = styled.a`
   border-radius: 10px;
   border: 1px solid rgba(0, 0, 0, 0.06);
   padding: 10px;
-  box-sizing: border-box;
-  transition:
-    transform 180ms ease,
-    box-shadow 180ms ease;
-  animation: ${floatIn} 220ms ease;
-
-  &:hover {
-    transform: translateY(-6px) scale(1.02);
-    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.1);
-  }
+  border: solid red;
 `;
 
 const RemoveButton = styled.button`
@@ -106,14 +96,6 @@ const RemoveButton = styled.button`
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition:
-    background 120ms ease,
-    transform 120ms ease;
-
-  &:hover {
-    background: rgba(0, 0, 0, 0.12);
-    transform: scale(1.08);
-  }
 `;
 
 const PositionBadge = styled.div`

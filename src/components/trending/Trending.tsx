@@ -59,20 +59,17 @@ export const Trending = () => {
   return (
     <Container>
       <TrendHead>
-        <span>
-          <Title>Trending Topics</Title>
-          <Icon as={TrendingUp} size={16} />
-          <IconButton
-            style={{ marginLeft: "auto" }}
-            variant="trans"
-            size="small"
-            onClick={handleFetch}
-            disabled={isRefreshing}
-          >
-            <RotateIcon as={RotateCw} size={16} $isSpinning={isRefreshing} />
-          </IconButton>
-        </span>
-        <Tagline>What people are discussing in the fediverse.</Tagline>
+        <Title>Trending Topics</Title>
+        <Icon as={TrendingUp} size={16} />
+        <IconButton
+          style={{ marginLeft: "auto" }}
+          variant="trans"
+          size="small"
+          onClick={handleFetch}
+          disabled={isRefreshing}
+        >
+          <RotateIcon as={RotateCw} size={16} $isSpinning={isRefreshing} />
+        </IconButton>
       </TrendHead>
 
       {error ? (
@@ -123,7 +120,7 @@ const shimmer = keyframes`
   100% { opacity: 0.5; }
 `;
 
-//
+
 const SkeletonTrend = () => (
   <SkeletonCard>
     <div className="skeleton-header">
@@ -201,32 +198,31 @@ const RotateIcon = styled.svg<{ $isSpinning: boolean }>`
 
 const Container = styled.div`
   border: 1px solid var(--border-light);
-  padding: var(--spacing-md);
+  padding: 0 var(--spacing-sm) var(--spacing-sm);
   border-radius: calc(var(--radius-md) + 4px);
   background-color: var(--bg-soft);
-  min-height: 380px;
 
   @media (max-width: 768px) {
-    padding: var(--spacing-md);
     border: unset;
     border-radius: unset;
   }
 `;
 
 const TrendHead = styled(Header)`
-  flex-direction: column;
+  flex-direction: row;
   align-items: unset;
-  & > span {
-    display: flex;
-    gap: var(--spacing-md);
-  }
+  gap: var(--spacing-md);
+  padding: var(--spacing-md) var(--spacing-sm);
 `;
 
 const Grid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
   gap: var(--spacing-md);
-  margin-top: var(--spacing-lg);
+  padding-left: var(--spacing-sm);
+
+  @media (max-width: 768px) {
+  }
 `;
 
 const ErrorState = styled.div`
@@ -234,8 +230,8 @@ const ErrorState = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 40px 0;
-  gap: 8px;
+  padding: var(--spacing-xl) 0;
+  gap: var(--spacing-sm);
   color: var(--text-muted);
   font-size: var(--font-sm);
   button {
