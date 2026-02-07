@@ -6,6 +6,7 @@ import { Footer } from "@components/Footer";
 import RootStyles from "@components/root.styles";
 import { Appbar } from "@components/appbar";
 import { People } from "@components/people";
+import Logo from "./components/pane/Logo";
 
 export default function App() {
   return (
@@ -13,7 +14,7 @@ export default function App() {
       <RootStyles />
       <Body>
         <Pane>
-          <Appbar />
+          <Logo />
         </Pane>
         <Main id="app">
           <Navigation>navigation</Navigation>
@@ -40,13 +41,17 @@ const Body = styled.div`
 `;
 
 const Pane = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 200px;
-  height: 99.7vh;
   position: sticky;
   top: 0;
-  border: solid red;
+  display: flex;
+  flex-direction: column;
+  align-items: right;
+  width: 200px;
+  height: 99.7vh;
+  align-items: flex-end; /* Aligns children to the right */
+  padding-top: var(--spacing-md);
+  border-right: thin solid var(--border-subtle);
+
 `;
 
 const Main = styled.main`
@@ -66,4 +71,8 @@ const Navigation = styled.nav`
 
 const Sidebar = styled(Pane)`
   width: 400px;
+  align-items: unset; 
+  border: unset;
+  border-left: thin solid var(--border-subtle);
+
 `;
