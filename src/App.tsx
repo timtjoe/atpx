@@ -4,13 +4,15 @@ import { Community as Communities } from "@components/community";
 import { Posts } from "@components/post";
 import { Footer } from "@components/Footer";
 import RootStyles from "@components/root.styles";
-import { Appbar } from "@components/appbar";
 import { People } from "@components/people";
-import Logo from "./components/pane/Logo";
+import Logo from "@components/pane/Logo";
+import { Toaster } from "react-hot-toast";
+import { ConnectivityManager } from "./components/headless/Connectivity";
 
 export default function App() {
   return (
     <>
+      <ConnectivityManager />
       <RootStyles />
       <Body>
         <Pane>
@@ -27,6 +29,7 @@ export default function App() {
           <Footer />
         </Sidebar>
       </Body>
+      <Toaster position="bottom-left" />
     </>
   );
 }
@@ -51,7 +54,6 @@ const Pane = styled.div`
   align-items: flex-end; /* Aligns children to the right */
   padding-top: var(--spacing-md);
   border-right: thin solid var(--border-subtle);
-
 `;
 
 const Main = styled.main`
@@ -71,8 +73,7 @@ const Navigation = styled.nav`
 
 const Sidebar = styled(Pane)`
   width: 400px;
-  align-items: unset; 
+  align-items: unset;
   border: unset;
   border-left: thin solid var(--border-subtle);
-
 `;

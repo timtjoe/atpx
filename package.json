@@ -20,11 +20,12 @@
   "dependencies": {
     "@atproto/api": "^0.18.20",
     "@headlessui/react": "^2.2.9",
+    "framer-motion": "^10.12.5",
     "jotai": "^2.17.1",
     "lucide-react": "^0.563.0",
-    "framer-motion": "^10.12.5",
     "react": "^19.0.0-rc.1",
     "react-dom": "^19.0.0-rc.1",
+    "react-hot-toast": "^2.6.0",
     "react-router-dom": "^7.13.0",
     "styled-components": "^6.3.8"
   }
