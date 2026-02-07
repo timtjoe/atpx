@@ -50,10 +50,8 @@ const RootStyles = createGlobalStyle`
 
     /* Text colors */
     --text-blue: #0078FF;
-    --text-purple: #551A8B;
     --text-orange: #ff6600;
-    --text-green: #3c963c;
-    --text-gray: var(--bg-gray);
+    --text-red: #eb3b5a;
     --text-black: #000000;
     --text-white: #e2e5e9;
     --text-muted: #465a6a;

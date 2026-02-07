@@ -1,28 +1,48 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { Outlet } from "react-router-dom";
-import { Footer } from "@components/Footer";
-import { Logo, Navigation } from "@components";
+import { Outlet, useMatches, UIMatch } from "react-router-dom";
+import { Logo, Navigation, Footer } from "@components";
+import { RouteHandle, NavConfig, RootContextType } from "@types";
 
-/**
- * Root Layout Component.
- * Acts as the structural wrapper for all nested routes.
- */
+const HOME_TABS = [
+  { label: "For You", path: "/" },
+  { label: "Following", path: "/following" },
+  { label: "Trends", path: "/trends" },
+  { label: "Discovery", path: "/discovery" },
+];
+
 export const Root = (): React.JSX.Element => {
+  const matches = useMatches() as UIMatch<unknown, RouteHandle>[];
+  const currentMatch = [...matches].reverse().find((m) => m.handle);
+  const routeHandle: RouteHandle = currentMatch?.handle || {};
+
+  const [navConfig, setNavConfig] = useState<NavConfig>({
+    title: routeHandle.title || "Home",
+    showBack: routeHandle.showBack || false,
+    tabs: routeHandle.showTabs ? HOME_TABS : [],
+  });
+
+  useEffect(() => {
+    setNavConfig({
+      title: routeHandle.title || "Home",
+      showBack: routeHandle.showBack || false,
+      tabs: routeHandle.showTabs ? HOME_TABS : [],
+    });
+  }, [routeHandle.title, routeHandle.showBack, routeHandle.showTabs]);
+
   return (
     <Body>
       <Pane>
         <Logo />
       </Pane>
-
       <Main id="app">
-        <Nav>
-          <Navigation title="Home" />
-        </Nav>
-
-        <Outlet />
+        <Navigation
+          title={navConfig.title}
+          showBack={navConfig.showBack}
+          tabs={navConfig.tabs}
+        />
+        <Outlet context={{ setNavConfig } satisfies RootContextType} />
       </Main>
-
       <Sidebar>
         <Footer />
       </Sidebar>
@@ -61,15 +81,6 @@ const Main = styled.main`
   @media (max-width: 430px) {
     width: auto;
   }
-`;
-
-const Nav = styled.nav`
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  height: 55px;
-  background-color: var(--bg-white);
-  margin-bottom: var(--spacing-md);
 `;
 
 const Sidebar = styled(Pane)`

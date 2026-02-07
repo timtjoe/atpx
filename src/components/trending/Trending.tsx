@@ -69,7 +69,7 @@ export const Trending = (): React.JSX.Element => {
 const Container = styled.div`
   max-width: 500px;
   padding: var(--spacing-md);
-  background-color: var(--bg-soft);
+  background-color: var(--bg-grey);
   border: 1px solid var(--border-light);
   border-radius: var(--radius-md);
 `;
