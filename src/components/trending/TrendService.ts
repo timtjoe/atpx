@@ -1,18 +1,16 @@
 import { Agents } from "@/utils/agents";
+import { Trend, Post, Actor } from "@types";
 
 export const TrendingService = {
-  list: async () => {
+  list: async (): Promise<Trend[]> => {
     const [bskyTrends, mastodonTrends] = await Promise.all([
       TrendingService.listBsky(),
       TrendingService.listMastodon(),
     ]);
 
-    // Combine and sort by post count
-    const allTrends = [...bskyTrends, ...mastodonTrends].sort(
+    return [...bskyTrends, ...mastodonTrends].sort(
       (a, b) => (b.postCount || 0) - (a.postCount || 0),
     );
-
-    return allTrends;
   },
 
   listBsky: async () => {
@@ -85,16 +83,14 @@ export const TrendingService = {
     }
   },
 
-  get: async (topicName: string) => {
+  get: async (topicName: string): Promise<Trend | null> => {
     const trends = await TrendingService.list();
     const trend = trends.find((t) => t.topic === topicName);
     if (!trend) return null;
 
-    // Route to the correct detail fetcher based on source
-    if (trend.source === "mastodon") {
-      return await TrendingService.getMastodonDetails(trend);
-    }
-    return await TrendingService.getBlueskyDetails(trend);
+    return trend.source === "mastodon"
+      ? await TrendingService.getMastodonDetails(trend)
+      : await TrendingService.getBlueskyDetails(trend);
   },
 
   getBlueskyDetails: async (trend: any) => {

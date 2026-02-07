@@ -54,8 +54,13 @@ const Pane = styled.div`
 
 const Main = styled.main`
   position: relative;
+  width: 500px;
   max-width: 500px;
   min-height: 100vh;
+
+  @media (max-width: 430px) {
+    width: auto;
+  }
 `;
 
 const Nav = styled.nav`

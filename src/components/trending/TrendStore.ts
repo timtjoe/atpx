@@ -1,16 +1,21 @@
 import { atom } from "jotai";
+import { Trend } from "@types";
 import { TrendingService } from "./TrendService";
 
-export const trendingAtom = atom<any[]>([]);
-export const isLoadingTrendsAtom = atom(false);
+export const withTrend = atom<Trend[]>([]);
+const isLoading = atom<boolean>(false);
 
-// Action atom to refresh data
-export const fetchTrendsAction = atom(null, async (get, set) => {
-  set(isLoadingTrendsAtom, true);
-  try {
-    const data = await TrendingService.list();
-    set(trendingAtom, data);
-  } finally {
-    set(isLoadingTrendsAtom, false);
+export const trendActions = atom(
+  null,
+  async (_get, set): Promise<void> => {
+    set(isLoading, true);
+    try {
+      const data = await TrendingService.list();
+      set(withTrend, data);
+    } catch (error) {
+      throw error;
+    } finally {
+      set(isLoading, false);
+    }
   }
-});
+);

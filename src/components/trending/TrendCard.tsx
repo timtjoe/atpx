@@ -1,68 +1,64 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { ITrendCard, Actor } from "@types";
 import { TrendLive } from "./TrendLive";
 
-interface Actor {
-  id?: string | number;
-  name?: string;
-  avatar?: string;
-}
-
-interface ITrend {
-  topic: any;
-  rank: number;
-  onClick: () => void;
-}
-
-export const TrendCard = ({ topic, rank, onClick }: ITrend) => {
+export const TrendCard = ({
+  topic,
+  rank,
+  onClick,
+}: ITrendCard): React.JSX.Element => {
   const actors: Actor[] = topic?.actors || [];
   const reactions: string[] = topic?.reactions || [];
-  const [liveCount, setLiveCount] = useState<number | undefined>(
-    topic?.postCount,
-  );
-  const [animatedCount, setAnimatedCount] = useState<number | undefined>(
-    topic?.postCount,
-  );
 
+  const [liveCount, setLiveCount] = useState<number>(topic.postCount);
+  const [animatedCount, setAnimatedCount] = useState<number>(topic.postCount);
+
+  // Live subscription logic
   useEffect(() => {
     if (!topic?.topic) return;
-    let mounted = true;
-    const cb = (_topic: string, count?: number) => {
-      if (!mounted) return;
+
+    const cb = (_: string, count?: number) => {
       if (typeof count === "number") setLiveCount(count);
     };
+
     const unsub = TrendLive.subscribe(topic.topic, cb);
-    return () => {
-      mounted = false;
-      unsub();
-    };
+    return () => unsub();
   }, [topic?.topic]);
 
-  // animate number changes
+  // Number animation logic (Raf)
   useEffect(() => {
-    if (typeof liveCount !== "number") return;
-    let start = performance.now();
-    const from =
-      typeof animatedCount === "number"
-        ? animatedCount
-        : (topic?.postCount ?? 0);
+    const from = animatedCount;
     const to = liveCount;
-    if (from === to) {
-      setAnimatedCount(to);
-      return;
-    }
+    if (from === to) return;
+
     const duration = 600;
-    let raf = 0;
-    const step = (ts: number) => {
-      const t = Math.min(1, (ts - start) / duration);
-      const eased = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t; // easeInOut
-      const val = Math.round(from + (to - from) * eased);
-      setAnimatedCount(val);
-      if (t < 1) raf = requestAnimationFrame(step);
+    const startTime = performance.now();
+    let rafId: number;
+
+    const step = (currentTime: number) => {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(1, elapsed / duration);
+
+      // easeInOutQuad
+      const eased =
+        progress < 0.5
+          ? 2 * progress * progress
+          : -1 + (4 - 2 * progress) * progress;
+
+      const currentVal = Math.round(from + (to - from) * eased);
+      setAnimatedCount(currentVal);
+
+      if (progress < 1) {
+        rafId = requestAnimationFrame(step);
+      }
     };
-    raf = requestAnimationFrame(step);
-    return () => cancelAnimationFrame(raf);
+
+    rafId = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(rafId);
   }, [liveCount]);
+
+  const displayCount = animatedCount.toLocaleString();
 
   return (
     <Card onClick={onClick}>
@@ -74,14 +70,10 @@ export const TrendCard = ({ topic, rank, onClick }: ITrend) => {
       <Content>
         <Info>
           <Meta>
-            <Badge $status={topic.status}>{topic.status}</Badge>
-            <PostCount>
-              {(typeof animatedCount === "number"
-                ? animatedCount
-                : (liveCount ?? topic.postCount)
-              ).toLocaleString()}{" "}
-              posts
-            </PostCount>
+            {topic.status && (
+              <Badge $status={topic.status}>{topic.status}</Badge>
+            )}
+            <PostCount>{displayCount} posts</PostCount>
           </Meta>
 
           {actors.length > 0 && (
@@ -92,11 +84,12 @@ export const TrendCard = ({ topic, rank, onClick }: ITrend) => {
                     key={a.id ?? idx}
                     src={a.avatar}
                     alt={a.name || "actor"}
-                    style={{ left: `${idx * 10}px`, zIndex: idx + 1 }}
+                    $offset={idx * 10}
+                    $zIndex={idx + 1}
                   />
                 ))}
               </AvatarStack>
-              {/* TODO: Test the reaction display */}
+
               {reactions.length > 0 && (
                 <ReactionGroup>
                   {reactions.slice(0, 3).map((r, i) => (
@@ -108,7 +101,6 @@ export const TrendCard = ({ topic, rank, onClick }: ITrend) => {
                   </ReactionCount>
                 </ReactionGroup>
               )}
-              
             </ActorRow>
           )}
         </Info>
@@ -116,6 +108,8 @@ export const TrendCard = ({ topic, rank, onClick }: ITrend) => {
     </Card>
   );
 };
+
+/* --- Styled Components --- */
 
 const Card = styled.div`
   display: flex;
@@ -147,7 +141,6 @@ const Title = styled.span`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  //add fallback for long topic names
   max-width: 200px;
 `;
 
@@ -179,8 +172,8 @@ const Badge = styled.span<{ $status?: string }>`
   font-size: 7px;
   padding: 1px 3px;
   border-radius: 2px;
-  background: ${(props) =>
-    props.$status === "hot" ? "var(--text-orange)" : "var(--text-blue)"};
+  background: ${({ $status }) =>
+    $status === "hot" ? "var(--text-orange)" : "var(--text-blue)"};
   color: white;
   text-transform: uppercase;
   font-weight: 700;
@@ -200,9 +193,11 @@ const AvatarStack = styled.div`
   z-index: 1;
 `;
 
-const Avatar = styled.img`
+const Avatar = styled.img<{ $offset: number; $zIndex: number }>`
   position: absolute;
   top: 0;
+  left: ${({ $offset }) => $offset}px;
+  z-index: ${({ $zIndex }) => $zIndex};
   width: 16px;
   height: 16px;
   border-radius: var(--round);

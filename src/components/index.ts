@@ -4,7 +4,7 @@ export * from "./Footer";
 export * from "./Headers";
 export * from "./IconButton";
 export * from "./ErrorBoundary";
-export * from "./ErrorBoundary";
+export * from "./TechnicalError";
 export * from "./root.styles";
 export * from "./Root";
 

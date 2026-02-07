@@ -7,7 +7,7 @@ import {
   DialogTitle,
 } from "@headlessui/react";
 import { X, ExternalLink, RotateCw } from "lucide-react";
-import { PostCard, ActorItem } from "./PostCard";
+import { PostCard, ActorItem } from "./TrendPost";
 
 interface TrendDialogProps {
   topic: any;

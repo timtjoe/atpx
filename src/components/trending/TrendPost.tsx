@@ -1,20 +1,23 @@
 import React from "react";
 import styled from "styled-components";
+import { Post, ITrendPost, IActorItem } from "@types";
 
-interface PostCardProps {
-  post: any;
-}
-
-export const PostCard = ({ post }: PostCardProps) => {
-  const author = post?.author || {};
-  const text = (post?.record?.text || "").replace(/\s+/g, " ");
+export const TrendPost = ({ post }: ITrendPost): React.JSX.Element => {
+  // Use optional chaining directly on the post object to avoid the "{}" type error
+  const author = post.author;
+  const text = (post.record?.text || "").replace(/\s+/g, " ");
 
   return (
     <Card>
       <Header>
-        <Avatar src={author.avatar} alt={author.displayName || author.handle} />
+        <Avatar 
+          src={author.avatar} 
+          alt={author.displayName || author.handle} 
+        />
         <Author>
-          <Name title={author.displayName}>{author.displayName}</Name>
+          <Name title={author.displayName || author.handle}>
+            {author.displayName || author.handle}
+          </Name>
           <Handle title={author.handle}>@{author.handle}</Handle>
         </Author>
       </Header>
@@ -28,18 +31,20 @@ export const PostCard = ({ post }: PostCardProps) => {
   );
 };
 
-export const ActorItem = ({ actor }: { actor: any }) => {
+export const ActorItem = ({ actor }: IActorItem): React.JSX.Element => {
+  const identifier = actor.displayName || actor.handle || String(actor.id);
+  
   return (
-    <Actor>
-      <AAvatar src={actor.avatar} alt={actor.displayName || actor.handle} />
-      <AName title={actor.displayName || actor.handle}>
-        {actor.displayName || actor.handle}
+    <ActorWrapper>
+      <AAvatar src={actor.avatar} alt={identifier} />
+      <AName title={identifier}>
+        {identifier}
       </AName>
-    </Actor>
+    </ActorWrapper>
   );
 };
 
-export default PostCard;
+/* --- STYLES --- */
 
 const Card = styled.div`
   width: 100%;
@@ -47,7 +52,6 @@ const Card = styled.div`
   padding: 8px;
   background: var(--bg-white);
   border-radius: var(--radius-xs);
-  box-shadow: none;
   border: 1px solid rgba(0, 0, 0, 0.04);
   display: flex;
   flex-direction: column;
@@ -117,7 +121,7 @@ const MetaText = styled.span`
   color: var(--text-gray);
 `;
 
-const Actor = styled.div`
+const ActorWrapper = styled.div`
   display: flex;
   align-items: center;
   gap: 6px;

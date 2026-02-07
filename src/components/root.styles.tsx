@@ -36,14 +36,17 @@ const RootStyles = createGlobalStyle`
     --round: 50%;
     --squicle: 20px/20px;
 
+    --color-white: #ffffff;
+
     /* Background colors */
-    --bg-berge: #f6f6ef;
-    --bg-gray: #828282;
-    --bg-white: #ffffff;
-    --bg-light: #ffffff99;
+    --bg-white: #FFFFFF;
+    --bg-grey: #FAFAFA;
+    --bg-black: #0C1015;
+
     --bg-subtle: #ffffff66;
+    --bg-light: #ffffff99;
     --bg-glass: #ffffff33;
-    --bg-soft: #FAFAFA;
+
 
     /* Text colors */
     --text-blue: #0078FF;
@@ -61,11 +64,9 @@ const RootStyles = createGlobalStyle`
     --text-glass: #16161633;
 
     /* Border colors */
-    --border-white: #ffffff;
-    --border-light: #EEE;
+    --border-light: #EBEBEB;
     --border-subtle: #e0e2ec;
     --border-gray: #dddddd;
-    --border-blue: #4086ce;
     --border-muted: #66667536;
   }
 
