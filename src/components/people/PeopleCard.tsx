@@ -3,7 +3,7 @@ import styled, { keyframes } from "styled-components";
 import { Person } from "./PeopleService";
 import { X as XIcon, ExternalLink } from "lucide-react";
 import { motion } from "framer-motion";
-import { IconButton } from "../styles.comp";
+import { IconButton } from "@components/IconButton";
 
 type Props = {
   person: Person;

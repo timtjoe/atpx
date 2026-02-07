@@ -46,3 +46,13 @@ img {
 #app {
   width: 100%;
 }
+
+.fullbleed, .midbleed {
+  position: relative;
+  min-width: 100%;
+  margin:0 auto;
+}
+
+.midbleed {
+  max-width: 1366px;
+}

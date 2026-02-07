@@ -7,7 +7,7 @@ const RootStyles = createGlobalStyle`
     --width-xs: 390px;
     --width-sm: 430px;
     --width-md: 693px;
-    --width-lg: 1208px;
+    --width-lg: 1366px;
 
     /* Font sizes */
     --font-xs: 0.75em;      /* 12px / 16 */
