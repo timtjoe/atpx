@@ -1,7 +1,12 @@
 import { createGlobalStyle } from "styled-components";
 
 const RootStyles = createGlobalStyle`
+  /* Import Google Fonts */
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Roboto:wght@400;500;700&display=swap');
+
   :root {
+    /* Font family variables */
+    --font-base: 'Inter', 'Roboto', 'Segoe UI', 'Helvetica Neue', sans-serif;
 
     /* Width variables */
     --width-xs: 390px;
@@ -10,11 +15,11 @@ const RootStyles = createGlobalStyle`
     --width-lg: 1366px;
 
     /* Font sizes */
-    --font-xs: 0.75em;      /* 12px / 16 */
-    --font-sm: 0.875em;     /* 14px / 16 */
-    --font-md: 1.0625em;    /* 17px / 16 */
-    --font-lg: 1.25em;      /* 20px / 16 */
-    --font-xl: 1.75em;      /* 28px / 16 */
+    --font-xs: 0.75em;    /* 12px / 16 */
+    --font-sm: 0.875em;   /* 14px / 16 */
+    --font-md: 1.0625em;  /* 17px / 16 */
+    --font-lg: 1.25em;    /* 20px / 16 */
+    --font-xl: 1.75em;    /* 28px / 16 */
 
     /* Spacing */
     --spacing-xs: 4px;
@@ -31,11 +36,6 @@ const RootStyles = createGlobalStyle`
     --round: 50%;
     --squicle: 20px/20px;
 
-    /* Flex  */
-    --flex-row: row;
-    --flex-column: column;
-    --flex-center: center;
-
     /* Background colors */
     --bg-berge: #f6f6ef;
     --bg-gray: #828282;
@@ -44,7 +44,6 @@ const RootStyles = createGlobalStyle`
     --bg-subtle: #ffffff66;
     --bg-glass: #ffffff33;
     --bg-soft: #FAFAFA;
-    /* --bg-v-soft: #f9f9fb; */
 
     /* Text colors */
     --text-blue: #0078FF;
@@ -54,21 +53,71 @@ const RootStyles = createGlobalStyle`
     --text-gray: var(--bg-gray);
     --text-black: #000000;
     --text-white: #e2e5e9;
-    --text-muted: #465a6a;    /* Accessible gray/blue for descriptions */
-  --text-main: #333333;     /* Standard body text */
-  --text-deep: #1e2151;     /* Brand/Navy for headers */
-  --text-dark: #1d2733;     /* UI text for labels */
-  --text-bold: #161525;     /* High-contrast headings */
-  --text-glass: #16161633;  /* Low-opacity text for watermarks/placeholders */
-  --text-black: #000000;    /* Pure black */
+    --text-muted: #465a6a;
+    --text-main: #333333;
+    --text-deep: #1e2151;
+    --text-dark: #1d2733;
+    --text-bold: #161525;
+    --text-glass: #16161633;
 
     /* Border colors */
-  --border-white: #ffffff;
-  --border-light: #EEE;
-  --border-subtle: #e0e2ec;
-  --border-gray: #dddddd;
-  --border-blue: #4086ce;
-  --border-muted: #66667536;
+    --border-white: #ffffff;
+    --border-light: #EEE;
+    --border-subtle: #e0e2ec;
+    --border-gray: #dddddd;
+    --border-blue: #4086ce;
+    --border-muted: #66667536;
+  }
+
+  /* Generic Resets */
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: var(--font-base);
+    background-color: var(--bg-white);
+    color: var(--text-main);
+    font-size: 14px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  a:visited {
+    color: var(--text-muted);
+  }
+
+  button {
+    font-family: var(--font-base);
+    cursor: pointer;
+    border: none;
+    background: none;
+  }
+
+  input,
+  textarea {
+    font-family: var(--font-base);
+    outline: none;
+    border: 1px solid var(--border-subtle);
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  @media (max-width: var(--width-sm)) {
+    body {
+      font-size: 13px;
+    }
   }
 `;
 

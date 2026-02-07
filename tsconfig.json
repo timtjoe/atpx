@@ -23,15 +23,29 @@
     "allowJs": true,
     "esModuleInterop": true,
     "resolveJsonModule": true,
-    "noImplicitAny": false,           
-    "noUnusedLocals": false,          
-    "noUnusedParameters": false,      
+    "noImplicitAny": false,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
     "strict": false,
 
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
-      "@components/*": ["./src/components/*"]
+
+      "@components": ["./src/components/index.ts"],
+      "@components/*": ["./src/components/*"],
+
+      "@pages": ["./src/pages/index.ts"],
+      "@pages/*": ["./src/pages/*"],
+
+      "@types": ["./src/types/index.ts"],
+      "@types/*": ["./src/types/*"],
+
+      "@store": ["./src/store/index.ts"],
+      "@store/*": ["./src/store/*"],
+
+      "@utils": ["./src/utils/index.ts"],
+      "@utils/*": ["./src/utils/*"]
     }
   },
   "include": ["src", "env.d.ts"],
