@@ -15,9 +15,11 @@ import {
   TechnicalError,
   IconButton,
 } from "@components";
+import { Comleton } from "./Comleton";
 
 const CommunityContent = () => {
   const [communities, setCommunities] = useState<CommunityType[]>([]);
+  const [loading, setLoading] = useState(true);
   const [isStart, setStart] = useState(true);
   const [isEnd, setEnd] = useState(false);
   const carousel = useRef<HTMLDivElement>(null);
@@ -27,12 +29,9 @@ const CommunityContent = () => {
       try {
         const removedUris = await communityDb.getRemovedCommunityUris();
         const result = await CommunityService.list(50);
-        const filtered = result.items.filter(
-          (c) => !removedUris.includes(c.uri)
-        );
-        setCommunities(filtered);
-      } catch (err) {
-        console.error("Failed to load communities:", err);
+        setCommunities(result.items.filter(c => !removedUris.includes(c.uri)));
+      } finally {
+        setLoading(false);
       }
     };
     loadData();
@@ -45,21 +44,7 @@ const CommunityContent = () => {
     setEnd(Math.abs(scrollWidth - clientWidth - scrollLeft) < 10);
   };
 
-  const scroll = (direction: "left" | "right") => {
-    if (!carousel.current) return;
-    // Increased scroll amount to account for two columns of cards
-    const amount = 700; 
-    carousel.current.scrollBy({
-      left: direction === "left" ? -amount : amount,
-      behavior: "smooth",
-    });
-  };
-
-  const handleRemove = (uri: string) => {
-    setCommunities((prev) => prev.filter((c) => c.uri !== uri));
-    communityDb.addRemovedCommunityUri(uri);
-    CommunityService.remove(uri);
-  };
+  if (loading) return <Comleton />;
 
   return (
     <Container>
@@ -67,12 +52,12 @@ const CommunityContent = () => {
         <Title>Trending Communities</Title>
         <HeadActions style={{ marginLeft: "auto" }}>
           {!isStart && (
-            <IconButton left onClick={() => scroll("left")} variant="trans">
+            <IconButton left onClick={() => carousel.current?.scrollBy({ left: -700, behavior: "smooth" })} variant="trans">
               <ChevronLeft size={16} />
             </IconButton>
           )}
           {!isEnd && (
-            <IconButton onClick={() => scroll("right")} variant="trans">
+            <IconButton onClick={() => carousel.current?.scrollBy({ left: 700, behavior: "smooth" })} variant="trans">
               <ChevronRight size={16} />
             </IconButton>
           )}
@@ -84,27 +69,21 @@ const CommunityContent = () => {
           {communities.map((community, idx) => (
             <motion.div
               key={community.uri}
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.2, delay: idx * 0.02 }}
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: idx * 0.05 }}
             >
-              <CommunityCard
-                community={community}
-                onRemove={handleRemove}
-              />
+              <CommunityCard community={community} onRemove={(uri) => {
+                setCommunities(prev => prev.filter(c => c.uri !== uri));
+                communityDb.addRemovedCommunityUri(uri);
+              }} />
             </motion.div>
           ))}
         </Carousel>
       </Content>
-
-      <CommunityLive
-        communities={communities}
-        setCommunities={setCommunities}
-      />
     </Container>
   );
 };
-
 export const Community = () => {
   const [key, setKey] = useState(0);
   const handleRetry = () => setKey((prev) => prev + 1);
@@ -145,26 +124,13 @@ const Content = styled.div`
 
 
 const Carousel = styled.div`
-  display: grid;
-  /* Fixed height to accommodate two rows of cards + gap */
-  height: calc((120px * 2) + 12px); 
-  grid-template-rows: repeat(2, 1fr);
-  grid-auto-flow: column;
-  grid-auto-columns: min-content;
+  display: flex;
   gap: 12px;
-  
   overflow-x: auto;
   scroll-behavior: smooth;
   scrollbar-width: none;
-  
-  &::-webkit-scrollbar {
-    display: none;
-  }
-
-  & > div {
-    /* Prevents the motion wrapper from collapsing */
-    width: 340px; 
-  }
+  &::-webkit-scrollbar { display: none; }
+  & > div { flex-shrink: 0; width: 340px; }
 `;
 
 export default Community;
