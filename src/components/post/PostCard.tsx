@@ -5,10 +5,12 @@ import { IPost as Post } from "@/types/post";
 
 export const PostCard = ({ post }: { post: Post }) => {
   const sourceEmoji = post.source === "bsky" ? "🦋" : "🐘";
+  
+  // Clean reactions logic
   const totalReactions = (
-    post.likes +
-    post.reposts +
-    post.replies
+    (post.likes || 0) +
+    (post.reposts || 0) +
+    (post.replies || 0)
   ).toLocaleString();
 
   const formattedDate = new Date(post.createdAt)
@@ -28,77 +30,73 @@ export const PostCard = ({ post }: { post: Post }) => {
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
     >
-      <Header>
+      <HeaderSection>
         <AuthorLink href={post.profileUrl} target="_blank">
-          <Avatar src={post.authorAvatar} alt="" />
+          {/* Fixed: prevents empty string src error */}
+          <Avatar src={post.authorAvatar || undefined} alt="" />
           <AuthorMeta>
-            <Name>{post.authorName || post.authorHandle}</Name>
-            <Handle>@{post.authorHandle}</Handle>
+            <AuthorName>{post.authorName || post.authorHandle}</AuthorName>
+            <AuthorHandle>@{post.authorHandle}</AuthorHandle>
           </AuthorMeta>
         </AuthorLink>
 
-        <SourceLink
-          href={
-            post.source === "bsky"
-              ? "https://bsky.app"
-              : "https://joinmastodon.org"
-          }
+        <SourceBadge
+          href={post.source === "bsky" ? "https://bsky.app" : "https://joinmastodon.org"}
           target="_blank"
         >
           {sourceEmoji}
-        </SourceLink>
-      </Header>
+        </SourceBadge>
+      </HeaderSection>
 
       <ContentLink href={post.postUrl} target="_blank">
         <ContentText>{post.content}</ContentText>
       </ContentLink>
 
-      <Footer>
+      <FooterSection>
         <FooterText>
-          <Bold>{totalReactions} reactions</Bold> &middot;{" "}
-          {post.category || "trending"} &middot; {formattedDate}
+          <ReactionCount>{totalReactions} reactions</ReactionCount> 
+          <DotSeparator />
+          {post.category || "trending"} 
+          <DotSeparator />
+          {formattedDate}
         </FooterText>
-      </Footer>
+      </FooterSection>
     </CardWrapper>
   );
 };
 
-/* --- Styled Components with Visual Breathing Room --- */
+/* --- Styled Components --- */
 
 const CardWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  padding: var(--spacing-md); /* Standard breathing room */
-  background: transparent;
-  /* border-bottom: 1px solid var(--border-light); */
+  padding: var(--spacing-md);
+  background: var(--bg-white);
   width: 100%;
+  border-bottom: 1px solid var(--border-light);
 `;
 
-const Header = styled.div`
+const HeaderSection = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 12px; /* Gap between header and content */
+  margin-bottom: var(--spacing-md);
 `;
 
 const AuthorLink = styled.a`
   display: flex;
   align-items: center;
-  gap: 12px;
-  text-decoration: none;
+  gap: var(--spacing-md);
   min-width: 0;
-
-  &:hover span {
-    text-decoration: underline;
-  }
+  &:hover span:first-child { text-decoration: underline; }
 `;
 
 const Avatar = styled.img`
   width: 36px;
   height: 36px;
-  border-radius: 50%;
+  border-radius: var(--round);
   object-fit: cover;
-  background: var(--bg-soft);
+  background: var(--bg-grey);
 `;
 
 const AuthorMeta = styled.div`
@@ -107,43 +105,38 @@ const AuthorMeta = styled.div`
   min-width: 0;
 `;
 
-const Name = styled.span`
-  font-size: 14px;
+const AuthorName = styled.span`
+  font-size: var(--font-sm);
   font-weight: 700;
   color: var(--text-bold);
   line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
-const Handle = styled.span`
-  font-size: 12px;
+const AuthorHandle = styled.span`
+  font-size: var(--font-xs);
   color: var(--text-muted);
 `;
 
-const SourceLink = styled.a`
+const SourceBadge = styled.a`
   font-size: 18px;
-  text-decoration: none;
-  padding: 4px;
-  border-radius: 6px;
+  padding: var(--spacing-xs);
+  border-radius: var(--radius-sm);
   transition: background 0.2s;
-
-  &:hover {
-    background: var(--bg-soft);
-  }
+  &:hover { background: var(--bg-grey); }
 `;
 
 const ContentLink = styled.a`
-  text-decoration: none;
-  color: inherit;
-  margin-bottom: 16px; /* Space before footer */
-
-  &:hover p {
-    color: var(--text-main-hover, #000);
-  }
+  display: block;
+  margin-bottom: var(--spacing-lg);
+  &:hover p { color: var(--text-blue); }
 `;
 
 const ContentText = styled.p`
   font-size: 15px;
-  line-height: 1.6; /* High readability line height */
+  line-height: 1.6;
   color: var(--text-main);
   font-weight: 400;
   display: -webkit-box;
@@ -152,22 +145,26 @@ const ContentText = styled.p`
   overflow: hidden;
 `;
 
-const Footer = styled.div`
-  padding-top: 12px;
-  /* border-top: 1px solid var(--border-extra-light, #f5f5f5); */
+const FooterSection = styled.div`
+  padding-top: var(--spacing-md);
 `;
 
 const FooterText = styled.div`
-  font-size: 11px;
+  font-size: 10px;
   color: var(--text-muted);
   text-transform: uppercase;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.05em;
   display: flex;
   align-items: center;
   gap: 6px;
 `;
 
-const Bold = styled.span`
+const ReactionCount = styled.span`
   font-weight: 700;
   color: var(--text-bold);
+`;
+
+const DotSeparator = styled.span`
+  &::before { content: "•"; }
+  opacity: 0.5;
 `;

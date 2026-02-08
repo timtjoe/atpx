@@ -6,6 +6,7 @@ import {
   Footer,
   Pane,
   Taskbar as MobileNav,
+  Sidebar,
 } from "@components";
 import { RouteHandle, NavConfig, RootContextType } from "@types";
 import { HOME_TABS } from "@constants";
@@ -35,10 +36,10 @@ export const Root = (): React.JSX.Element => {
     currentMatch?.pathname,
   ]);
 
-return (
+  return (
     <Body vaul-drawer-wrapper="">
       {/* SidePane remains as a spacer to maintain the layout width */}
-      <SidePane /> 
+      <SidePane />
 
       <Main id="app">
         <Toolbar
@@ -49,11 +50,7 @@ return (
         <Outlet context={{ setNavConfig } satisfies RootContextType} />
       </Main>
 
-      <Sidebar>
-        <StickyWrapper>
-          <Footer />
-        </StickyWrapper>
-      </Sidebar>
+      <Sidebar />
 
       <MobileNavWrapper>
         <MobileNav />
@@ -86,55 +83,14 @@ const Body = styled.div`
   margin: 0 auto;
 `;
 
-// const SidePane = styled.aside`
-//   width: 275px;
-//   flex-shrink: 0;
-//   display: flex;
-//   justify-content: flex-end;
-//   border-right: 1px solid var(--border-subtle);
-
-//   @media (max-width: 768px) {
-//     display: none;
-//   }
-// `;
-
-const Sidebar = styled.aside`
-  width: 350px;
-  flex-shrink: 0;
-  border-left: 1px solid var(--border-subtle);
-
-  @media (max-width: 1100px) {
-    display: none;
-  }
-`;
-
-const StickyWrapper = styled.div`
-  position: sticky;
-  top: 0;
-  height: 100vh;
-  width: 100%;
-  padding: 0 12px;
-  overflow-y: auto;
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-`;
-
 const Main = styled.main`
   width: 600px;
   min-height: 100vh;
   flex-shrink: 0;
-  /* Important: Do NOT use overflow: hidden here, 
-     it will break the sticky Navigation component.
-  */
 
   @media (max-width: 768px) {
     width: 100%;
     max-width: 100%;
-    /* padding-bottom ensures the last piece of content isn't under the fixed nav */
     padding-bottom: 80px;
   }
 `;

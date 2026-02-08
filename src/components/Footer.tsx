@@ -2,58 +2,89 @@ import React from "react";
 import styled from "styled-components";
 
 export const Footer = React.memo(() => {
-  const currentYear = new Date().getFullYear();
-
   return (
     <Container>
-      <Divider />
-      <p style={{ margin: 0 }}>
-        Made with ❤️ by{" "}
-        <a
+      <ProductionText>
+        A{" "}
+        <GithubLink
           href="https://github.com/timtjoe"
           target="_blank"
-          rel="noreferrer"
-          style={{ color: "#000", fontWeight: "bold", textDecoration: "none" }}
+          rel="noopener noreferrer"
         >
-          timtjoe
-        </a>{" "}
-        &copy; {currentYear}
-      </p>
+          Tim T. Joe
+        </GithubLink>{" "}
+        production
+      </ProductionText>
 
-      <BadgeContainer>
-        <img
-          src="https://img.shields.io/badge/ATProto-0085FF?style=flat-square&logo=bluesky&logoColor=white"
-          alt="ATProto"
-        />
-      </BadgeContainer>
+      <PowerText>
+        powered by <strong>atproto</strong>
+      </PowerText>
+
+      <LinksRow>
+        <a href="#">Terms</a>
+        <a href="#">Privacy</a>
+        <a href="#">Cookies</a>
+        <span>© {new Date().getFullYear()}</span>
+      </LinksRow>
     </Container>
   );
 });
 
+/* --- Styled Components --- */
+
 const Container = styled.footer`
-  margin-top: auto;
-  padding: 40px 0 20px;
-  text-align: center;
-  font-size: 11px;
-`;
-
-const Divider = styled.div`
-  height: 1px;
-  background-color: var(--hn-gray);
-  opacity: 0.2;
-  margin-bottom: 20px;
-`;
-
-const BadgeContainer = styled.div`
-  margin-top: 12px;
+  padding: var(--spacing-lg) var(--spacing-md);
   display: flex;
-  justify-content: center;
-  gap: 6px;
-  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: center; /* Centers items horizontally */
+  text-align: center; /* Centers text lines */
+  gap: 4px;
+  margin-top: auto;
+`;
 
-  img {
-    height: 20px;
-    border-radius: 3px;
+const ProductionText = styled.div`
+  font-size: 13px;
+  color: var(--text-main);
+`;
+
+const GithubLink = styled.a`
+  font-weight: 700;
+  color: var(--text-bold);
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+    color: var(--text-blue);
+  }
+`;
+
+const PowerText = styled.div`
+  font-size: 11px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+
+  strong {
+    color: var(--text-blue);
+    font-weight: 700;
+  }
+`;
+
+const LinksRow = styled.div`
+  margin-top: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center; /* Centers the row of links */
+  gap: 12px;
+  font-size: 12px;
+  color: var(--text-muted);
+
+  a {
+    transition: color 0.2s;
+    &:hover {
+      text-decoration: underline;
+      color: var(--text-main);
+    }
   }
 `;
 
