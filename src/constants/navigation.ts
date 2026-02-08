@@ -6,6 +6,7 @@ import {
   User,
   Settings,
   Search,
+  Info,
 } from "lucide-react";
 
 /**
@@ -14,8 +15,9 @@ import {
  */
 export const NAV_ITEMS = [
   // { id: "notifications", uri: "/notifications", label: "Notifications", icon: Bell },
-  { id: "chat", uri: "/chat", label: "Chat", icon: MessageCircle },
-  { id: "profile", uri: "/profile", label: "Profile", icon: User },
+  // { id: "chat", uri: "/chat", label: "Chat", icon: MessageCircle },
+  // { id: "profile", uri: "/profile", label: "Profile", icon: User },
+  { id: "info", uri: "#", label: "Info", icon: Info },
 ];
 
 /**
