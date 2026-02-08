@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import {
   IconButton,
@@ -11,6 +11,7 @@ import {
 } from "@components";
 import PeopleCard from "./PeopleCard";
 import PeopleLive from "./PeopleLive";
+import { Peoleton } from "./Peoleton";
 import { PeopleService, Person } from "./PeopleService";
 
 const PeopleContent = () => {
@@ -23,86 +24,79 @@ const PeopleContent = () => {
   const onScroll = () => {
     const el = container.current;
     if (!el) return;
-    setStart(el.scrollLeft <= 4);
-    setEnd(el.scrollLeft + el.clientWidth >= el.scrollWidth - 4);
-  };
-
-  const scroll = (dir: "left" | "right") => {
-    const el = container.current;
-    if (!el) return;
-    const amount = el.clientWidth * 0.8;
-    el.scrollBy({
-      left: dir === "left" ? -amount : amount,
-      behavior: "smooth",
-    });
+    setStart(el.scrollLeft <= 5);
+    setEnd(el.scrollLeft + el.clientWidth >= el.scrollWidth - 5);
   };
 
   useEffect(() => {
     const init = async () => {
       try {
-        setLoading(true);
         const { items } = await PeopleService.list(30);
         const removed = await import("@/utils/peopleDb")
           .then((m) => m.getRemovedUris())
           .catch(() => []);
-        const filtered = (items || []).filter((i) => !removed.includes(i.uri));
-        setPeople(filtered);
-      } catch (e) {
-        console.error("People fetch failed", e);
+        setPeople((items || []).filter((i) => !removed.includes(i.uri)));
       } finally {
         setLoading(false);
       }
     };
     init();
-    setTimeout(onScroll, 200);
   }, []);
 
-  useEffect(() => {
-    setTimeout(onScroll, 120);
-  }, [people]);
-
-  if (loading && people.length === 0) return null;
+  if (loading) return <Peoleton />;
 
   return (
     <Container>
       <PeoHead>
-        <Title>popular creators</Title>
-        <span style={{marginLeft: "auto"}}>
+        <Title>Popular Creators</Title>
+        <div style={{ marginLeft: "auto", display: "flex", gap: "4px" }}>
           {!isStart && (
-            <IconButton left onClick={() => scroll("left")} variant="trans">
+            <IconButton
+              left
+              onClick={() =>
+                container.current?.scrollBy({ left: -600, behavior: "smooth" })
+              }
+              variant="trans"
+            >
               <ChevronLeft size={16} />
             </IconButton>
           )}
           {!isEnd && (
-            <IconButton onClick={() => scroll("right")} variant="trans">
+            <IconButton
+              onClick={() =>
+                container.current?.scrollBy({ left: 600, behavior: "smooth" })
+              }
+              variant="trans"
+            >
               <ChevronRight size={16} />
             </IconButton>
           )}
-        </span>
+        </div>
       </PeoHead>
       <Content>
         <Carousel ref={container} onScroll={onScroll}>
-          {people.map((p, idx) => (
-            <Item key={p.uri}>
+          <AnimatePresence>
+            {people.map((p, idx) => (
               <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.22 }}
+                key={p.uri}
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                transition={{ duration: 0.2, delay: idx * 0.04 }}
               >
                 <PeopleCard
                   person={p}
-                  position={idx + 1}
                   onRemove={(uri) => {
-                    import("@/utils/peopleDb")
-                      .then((m) => m.addRemovedUri(uri))
-                      .catch(() => {});
+                    import("@/utils/peopleDb").then((m) =>
+                      m.addRemovedUri(uri),
+                    );
                     PeopleService.remove(uri);
                     setPeople((prev) => prev.filter((x) => x.uri !== uri));
                   }}
                 />
               </motion.div>
-            </Item>
-          ))}
+            ))}
+          </AnimatePresence>
         </Carousel>
       </Content>
       <PeopleLive people={people} setPeople={setPeople} />
@@ -110,54 +104,41 @@ const PeopleContent = () => {
   );
 };
 
-export const People = () => {
-  const [key, setKey] = useState(0);
-  const handleRetry = () => setKey((prev) => prev + 1);
-
-  return (
-    <ErrorBoundary
-      key={key}
-      fallback={
-        <TechnicalError
-          message="Failed to load creators."
-          onRetry={handleRetry}
-          autoRetrySeconds={5}
-        />
-      }
-    >
-      <PeopleContent />
-    </ErrorBoundary>
-  );
-};
-
+/* --- Styles --- */
 const Container = styled.section`
   margin-top: var(--spacing-md);
   background-color: var(--bg-white);
-  position: relative;
+  width: 100%;
 `;
 
 const Content = styled.div`
   display: flex;
-  align-items: center;
-  margin-top: var(--spacing-md);
+  margin-top: var(--spacing-sm);
 `;
 
 const Carousel = styled.div`
   display: flex;
   overflow-x: auto;
   scroll-behavior: smooth;
-  padding: 0 var(--spacing-sm);
+  padding: 0 var(--spacing-md);
   gap: var(--spacing-xs);
+  scrollbar-width: none;
   &::-webkit-scrollbar {
     display: none;
   }
-`;
-
-const Item = styled.div`
-  margin-right: 8px;
-  flex: 0 0 auto;
+  & > div {
+    flex-shrink: 0;
+  }
 `;
 
 const PeoHead = styled(Header)`
-  padding-left: var(--spacing-md);
+  padding: var(--spacing-xs) var(--spacing-md);
 `;
+
+export const People = () => (
+  <ErrorBoundary
+    fallback={<TechnicalError message="Failed to load creators." />}
+  >
+    <PeopleContent />
+  </ErrorBoundary>
+);
