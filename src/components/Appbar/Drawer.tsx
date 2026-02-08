@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { Drawer as Vaul } from "vaul";
 
-interface IAppDrawer {
+interface IDrawer {
   trigger: React.ReactNode;
   children: React.ReactNode;
   title?: string;
@@ -10,13 +10,13 @@ interface IAppDrawer {
   onOpenChange?: (open: boolean) => void;
 }
 
-export const AppDrawer = ({
+export const Drawer = ({
   trigger,
   children,
   title,
   open,
   onOpenChange,
-}: IAppDrawer) => {
+}: IDrawer) => {
   return (
     <Vaul.Root open={open} onOpenChange={onOpenChange}>
       <Vaul.Trigger asChild>{trigger}</Vaul.Trigger>
@@ -41,7 +41,7 @@ export const AppDrawer = ({
   );
 };
 
-/* --- Updated Styled Components in AppDrawer.tsx --- */
+/* --- Updated Styled Components in Drawer.tsx --- */
 
 const Overlay = styled(Vaul.Overlay)`
   position: fixed;

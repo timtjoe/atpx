@@ -64,7 +64,7 @@ const CommunityContent = () => {
   return (
     <Container>
       <ComHead>
-        <Title>communities</Title>
+        <Title>Trending Communities</Title>
         <HeadActions style={{ marginLeft: "auto" }}>
           {!isStart && (
             <IconButton left onClick={() => scroll("left")} variant="trans">

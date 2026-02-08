@@ -1,5 +1,6 @@
 // Barrel file
-export * from "./Navigation"
-export * from "./MobileNav"
+export * from "./Navbar"; // Tabs list navigation for all screens
+export * from "./Taskbar"; //Bottombar for small screen
 export * from "./Logo";
-export * from "./Pane";
+export * from "./Pane"; // Leftside bars for big screen
+export * from "./Sidebar"; // Rightside bar for big screens

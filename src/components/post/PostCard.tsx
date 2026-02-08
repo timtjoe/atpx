@@ -1,273 +1,173 @@
+import React from "react";
 import styled from "styled-components";
 import { motion } from "framer-motion";
-import { Heart, MessageCircle, Repeat2 } from "lucide-react";
-import { Post } from "./PostService";
+import { IPost as Post } from "@/types/post";
 
-type Props = {
-  post: Post;
-};
-
-export const PostCard = ({ post }: Props) => {
+export const PostCard = ({ post }: { post: Post }) => {
   const sourceEmoji = post.source === "bsky" ? "🦋" : "🐘";
+  const totalReactions = (
+    post.likes +
+    post.reposts +
+    post.replies
+  ).toLocaleString();
+
+  const formattedDate = new Date(post.createdAt)
+    .toLocaleString("en-US", {
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    })
+    .toUpperCase();
 
   return (
-    <Card
-      as={motion.a}
-      href={post.postUrl}
-      target="_blank"
-      rel="noopener noreferrer"
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: 1, scale: 1 }}
-      whileHover={{ scale: 1.03 }}
-      transition={{ duration: 0.25 }}
+    <CardWrapper
+      as={motion.div}
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
     >
-      <SourceBadge>{sourceEmoji}</SourceBadge>
-
       <Header>
-        <AuthorAvatar src={post.authorAvatar} alt={post.authorHandle} />
-        <AuthorInfo>
-          <AuthorName>{post.authorName || post.authorHandle}</AuthorName>
-          <AuthorHandle>@{post.authorHandle}</AuthorHandle>
-        </AuthorInfo>
+        <AuthorLink href={post.profileUrl} target="_blank">
+          <Avatar src={post.authorAvatar} alt="" />
+          <AuthorMeta>
+            <Name>{post.authorName || post.authorHandle}</Name>
+            <Handle>@{post.authorHandle}</Handle>
+          </AuthorMeta>
+        </AuthorLink>
+
+        <SourceLink
+          href={
+            post.source === "bsky"
+              ? "https://bsky.app"
+              : "https://joinmastodon.org"
+          }
+          target="_blank"
+        >
+          {sourceEmoji}
+        </SourceLink>
       </Header>
 
-      <Content>{post.content}</Content>
+      <ContentLink href={post.postUrl} target="_blank">
+        <ContentText>{post.content}</ContentText>
+      </ContentLink>
 
-      <EngagementMetrics>
-        <MetricItem>
-          <MessageCircle size={14} />
-          <MetricValue>{post.replies > 0 ? post.replies : "0"}</MetricValue>
-        </MetricItem>
-        <MetricItem>
-          <Repeat2 size={14} />
-          <MetricValue>{post.reposts > 0 ? post.reposts : "0"}</MetricValue>
-        </MetricItem>
-        <MetricItem>
-          <Heart size={14} />
-          <MetricValue>{post.likes > 0 ? post.likes : "0"}</MetricValue>
-        </MetricItem>
-      </EngagementMetrics>
-
-      <Timestamp>{formatTime(post.createdAt)}</Timestamp>
-    </Card>
+      <Footer>
+        <FooterText>
+          <Bold>{totalReactions} reactions</Bold> &middot;{" "}
+          {post.category || "trending"} &middot; {formattedDate}
+        </FooterText>
+      </Footer>
+    </CardWrapper>
   );
 };
 
-function formatTime(isoString: string): string {
-  const date = new Date(isoString);
-  const now = new Date();
-  const diffMs = now.getTime() - date.getTime();
-  const diffMins = Math.floor(diffMs / 60000);
-  const diffHours = Math.floor(diffMins / 60);
-  const diffDays = Math.floor(diffHours / 24);
+/* --- Styled Components with Visual Breathing Room --- */
 
-  if (diffMins < 1) return "now";
-  if (diffMins < 60) return `${diffMins}m`;
-  if (diffHours < 24) return `${diffHours}h`;
-  if (diffDays < 7) return `${diffDays}d`;
-
-  return date.toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-  });
-}
-
-export const Card = styled.a`
+const CardWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  background: #fff;
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  border-radius: 12px;
-  padding: 14px;
-  gap: 10px;
+  padding: var(--spacing-md); /* Standard breathing room */
+  background: transparent;
+  /* border-bottom: 1px solid var(--border-light); */
   width: 100%;
-  max-height: 420px;
-  min-height: 320px;
-  cursor: pointer;
-  position: relative;
-  transition: all 0.25s ease;
-  text-decoration: none;
-  color: inherit;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-  overflow: hidden;
-
-  &:hover {
-    border-color: rgba(0, 0, 0, 0.15);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
-    background: #fafafa;
-  }
-
-  /* Tablet sizing */
-  @media (max-width: 1024px) {
-    padding: 12px;
-    gap: 8px;
-    max-height: 380px;
-    min-height: 300px;
-  }
-
-  /* Mobile sizing - smaller cards */
-  @media (max-width: 768px) {
-    padding: 10px;
-    gap: 6px;
-    max-height: 360px;
-    min-height: 280px;
-  }
-
-  /* Small mobile */
-  @media (max-width: 480px) {
-    padding: 8px;
-    gap: 5px;
-    max-height: 340px;
-    min-height: 240px;
-  }
 `;
 
-export const SourceBadge = styled.div`
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  font-size: 16px;
-  opacity: 0.8;
-  z-index: 5;
-  transition: opacity 0.2s ease;
-
-  ${Card}:hover & {
-    opacity: 1;
-  }
-`;
-
-export const Header = styled.div`
+const Header = styled.div`
   display: flex;
-  gap: 12px;
-  align-items: flex-start;
-  padding-top: 4px;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px; /* Gap between header and content */
 `;
 
-export const AuthorAvatar = styled.img`
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  object-fit: cover;
-  flex-shrink: 0;
-  background: #eee;
-
-  @media (max-width: 768px) {
-    width: 40px;
-    height: 40px;
-  }
-
-  @media (max-width: 480px) {
-    width: 36px;
-    height: 36px;
-  }
-`;
-
-export const AuthorInfo = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  min-width: 0;
-  flex: 1;
-`;
-
-export const AuthorName = styled.div`
-  font-weight: 600;
-  font-size: 13px;
-  color: #000;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-
-  @media (max-width: 768px) {
-    font-size: 12px;
-  }
-
-  @media (max-width: 480px) {
-    font-size: 11px;
-  }
-`;
-
-export const AuthorHandle = styled.div`
-  font-size: 12px;
-  color: #666;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-
-  @media (max-width: 768px) {
-    font-size: 11px;
-  }
-
-  @media (max-width: 480px) {
-    font-size: 10px;
-  }
-`;
-
-export const Content = styled.div`
-  font-size: 14px;
-  color: #222;
-  line-height: 1.5;
-  word-wrap: break-word;
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-line-clamp: 4;
-  -webkit-box-orient: vertical;
-  flex: 1;
-  margin: 2px 0;
-  font-weight: 500;
-
-  @media (max-width: 768px) {
-    font-size: 13px;
-    -webkit-line-clamp: 3;
-  }
-
-  @media (max-width: 480px) {
-    font-size: 12px;
-    -webkit-line-clamp: 2;
-  }
-`;
-
-export const EngagementMetrics = styled.div`
-  display: flex;
-  gap: 14px;
-  font-size: 12px;
-  color: #666;
-  padding-top: 10px;
-  border-top: 1px solid #f0f0f0;
-  margin-top: auto;
-
-  @media (max-width: 768px) {
-    gap: 10px;
-    font-size: 11px;
-    padding-top: 8px;
-  }
-
-  @media (max-width: 480px) {
-    gap: 8px;
-    font-size: 10px;
-    padding-top: 6px;
-  }
-`;
-
-export const MetricItem = styled.div`
+const AuthorLink = styled.a`
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 12px;
+  text-decoration: none;
+  min-width: 0;
 
-  svg {
-    color: #ff6600;
-    opacity: 0.8;
+  &:hover span {
+    text-decoration: underline;
   }
 `;
 
-export const MetricValue = styled.span`
-  font-size: 11px;
-  color: #666;
-  font-weight: 500;
+const Avatar = styled.img`
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: var(--bg-soft);
 `;
 
-export const Timestamp = styled.div`
+const AuthorMeta = styled.div`
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+`;
+
+const Name = styled.span`
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-bold);
+  line-height: 1.2;
+`;
+
+const Handle = styled.span`
+  font-size: 12px;
+  color: var(--text-muted);
+`;
+
+const SourceLink = styled.a`
+  font-size: 18px;
+  text-decoration: none;
+  padding: 4px;
+  border-radius: 6px;
+  transition: background 0.2s;
+
+  &:hover {
+    background: var(--bg-soft);
+  }
+`;
+
+const ContentLink = styled.a`
+  text-decoration: none;
+  color: inherit;
+  margin-bottom: 16px; /* Space before footer */
+
+  &:hover p {
+    color: var(--text-main-hover, #000);
+  }
+`;
+
+const ContentText = styled.p`
+  font-size: 15px;
+  line-height: 1.6; /* High readability line height */
+  color: var(--text-main);
+  font-weight: 400;
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+`;
+
+const Footer = styled.div`
+  padding-top: 12px;
+  /* border-top: 1px solid var(--border-extra-light, #f5f5f5); */
+`;
+
+const FooterText = styled.div`
   font-size: 11px;
-  color: #999;
-  margin-top: 6px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+`;
+
+const Bold = styled.span`
+  font-weight: 700;
+  color: var(--text-bold);
 `;

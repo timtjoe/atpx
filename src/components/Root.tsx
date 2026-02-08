@@ -1,9 +1,15 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Outlet, useMatches, UIMatch } from "react-router-dom";
-import { Navigation, Footer, Pane, MobileNav } from "@components";
+import {
+  Navbar as Navigation,
+  Footer,
+  Pane,
+  Taskbar as MobileNav,
+} from "@components";
 import { RouteHandle, NavConfig, RootContextType } from "@types";
 import { HOME_TABS } from "@constants";
+import { Toolbar } from "./appbar/Toolbar";
 
 export const Root = (): React.JSX.Element => {
   const matches = useMatches() as UIMatch<unknown, RouteHandle>[];
@@ -22,16 +28,20 @@ export const Root = (): React.JSX.Element => {
       showBack: routeHandle.showBack || false,
       tabs: routeHandle.showTabs ? HOME_TABS : [],
     });
-  }, [routeHandle.title, routeHandle.showBack, routeHandle.showTabs, currentMatch?.pathname]);
+  }, [
+    routeHandle.title,
+    routeHandle.showBack,
+    routeHandle.showTabs,
+    currentMatch?.pathname,
+  ]);
 
-  return (
-<Body vaul-drawer-wrapper="">
-      <SidePane>
-        <StickyWrapper><Pane /></StickyWrapper>
-      </SidePane>
+return (
+    <Body vaul-drawer-wrapper="">
+      {/* SidePane remains as a spacer to maintain the layout width */}
+      <SidePane /> 
 
       <Main id="app">
-        <Navigation
+        <Toolbar
           title={navConfig.title ?? ""}
           showBack={navConfig.showBack}
           tabs={navConfig.tabs}
@@ -40,11 +50,11 @@ export const Root = (): React.JSX.Element => {
       </Main>
 
       <Sidebar>
-        <StickyWrapper><Footer /></StickyWrapper>
+        <StickyWrapper>
+          <Footer />
+        </StickyWrapper>
       </Sidebar>
 
-      {/* FIXED: Move this OUTSIDE of Main so it can sit 
-          correctly in the global stacking context */}
       <MobileNavWrapper>
         <MobileNav />
       </MobileNavWrapper>
@@ -53,6 +63,20 @@ export const Root = (): React.JSX.Element => {
 };
 
 /* --- Styled Components --- */
+// Update SidePane to be a simple spacer
+const SidePane = styled.aside`
+  width: 275px;
+  flex-shrink: 0;
+  border-right: 1px solid var(--border-subtle);
+
+  @media (max-width: 1100px) {
+    width: 80px; /* Collapse spacer on medium screens */
+  }
+
+  @media (max-width: 768px) {
+    display: none;
+  }
+`;
 
 const Body = styled.div`
   display: flex;
@@ -62,17 +86,17 @@ const Body = styled.div`
   margin: 0 auto;
 `;
 
-const SidePane = styled.aside`
-  width: 275px;
-  flex-shrink: 0; 
-  display: flex;
-  justify-content: flex-end;
-  border-right: 1px solid var(--border-subtle);
+// const SidePane = styled.aside`
+//   width: 275px;
+//   flex-shrink: 0;
+//   display: flex;
+//   justify-content: flex-end;
+//   border-right: 1px solid var(--border-subtle);
 
-  @media (max-width: 768px) {
-    display: none;
-  }
-`;
+//   @media (max-width: 768px) {
+//     display: none;
+//   }
+// `;
 
 const Sidebar = styled.aside`
   width: 350px;
@@ -91,8 +115,10 @@ const StickyWrapper = styled.div`
   width: 100%;
   padding: 0 12px;
   overflow-y: auto;
-  
-  &::-webkit-scrollbar { display: none; }
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
   -ms-overflow-style: none;
   scrollbar-width: none;
 `;
@@ -100,7 +126,7 @@ const StickyWrapper = styled.div`
 const Main = styled.main`
   width: 600px;
   min-height: 100vh;
-  flex-shrink: 0; 
+  flex-shrink: 0;
   /* Important: Do NOT use overflow: hidden here, 
      it will break the sticky Navigation component.
   */
@@ -109,7 +135,7 @@ const Main = styled.main`
     width: 100%;
     max-width: 100%;
     /* padding-bottom ensures the last piece of content isn't under the fixed nav */
-    padding-bottom: 80px; 
+    padding-bottom: 80px;
   }
 `;
 

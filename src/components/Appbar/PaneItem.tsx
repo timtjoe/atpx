@@ -10,70 +10,67 @@ interface IPaneItem {
 }
 
 export const PaneItem = ({ uri, label, icon: Icon, badge }: IPaneItem) => {
+  // Show indicator if badge is a number > 0 or explicitly true
+  const hasNotifications =
+    badge !== undefined &&
+    badge !== false &&
+    (typeof badge !== "number" || badge > 0);
+
   return (
-    <StyledLink to={uri} title={label}>
+    <Link to={uri} title={label}>
       <IconContainer>
-        <Icon size={28} />
-        {badge !== undefined && badge !== false && (
-          <Badge $isDot={badge === true}>
-            {typeof badge === "number" && badge > 0 ? badge : ""}
-          </Badge>
-        )}
+        <Icon size={24} strokeWidth={2.2} />
+        {hasNotifications && <NotificationDot />}
       </IconContainer>
-    </StyledLink>
+    </Link>
   );
 };
+
+/* --- Styled Components --- */
 
 const IconContainer = styled.div`
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  /* Ensure icon itself is black as requested */
-  color: var(--bg-black, #000); 
+  color: var(--text-main);
 `;
 
-const Badge = styled.div<{ $isDot: boolean }>`
+const NotificationDot = styled.div`
   position: absolute;
-  top: -2px;
-  right: -2px;
-  background-color: var(--brand-primary, #1d9bf0);
-  color: white;
-  border: 2px solid var(--bg-page, #fff);
-  border-radius: 999px;
-  min-width: ${(props) => (props.$isDot ? "10px" : "18px")};
-  height: ${(props) => (props.$isDot ? "10px" : "18px")};
-  font-size: 10px;
-  font-weight: bold;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  /* Positioned at the top right of the icon */
+  top: -1px;
+  right: -1px;
+
+  width: 9px;
+  height: 9px;
+  background-color: var(--text-red);
+  border: thin solid var(--border-sofe, #fff);
+  border-radius: 50%;
+  z-index: 1;
 `;
 
-const StyledLink = styled(NavLink)`
+const Link = styled(NavLink)`
   display: flex;
   align-items: center;
   justify-content: center;
-  
-  /* Fixed 60x60 size */
-  width: 60px;
-  height: 60px;
-  
-  /* Squicle-like border radius */
-  border-radius: 20px; 
-  
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
   text-decoration: none;
-  transition: all 0.2s ease;
+  transition: background 0.2s ease;
 
   &:hover {
-    background: var(--bg-trans, rgba(0, 0, 0, 0.05));
+    background: var(--bg-soft, rgba(0, 0, 0, 0.05));
   }
-  
+
   &.active {
-    background: var(--bg-trans, rgba(0, 0, 0, 0.08));
-    /* Active icon can stay black or switch to brand color */
     ${IconContainer} {
-       color: var(--brand-primary);
+      color: var(--text-bold, #000);
+      /* Opt: thicker stroke for active icon if using Lucide */
+      svg {
+        stroke-width: 2.5;
+      }
     }
   }
 `;

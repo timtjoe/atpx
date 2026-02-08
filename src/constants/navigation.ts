@@ -5,27 +5,42 @@ import {
   Bookmark,
   User,
   Settings,
+  Search,
 } from "lucide-react";
 
 /**
- * Main Sidebar & Drawer Items
+ * TOOLBAR / PANE ITEMS (Main Header)
+ * These appear in the top row on desktop and tablet.
  */
 export const NAV_ITEMS = [
-  { id: "home", uri: "/", label: "Home", icon: Home },
-  {
-    id: "notifications",
-    uri: "/notifications",
-    label: "Notifications",
-    icon: Bell,
-  },
+  { id: "notifications", uri: "/notifications", label: "Notifications", icon: Bell },
   { id: "chat", uri: "/chat", label: "Chat", icon: MessageCircle },
-  { id: "bookmarks", uri: "/bookmarks", label: "Bookmarks", icon: Bookmark },
   { id: "profile", uri: "/profile", label: "Profile", icon: User },
+];
+
+/**
+ * TASKBAR PRIMARY (Mobile Bottom Bar)
+ * Persistent items at the bottom of the screen.
+ */
+export const TASKBAR_PRIMARY = [
+  { id: "explore", uri: "/explore", icon: Search },
+  { id: "notifications", uri: "/notifications", icon: Bell },
+  { id: "messages", uri: "/chat", icon: MessageCircle },
+  // Home removed as requested
+];
+
+/**
+ * TASKBAR SECONDARY (Mobile Drawer)
+ * Items tucked away inside the profile/more menu on mobile.
+ */
+export const TASKBAR_SECONDARY = [
+  { id: "profile", uri: "/profile", label: "Profile", icon: User },
+  { id: "bookmarks", uri: "/bookmarks", label: "Bookmarks", icon: Bookmark },
   { id: "settings", uri: "/settings", label: "Settings", icon: Settings },
 ];
 
 /**
- * Top Navigation Tabs (Home Screen)
+ * SUB-NAVIGATION TABS (Home Content)
  */
 export const HOME_TABS = [
   { label: "Your Feed", path: "/" },
@@ -34,15 +49,6 @@ export const HOME_TABS = [
   { label: "Trending", path: "/trendings" },
 ];
 
-/**
- * Mobile Bottom Bar Configuration
- * Items to extract from NAV_ITEMS for the persistent bottom bar
- */
-export const BOTTOM_BAR_IDS = ["home", "explore", "notifications", "messages"];
-
-/**
- * Responsive Breakpoints
- */
 export const BREAKPOINTS = {
   mobile: "768px",
   tablet: "1100px",

@@ -1,180 +1,114 @@
-import { useState, useEffect, useRef, useCallback } from "react";
-import { motion } from "framer-motion";
+import React, { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
+import { IPost as Post } from "@/types/post";
 import { PostService } from "./PostService";
 import { PostCard } from "./PostCard";
 import { PostLive } from "./PostLive";
+import { ErrorBoundary, TechnicalError } from "@components";
 
-export const Posts = () => {
-  const [posts, setPosts] = useState<any[]>([]);
+const PostsContent = () => {
+  const [posts, setPosts] = useState<Post[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
-  const observerTarget = useRef<HTMLDivElement>(null);
 
-  // Initial load
-  useEffect(() => {
-    const loadInitial = async () => {
-      try {
-        setIsLoading(true);
-        const result = await PostService.list(30);
-        setPosts(result.items);
-        setHasMore((result.items?.length || 0) > 0);
-      } catch (err) {
-        console.error("Failed to load posts:", err);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    loadInitial();
-  }, []);
-
-  // Load more posts when scrolling to bottom
-  const loadMore = useCallback(async () => {
-    if (isLoading || !hasMore) return;
-
+  const loadPosts = useCallback(async () => {
+    if (isLoading) return;
+    setIsLoading(true);
     try {
-      setIsLoading(true);
-      const result = await PostService.list(20);
-      const newPosts = result.items || [];
+      // Pass existing URIs so the service knows what to skip
+      const currentUris = posts.map((p) => p.uri);
+      const result = await PostService.list(15, currentUris);
 
-      // Filter out duplicates
-      const existingUris = new Set(posts.map((p) => p.uri));
-      const uniquePosts = newPosts.filter((p) => !existingUris.has(p.uri));
-
-      if (uniquePosts.length > 0) {
-        setPosts((prev) => [...prev, ...uniquePosts]);
-      }
-
-      setHasMore(uniquePosts.length > 0);
+      setPosts((prev) => [...prev, ...result.items]);
+      setHasMore(result.hasMore);
     } catch (err) {
-      console.error("Failed to load more posts:", err);
-      setHasMore(false);
+      console.error(err);
+      throw err; // Let ErrorBoundary handle it
     } finally {
       setIsLoading(false);
     }
-  }, [posts, isLoading, hasMore]);
+  }, [isLoading, posts]);
 
-  // Intersection Observer for infinite scroll
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting && hasMore && !isLoading) {
-          loadMore();
-        }
-      },
-      { threshold: 0.1 },
-    );
-
-    if (observerTarget.current) {
-      observer.observe(observerTarget.current);
-    }
-
-    return () => {
-      if (observerTarget.current) {
-        observer.unobserve(observerTarget.current);
-      }
-    };
-  }, [loadMore, hasMore, isLoading]);
+    loadPosts();
+  }, []);
 
   return (
-    <PostsWrapper>
+    <Container>
       <SectionHeader>trending posts</SectionHeader>
 
-      <PostsGrid>
-        {posts.map((post, idx) => (
-          <motion.div
-            key={`${post.uri}-${post.cid || idx}`}
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.3, delay: idx * 0.02 }}
-          >
-            <PostCard post={post} />
-          </motion.div>
+      <Grid>
+        {posts.map((post) => (
+          <PostCard key={post.uri} post={post} />
         ))}
-      </PostsGrid>
+      </Grid>
 
-      <LoadingTarget ref={observerTarget}>
-        {isLoading && <LoadingSpinner>loading more posts...</LoadingSpinner>}
-      </LoadingTarget>
+      {hasMore && (
+        <ActionArea>
+          <LoadButton onClick={loadPosts} disabled={isLoading}>
+            {isLoading ? "loading..." : "load more posts"}
+          </LoadButton>
+        </ActionArea>
+      )}
 
-      <PostLive posts={posts} setPosts={setPosts} />
-    </PostsWrapper>
+      <PostLive setPosts={setPosts} />
+    </Container>
   );
 };
 
-export const PostsWrapper = styled.div`
-  width: 100%;
-  margin-top: 10px;
-  padding: 0 10px;
-`;
+// Main Export with ErrorBoundary
+export const Posts = () => {
+  const [key, setKey] = useState(0);
+  return (
+    <ErrorBoundary
+      key={key}
+      fallback={
+        <TechnicalError
+          message="Could not load trending posts."
+          onRetry={() => setKey((k) => k + 1)}
+        />
+      }
+    >
+      <PostsContent />
+    </ErrorBoundary>
+  );
+};
 
-export const SectionHeader = styled.div`
-  padding: 10px 0;
-  font-weight: bold;
-  font-size: 13px;
+/* --- Styles --- */
+const Container = styled.div`
+  width: 100%;
+  padding: 0 16px;
+  margin-bottom: 50px;
+`;
+const SectionHeader = styled.h3`
+  font-size: 11px;
+  font-weight: 700;
   color: #ff6600;
-  text-transform: lowercase;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  letter-spacing: 0.1em;
 `;
-
-export const PostsGrid = styled.div`
-  /* Modern CSS Grid Masonry Layout with Subgrid */
+const Grid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 14px;
-  width: 100%;
-  animation: fadeIn 0.3s ease;
-  align-items: start;
-
-  /* CSS Grid Auto Rows for masonry effect */
-  grid-auto-rows: auto;
-
-  /* Fallback for older browsers: CSS Columns */
-  @supports not (grid-template-columns: subgrid) {
-    column-count: 3;
-    column-gap: 14px;
-    break-inside: avoid;
-
-    @media (max-width: 1024px) {
-      column-count: 2;
-    }
-
-    @media (max-width: 640px) {
-      column-count: 1;
-    }
-  }
-
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
-  }
-
-  /* Tablet: 2 columns */
-  @media (max-width: 1024px) {
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 12px;
-  }
-
-  /* Mobile: 1 column */
-  @media (max-width: 640px) {
-    grid-template-columns: 1fr;
-    gap: 10px;
-  }
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1px;
+  background: var(--border-light);
+  border-top: 1px solid var(--border-light);
 `;
-
-export const LoadingTarget = styled.div`
-  width: 100%;
-  padding: 20px 0;
+const ActionArea = styled.div`
   display: flex;
   justify-content: center;
-  align-items: center;
+  padding: 32px 0;
 `;
-
-export const LoadingSpinner = styled.div`
+const LoadButton = styled.button`
+  background: transparent;
+  border: 1px solid var(--border-light);
+  padding: 8px 20px;
+  border-radius: 6px;
   font-size: 12px;
-  color: #999;
-  font-style: italic;
+  font-weight: 600;
+  cursor: pointer;
+  &:hover {
+    background: var(--bg-soft);
+  }
 `;

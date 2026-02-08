@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { Link as RouterLink } from "react-router-dom";
 import image from "/logo.svg";
 
 interface ILogo {
@@ -8,53 +9,52 @@ interface ILogo {
 
 export const Logo = ({ link }: ILogo): React.JSX.Element => {
   return (
-    <Link href={link || "/"} aria-label="Home">
+    <Container to={link || "/"} aria-label="Home">
       <Icon src={image} alt="Logo" />
-    </Link>
+    </Container>
   );
 };
 
 /* --- Styled Components --- */
 
-const Link = styled.a`
+const Container = styled(RouterLink)`
   display: flex;
   align-items: center;
   justify-content: center;
   
-  /* Matches PaneItem size exactly */
-  width: 60px;
-  height: 60px;
+  /* Adjusted to fit inside the 54px Toolbar TopRow */
+  width: 44px;
+  height: 44px;
   
-  /* Matches PaneItem squircle radius */
-  border-radius: 20px;
+  /* Retains the squircle look but scaled down for the header */
+  border-radius: 12px;
   
   text-decoration: none;
-  transition: background 0.2s ease;
+  transition: all 0.2s ease;
   cursor: pointer;
 
   &:hover {
-    background: var(--bg-trans, rgba(0, 0, 0, 0.05));
+    background: var(--bg-soft, rgba(0, 0, 0, 0.05));
+  }
+
+  &:active {
+    transform: scale(0.95);
   }
 `;
 
 const Icon = styled.img`
-  /* Set a fixed size for the logo mark inside the 60px container */
-  width: 32px; 
-  height: 32px;
+  /* Standardized logo size for headers */
+  width: 28px; 
+  height: 28px;
   
-  /* Keeps the SVG crisp and centered */
   object-fit: contain;
   display: block;
-  
-  /* Inherits black color if the SVG is set to 'currentColor', 
-     otherwise this controls opacity */
-  opacity: 0.9;
+  opacity: 0.95;
   transition: transform 0.2s ease;
 
-  ${Link}:hover & {
+  ${Container}:hover & {
     opacity: 1;
-    /* Subtle scale effect on hover */
-    transform: scale(1.05);
+    transform: scale(1.08);
   }
 `;
 
