@@ -3,22 +3,20 @@ import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 import { User } from "lucide-react";
 import { TASKBAR_PRIMARY, TASKBAR_SECONDARY } from "@constants";
-import { Drawer as AppDrawer } from "./Drawer";
+import { AppDrawer } from "@components";
 
 export const Taskbar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <BottomBarContainer>
+    <Container>
       <BarRow>
-        {/* Navigation Links */}
         {TASKBAR_PRIMARY.map((item) => (
           <TabLink key={item.id} to={item.uri} onClick={() => setIsOpen(false)}>
             <item.icon size={26} strokeWidth={2} />
           </TabLink>
         ))}
 
-        {/* Drawer Trigger - Integrated in the same row */}
         <AppDrawer
           open={isOpen}
           onOpenChange={setIsOpen}
@@ -28,7 +26,7 @@ export const Taskbar = () => {
             </ProfileTrigger>
           }
         >
-          <DrawerContentWrapper>
+          <DrawerContent>
             <DrawerList>
               {TASKBAR_SECONDARY.map((item) => (
                 <DrawerItem
@@ -41,16 +39,16 @@ export const Taskbar = () => {
                 </DrawerItem>
               ))}
             </DrawerList>
-          </DrawerContentWrapper>
+          </DrawerContent>
         </AppDrawer>
       </BarRow>
-    </BottomBarContainer>
+    </Container>
   );
 };
 
 /* --- Styled Components --- */
 
-const BottomBarContainer = styled.nav`
+const Container = styled.nav`
   position: fixed;
   bottom: 0;
   left: 0;
@@ -88,7 +86,8 @@ const ProfileTrigger = styled.div<{ $active: boolean }>`
   display: flex;
   align-items: center;
   justify-content: center;
-  color: ${(props) => (props.$active ? "var(--text-bold)" : "var(--text-muted)")};
+  color: ${(props) =>
+    props.$active ? "var(--text-bold)" : "var(--text-muted)"};
   flex: 1;
   height: 100%;
   cursor: pointer;
@@ -99,11 +98,11 @@ const ProfileTrigger = styled.div<{ $active: boolean }>`
   }
 `;
 
-const DrawerContentWrapper = styled.div`
+const DrawerContent = styled.div`
   /* This ensures the drawer items start high enough so they don't 
      feel "behind" the taskbar links */
   padding: 16px;
-  padding-bottom: 80px; 
+  padding-bottom: 80px;
   background: var(--bg-page);
   border-radius: 24px 24px 0 0;
 `;

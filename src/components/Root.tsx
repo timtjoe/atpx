@@ -2,15 +2,12 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Outlet, useMatches, UIMatch } from "react-router-dom";
 import {
-  Navbar as Navigation,
-  Footer,
-  Pane,
-  Taskbar as MobileNav,
+  Taskbar,
   Sidebar,
+  Toolbar
 } from "@components";
 import { RouteHandle, NavConfig, RootContextType } from "@types";
 import { HOME_TABS } from "@constants";
-import { Toolbar } from "./appbar/Toolbar";
 
 export const Root = (): React.JSX.Element => {
   const matches = useMatches() as UIMatch<unknown, RouteHandle>[];
@@ -38,9 +35,7 @@ export const Root = (): React.JSX.Element => {
 
   return (
     <Body vaul-drawer-wrapper="">
-      {/* SidePane remains as a spacer to maintain the layout width */}
       <SidePane />
-
       <Main id="app">
         <Toolbar
           title={navConfig.title ?? ""}
@@ -53,7 +48,7 @@ export const Root = (): React.JSX.Element => {
       <Sidebar />
 
       <MobileNavWrapper>
-        <MobileNav />
+        <Taskbar />
       </MobileNavWrapper>
     </Body>
   );

@@ -2,14 +2,14 @@ import React from "react";
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
 
-interface IPaneItem {
+interface IBarItem {
   uri: string;
   label: string;
   icon: React.ElementType;
   badge?: number | boolean;
 }
 
-export const PaneItem = ({ uri, label, icon: Icon, badge }: IPaneItem) => {
+export const BarItem = ({ uri, label, icon: Icon, badge }: IBarItem) => {
   // Show indicator if badge is a number > 0 or explicitly true
   const hasNotifications =
     badge !== undefined &&

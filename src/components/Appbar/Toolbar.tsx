@@ -4,7 +4,7 @@ import { Home } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Navbar } from "./Navbar";
 import { Logo } from "./Logo";
-import { PaneItem } from "./PaneItem";
+import { BarItem } from "./BarItem";
 import { NAV_ITEMS } from "@constants";
 import { ErrorBoundary } from "@components/ErrorBoundary";
 
@@ -37,7 +37,7 @@ export const Toolbar = ({ title, showBack, tabs }: IToolbar) => {
           <DesktopIcons>
             {NAV_ITEMS.map((item) => (
               <ErrorBoundary key={item.id}>
-                <PaneItem {...item} />
+                <BarItem {...item} />
               </ErrorBoundary>
             ))}
           </DesktopIcons>
@@ -72,13 +72,13 @@ const TopRow = styled.div`
 `;
 
 const LeftSection = styled.div`
-  flex: 1; 
+  flex: 1;
   display: flex;
   justify-content: flex-start;
 `;
 
 const CenterSection = styled.div`
-  flex: 0 0 auto; 
+  flex: 0 0 auto;
   display: flex;
   justify-content: center;
 `;
