@@ -13,7 +13,7 @@ import {
  * These appear in the top row on desktop and tablet.
  */
 export const NAV_ITEMS = [
-  { id: "notifications", uri: "/notifications", label: "Notifications", icon: Bell },
+  // { id: "notifications", uri: "/notifications", label: "Notifications", icon: Bell },
   { id: "chat", uri: "/chat", label: "Chat", icon: MessageCircle },
   { id: "profile", uri: "/profile", label: "Profile", icon: User },
 ];

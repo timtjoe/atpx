@@ -7,7 +7,7 @@ import {
   DialogTitle,
 } from "@headlessui/react";
 import { X, ExternalLink, RotateCw } from "lucide-react";
-import { PostCard, ActorItem } from "./TrendPost";
+import { TrendPost, ActorItem } from "./TrendPost";
 
 interface TrendDialogProps {
   topic: any;
@@ -95,7 +95,7 @@ export const TrendDialog = ({
                           target="_blank"
                           rel="noreferrer"
                         >
-                          <PostCard post={post} />
+                          <TrendPost post={post} />
                         </a>
                       ))}
                     </PostGrid>

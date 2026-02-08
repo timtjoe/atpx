@@ -5,7 +5,7 @@ import {
   Taskbar,
   Sidebar,
   Toolbar
-} from "@components";
+} from "@components/appbar";
 import { RouteHandle, NavConfig, RootContextType } from "@types";
 import { HOME_TABS } from "@constants";
 
