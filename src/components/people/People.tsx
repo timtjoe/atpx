@@ -2,7 +2,13 @@ import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { motion } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { IconButton, Header, Title, ErrorBoundary, TechnicalError } from "@components";
+import {
+  IconButton,
+  Header,
+  Title,
+  ErrorBoundary,
+  TechnicalError,
+} from "@components";
 import PeopleCard from "./PeopleCard";
 import PeopleLive from "./PeopleLive";
 import { PeopleService, Person } from "./PeopleService";
@@ -25,7 +31,10 @@ const PeopleContent = () => {
     const el = container.current;
     if (!el) return;
     const amount = el.clientWidth * 0.8;
-    el.scrollBy({ left: dir === "left" ? -amount : amount, behavior: "smooth" });
+    el.scrollBy({
+      left: dir === "left" ? -amount : amount,
+      behavior: "smooth",
+    });
   };
 
   useEffect(() => {
@@ -33,7 +42,9 @@ const PeopleContent = () => {
       try {
         setLoading(true);
         const { items } = await PeopleService.list(30);
-        const removed = await import("@/utils/peopleDb").then((m) => m.getRemovedUris()).catch(() => []);
+        const removed = await import("@/utils/peopleDb")
+          .then((m) => m.getRemovedUris())
+          .catch(() => []);
         const filtered = (items || []).filter((i) => !removed.includes(i.uri));
         setPeople(filtered);
       } catch (e) {
@@ -56,13 +67,20 @@ const PeopleContent = () => {
     <Container>
       <PeoHead>
         <Title>popular creators</Title>
+        <span style={{marginLeft: "auto"}}>
+          {!isStart && (
+            <IconButton left onClick={() => scroll("left")} variant="trans">
+              <ChevronLeft size={16} />
+            </IconButton>
+          )}
+          {!isEnd && (
+            <IconButton onClick={() => scroll("right")} variant="trans">
+              <ChevronRight size={16} />
+            </IconButton>
+          )}
+        </span>
       </PeoHead>
       <Content>
-        {!isStart && (
-          <IconButton left onClick={() => scroll("left")} variant="trans">
-            <ChevronLeft size={16} />
-          </IconButton>
-        )}
         <Carousel ref={container} onScroll={onScroll}>
           {people.map((p, idx) => (
             <Item key={p.uri}>
@@ -75,7 +93,9 @@ const PeopleContent = () => {
                   person={p}
                   position={idx + 1}
                   onRemove={(uri) => {
-                    import("@/utils/peopleDb").then((m) => m.addRemovedUri(uri)).catch(() => {});
+                    import("@/utils/peopleDb")
+                      .then((m) => m.addRemovedUri(uri))
+                      .catch(() => {});
                     PeopleService.remove(uri);
                     setPeople((prev) => prev.filter((x) => x.uri !== uri));
                   }}
@@ -84,11 +104,6 @@ const PeopleContent = () => {
             </Item>
           ))}
         </Carousel>
-        {!isEnd && (
-          <IconButton onClick={() => scroll("right")} variant="trans">
-            <ChevronRight size={16} />
-          </IconButton>
-        )}
       </Content>
       <PeopleLive people={people} setPeople={setPeople} />
     </Container>
@@ -103,10 +118,10 @@ export const People = () => {
     <ErrorBoundary
       key={key}
       fallback={
-        <TechnicalError 
-          message="Failed to load creators." 
-          onRetry={handleRetry} 
-          autoRetrySeconds={5} 
+        <TechnicalError
+          message="Failed to load creators."
+          onRetry={handleRetry}
+          autoRetrySeconds={5}
         />
       }
     >
@@ -133,7 +148,9 @@ const Carousel = styled.div`
   scroll-behavior: smooth;
   padding: 0 var(--spacing-sm);
   gap: var(--spacing-xs);
-  &::-webkit-scrollbar { display: none; }
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const Item = styled.div`

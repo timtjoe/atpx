@@ -1,13 +1,12 @@
-import { useEffect } from "react";
-import { CommunityService, Community } from "./CommunityService";
+import React, { useEffect } from "react";
+import { Community } from "@/types/community";
+import { CommunityService } from "./CommunityService";
 
-type Props = {
-  communities: Community[];
-  setCommunities: (
-    fn: (prev: Community[]) => Community[] | Community[],
-  ) => void;
+interface Props {
+  communities: Community[]; // Added to match the parent's call
+  setCommunities: React.Dispatch<React.SetStateAction<Community[]>>;
   pollIntervalMs?: number;
-};
+}
 
 export const CommunityLive = ({
   communities,
@@ -15,30 +14,31 @@ export const CommunityLive = ({
   pollIntervalMs = 25000,
 }: Props) => {
   useEffect(() => {
-    const unsub = CommunityService.subscribe(async (items: Community[]) => {
-      const incoming = new Map(items.map((i) => [i.uri, i]));
+    // Subscribe to the service for real-time updates
+    const unsub = CommunityService.subscribe((items: Community[]) => {
+      const incomingMap = new Map(items.map((i) => [i.uri, i]));
 
       setCommunities((prev) => {
-        // Merge updates into existing order, maintain position
-        const merged = prev.map((c) => {
-          const update = incoming.get(c.uri);
-          if (!update) return c;
-          return { ...c, ...update } as Community;
+        // Update existing items with new data (like activeCount)
+        const updated = prev.map((current) => {
+          const freshData = incomingMap.get(current.uri);
+          if (!freshData) return current;
+          return { ...current, ...freshData };
         });
 
-        // Append any new items
+        // Add brand new items that appeared in the feed
         const existingUris = new Set(prev.map((c) => c.uri));
-        const toAppend = items.filter((it) => !existingUris.has(it.uri));
-        if (toAppend.length) return merged.concat(toAppend);
-        return merged;
+        const newItems = items.filter((it) => !existingUris.has(it.uri));
+
+        return newItems.length ? [...updated, ...newItems] : updated;
       });
     }, pollIntervalMs);
 
+    // Clean up interval on unmount
     return () => {
-      if (unsub) unsub();
+      if (typeof unsub === "function") unsub();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [setCommunities]);
+  }, [setCommunities, pollIntervalMs]);
 
   return null;
 };

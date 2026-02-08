@@ -1,35 +1,28 @@
 import { Agents } from "@/utils/agents";
-
-export type Community = {
-  uri: string;
-  displayName: string;
-  description?: string;
-  avatar?: string | null;
-  creatorHandle?: string;
-  feedUrl: string;
-  profileUrl: string;
-  source: "bsky" | "mastodon" | string;
-  activeCount: number;
-};
+import { Community, CommunityListResponse } from "@types";
 
 class CommunityServiceClass {
   private cache: Community[] = [];
-  private pollHandle: any = null;
+  private pollHandle: ReturnType<typeof setInterval> | null = null;
 
-  async list(limit = 30, cursor?: string) {
+  /**
+   * Fetches communities from BlueSky and Mastodon
+   */
+  public async list(limit: number = 30, cursor?: string): Promise<CommunityListResponse> {
     const results: Community[] = [];
 
-    // BlueSky popular feed generators
+    // 1. BlueSky popular feed generators
     try {
       const tryAgents = [Agents.public, Agents.bsky];
       for (const a of tryAgents) {
-        if (!a || !a.app) continue;
+        if (!a?.app) continue;
         try {
           const { data } = await a.app.bsky.unspecced.getPopularFeedGenerators({
             limit,
             cursor,
           });
-          const mapped = (data.feeds || []).map((feed: any) => {
+
+          const mapped: Community[] = (data.feeds || []).map((feed: any) => {
             const creatorHandle = feed.creator?.handle || "";
             return {
               uri: feed.uri,
@@ -39,41 +32,38 @@ class CommunityServiceClass {
               creatorHandle,
               feedUrl: `https://bsky.app/profile/${feed.creator?.did || ""}/feed/${feed.uri.split("/").pop()}`,
               profileUrl: `https://bsky.app/profile/${creatorHandle}`,
-              source: "bsky" as const,
-              activeCount: feed.likeCount || 0,
+              source: "bsky",
+              activeCount: feed.userCount || feed.likeCount || 0,
             };
           });
           results.push(...mapped);
-          break;
+          break; 
         } catch (err) {
-          // try next agent
+          continue;
         }
       }
     } catch (e) {
       console.warn("bsky communities list failed", e);
     }
 
-    // Mastodon server/hashtag info (sample alternative)
+    // 2. Mastodon trending tags
     try {
       const mastodonBase = Agents.mastodon as string | undefined;
       if (mastodonBase) {
-        let base = mastodonBase;
-        if (base.endsWith("/")) base = base.slice(0, -1);
-        if (base.includes("/api/v1")) base = base.replace(/\/api\/v1.*$/, "");
-        // Fetch trending hashtags as communities
-        const url = `${base}/api/v1/trends/tags`;
-        const res = await fetch(url);
+        const base = mastodonBase.replace(/\/$/, "").replace(/\/api\/v1.*$/, "");
+        const res = await fetch(`${base}/api/v1/trends/tags`);
+        
         if (res.ok) {
           const data = await res.json();
-          const mapped = (data || []).slice(0, limit).map((tag: any) => ({
+          const mapped: Community[] = (data || []).slice(0, limit).map((tag: any) => ({
             uri: `mastodon:tag:${tag.name}`,
             displayName: `#${tag.name}`,
-            description: `${tag.following ? "Following" : "Trending"} community`,
+            description: `${tag.history?.[0]?.accounts || 0} people talking about this`,
             avatar: null,
             creatorHandle: "",
             feedUrl: `${base}/tags/${tag.name}`,
             profileUrl: `${base}/tags/${tag.name}`,
-            source: "mastodon" as const,
+            source: "mastodon",
             activeCount: tag.history?.[0]?.uses || 0,
           }));
           results.push(...mapped);
@@ -83,7 +73,6 @@ class CommunityServiceClass {
       console.warn("mastodon communities list failed", e);
     }
 
-    // Deduplicate by URI
     const seen = new Set<string>();
     const deduped = results.filter((r) => {
       if (seen.has(r.uri)) return false;
@@ -95,33 +84,36 @@ class CommunityServiceClass {
     return { items: deduped, cursor: undefined };
   }
 
-  subscribe(callback: (items: Community[]) => void, intervalMs = 25000) {
+  /**
+   * Real-time subscription for UI updates
+   */
+  public subscribe(callback: (items: Community[]) => void, intervalMs: number = 25000): () => void {
     let mounted = true;
+
     const run = async () => {
       try {
         const { items } = await this.list(30);
-        if (!mounted) return;
-        callback(items);
+        if (mounted) callback(items);
       } catch (e) {
         console.warn("CommunityService subscribe failed", e);
       }
     };
 
     run();
-    this.pollHandle = setInterval(run, intervalMs);
+    const handle = setInterval(run, intervalMs);
 
     return () => {
       mounted = false;
-      if (this.pollHandle) clearInterval(this.pollHandle);
+      clearInterval(handle);
     };
   }
 
-  remove(uri: string) {
+  public remove(uri: string): Community[] {
     this.cache = this.cache.filter((c) => c.uri !== uri);
     return this.cache;
   }
 
-  getCache() {
+  public getCache(): Community[] {
     return this.cache;
   }
 }

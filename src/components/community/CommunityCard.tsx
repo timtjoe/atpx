@@ -1,167 +1,179 @@
-import React from "react";
-import styled, { keyframes } from "styled-components";
-import { Community } from "./CommunityService";
-import { X as XIcon, ExternalLink } from "lucide-react";
-import { motion } from "framer-motion";
+import React, { useState, useEffect } from "react";
+import styled, { keyframes, css } from "styled-components";
+import { X as XIcon, Users } from "lucide-react";
+import { Community } from "@/types/community";
+import { Middot } from "@components";
 
-type Props = {
+interface ICommunityCard {
   community: Community;
   onRemove?: (uri: string) => void;
-  position?: number;
-};
+}
 
-export const CommunityCard: React.FC<Props> = ({
+export const CommunityCard = ({
   community,
   onRemove,
-  position,
-}) => {
+}: ICommunityCard): React.JSX.Element => {
+  const [isPulsing, setIsPulsing] = useState(false);
+
+  useEffect(() => {
+    if (community.activeCount) {
+      setIsPulsing(true);
+      const timer = setTimeout(() => setIsPulsing(false), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [community.activeCount]);
+
   const handleRemove = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    if (onRemove) onRemove(community.uri);
-  };
-
-  const handleOpen = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (community.feedUrl) window.open(community.feedUrl, "_blank", "noopener");
+    onRemove?.(community.uri);
   };
 
   return (
-    <Card
-      as={motion.a}
-      href={community.feedUrl}
-      target="_blank"
-      rel="noopener noreferrer"
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      whileHover={{ scale: 1.02 }}
-    >
-      <RemoveButton onClick={handleRemove} aria-label="remove">
-        <XIcon size={14} />
-      </RemoveButton>
-      
-      <Avatar
-        src={community.avatar || "https://via.placeholder.com/100"}
-        alt={community.displayName}
-      />
-      <Name title={community.displayName}>{community.displayName}</Name>
-      {community.description && (
+    <Card href={community.feedUrl} target="_blank" rel="noopener noreferrer">
+      <Media>
+        <Avatar src={community.avatar || ""} alt={community.displayName} />
+      </Media>
+
+      <Body>
+        <HeaderRow>
+          <Name>{community.displayName}</Name>
+          <RemoveButton onClick={handleRemove}>
+            <XIcon size={14} />
+          </RemoveButton>
+        </HeaderRow>
+
         <Description>{community.description}</Description>
-      )}
-      <Source>
-      {community.activeCount}
-        {community.source === "bsky" ? "🦋 Bluesky" : "🐘 Mastodon"}
-      </Source>
-      <OpenButton onClick={handleOpen} aria-label="open-feed">
-        <span>join</span>
-        <ExternalLink size={14} />
-      </OpenButton>
+
+        <Footer>
+          <FooterLeft>
+            <Stats>
+              <Users size={12} strokeWidth={2.5} />
+              <span>{community.activeCount?.toLocaleString()}</span>
+            </Stats>
+            <Middot />
+            <ActivityInfo>
+              <PulseDot $active={isPulsing} />
+              <span>active now</span>
+            </ActivityInfo>
+          </FooterLeft>
+          <Platform $type={community.source}>{community.source}</Platform>
+        </Footer>
+      </Body>
     </Card>
   );
 };
 
-const floatIn = keyframes`
-  from { transform: translateY(8px); opacity: 0 }
-  to { transform: translateY(0); opacity: 1 }
+/* --- Styles --- */
+
+const pulse = keyframes`
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
+  70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(34, 197, 94, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+`;
+
+const PulseDot = styled.div<{ $active: boolean }>`
+  width: 6px;
+  height: 6px;
+  background-color: #22c55e;
+  border-radius: 50%;
+  margin-right: 2px;
+  ${(props) =>
+    props.$active &&
+    css`
+      animation: ${pulse} 1.5s infinite;
+    `}
 `;
 
 const Card = styled.a`
-  position: relative;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 280px;
-  height: 200px;
+  width: 340px;
+  height: 120px; /* Adjusted height slightly for better stacking */
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: 18px;
+  padding: 16px;
   text-decoration: none;
   color: inherit;
-  background: #fff;
-  border-radius: 10px;
-  border: 1px solid rgba(0, 0, 0, 0.06);
-  padding: 10px;
-  border: solid red;
+  gap: 14px;
 `;
 
-const RemoveButton = styled.button`
-  position: absolute;
-  top: 6px;
-  right: 6px;
-  background: rgba(0, 0, 0, 0.06);
-  border: none;
-  width: 24px;
-  height: 24px;
+const Media = styled.div`
+  flex-shrink: 0;
+`;
+const Avatar = styled.img`
+  width: 60px;
+  height: 60px;
   border-radius: 12px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  object-fit: cover;
+  background: var(--bg-soft);
+`;
+const Body = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+`;
+const HeaderRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+`;
+const Name = styled.h4`
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-bold);
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+`;
+const RemoveButton = styled.button`
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  opacity: 0.3;
   cursor: pointer;
 `;
-
-const PositionBadge = styled.div`
-  position: absolute;
-  top: 6px;
-  left: 6px;
-  background: rgba(0, 0, 0, 0.06);
-  padding: 2px 6px;
-  border-radius: 10px;
-  font-weight: 700;
-  font-size: 11px;
-`;
-
-const Avatar = styled.img`
-  width: 70px;
-  height: 70px;
-  border-radius: 10px;
-  object-fit: cover;
-  margin-bottom: 6px;
-  background: #eee;
-`;
-
-const Name = styled.div`
+const Description = styled.p`
   font-size: 12px;
-  font-weight: 700;
-  margin-bottom: 4px;
-  text-align: center;
-  max-width: 130px;
-  display: -webkit-box;
-  -webkit-line-clamp: 1;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  word-break: break-word;
-`;
-
-const Description = styled.div`
-  font-size: 10px;
-  color: var(--hn-gray);
-  text-align: center;
-  max-width: 130px;
+  color: var(--text-muted);
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  margin-bottom: 4px;
+  margin: 4px 0;
+  line-height: 1.4;
 `;
-
-const Source = styled.div`
-  font-size: 10px;
-  color: var(--fb-blue);
-  margin-bottom: 6px;
-`;
-
-const OpenButton = styled.button`
-  display: inline-flex;
+const Footer = styled.div`
+  display: flex;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
-  width: 100px;
-  height: 28px;
-  background: #ff6600;
-  color: #fff;
-  border: none;
-  border-radius: 6px;
-  font-size: 11px;
-  cursor: pointer;
+  margin-top: auto;
+`;
+const FooterLeft = styled.div`
+  display: flex;
+  align-items: center;
   gap: 4px;
 `;
-
-export default CommunityCard;
+const Stats = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: var(--font-xs);
+  font-weight: 700;
+  color: var(--text-bold);
+`;
+const ActivityInfo = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: var(--font-xs);
+  color: var(--text-muted);
+`;
+const Platform = styled.span<{ $type?: string }>`
+  color: ${(p) => (p.$type === "bsky" ? "#0085ff" : "#6364ff")};
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: capitalize;
+`;
