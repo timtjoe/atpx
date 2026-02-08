@@ -1,13 +1,9 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Outlet, useMatches, UIMatch } from "react-router-dom";
-import {
-  Taskbar,
-  Sidebar,
-  Toolbar
-} from "@components/appbar";
+import { Taskbar, Sidebar, Toolbar } from "@/components/appbar";
 import { RouteHandle, NavConfig, RootContextType } from "@types";
-import { HOME_TABS } from "@constants";
+import { HOME_TABS } from "@constants/navigation";
 
 export const Root = (): React.JSX.Element => {
   const matches = useMatches() as UIMatch<unknown, RouteHandle>[];

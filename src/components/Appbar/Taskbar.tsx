@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 import { User } from "lucide-react";
 import { TASKBAR_PRIMARY, TASKBAR_SECONDARY } from "@constants";
-import { AppDrawer } from "@components/appbar";
+import { AppDrawer } from "./AppDrawer";
 
 export const Taskbar = () => {
   const [isOpen, setIsOpen] = useState(false);

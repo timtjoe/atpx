@@ -1,4 +1,4 @@
-// components output
+// Components export
 export * from "./Components";
 export * from "./Footer";
 export * from "./Headers";
