@@ -20,7 +20,7 @@ export const HeadActions = styled.section`
   }
 `;
 
-export const Headbar = HeadActions;
+const Headbar = HeadActions;
 
 export const Title = styled.h2`
   margin: 0;
@@ -34,7 +34,7 @@ export const Title = styled.h2`
   }
 `;
 
-export const Tagline = styled.span`
+const Tagline = styled.span`
   font-size: var(--font-md);
   color: var(--text-muted);
 
@@ -43,4 +43,4 @@ export const Tagline = styled.span`
   }
 `;
 
-export const Subtitle = Tagline;
+const Subtitle = Tagline;

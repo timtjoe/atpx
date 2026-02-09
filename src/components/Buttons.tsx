@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const RetryButton = styled.button`
+const RetryButton = styled.button`
   display: flex;
   align-items: center;
   gap: 8px;

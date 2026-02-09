@@ -43,7 +43,7 @@ export async function addRemovedCommunityUri(uri: string): Promise<void> {
   }
 }
 
-export async function clearRemovedCommunityUris(): Promise<void> {
+async function clearRemovedCommunityUris(): Promise<void> {
   try {
     await fetch("/api/community/removed", { method: "DELETE" });
   } catch (e) {
@@ -52,8 +52,4 @@ export async function clearRemovedCommunityUris(): Promise<void> {
   localStorage.removeItem("community.removed");
 }
 
-export default {
-  getRemovedCommunityUris,
-  addRemovedCommunityUri,
-  clearRemovedCommunityUris,
-};
+

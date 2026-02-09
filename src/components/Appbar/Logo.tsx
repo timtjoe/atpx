@@ -57,5 +57,3 @@ const Icon = styled.img`
     transform: scale(1.08);
   }
 `;
-
-export default Logo;

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Outlet, useMatches, UIMatch } from "react-router-dom";
-import { Taskbar, Sidebar, Toolbar } from "@/components/appbar";
+import { Taskbar, Sidebar, Toolbar } from "@components/appbar";
 import { RouteHandle, NavConfig, RootContextType } from "@types";
 import { HOME_TABS } from "@constants/navigation";
 
@@ -32,6 +32,7 @@ export const Root = (): React.JSX.Element => {
   return (
     <Body vaul-drawer-wrapper="">
       <SidePane />
+
       <Main id="app">
         <Toolbar
           title={navConfig.title ?? ""}
@@ -43,22 +44,21 @@ export const Root = (): React.JSX.Element => {
 
       <Sidebar />
 
-      <MobileNavWrapper>
+      <MobileWrap>
         <Taskbar />
-      </MobileNavWrapper>
+      </MobileWrap>
     </Body>
   );
 };
 
 /* --- Styled Components --- */
-// Update SidePane to be a simple spacer
 const SidePane = styled.aside`
   width: 275px;
   flex-shrink: 0;
   border-right: 1px solid var(--border-subtle);
 
   @media (max-width: 1100px) {
-    width: 80px; /* Collapse spacer on medium screens */
+    width: 80px;
   }
 
   @media (max-width: 768px) {
@@ -86,17 +86,15 @@ const Main = styled.main`
   }
 `;
 
-const MobileNavWrapper = styled.div`
+const MobileWrap = styled.div`
   display: none;
 
   @media (max-width: 768px) {
     display: block;
-    position: fixed; /* Fixes it to the glass/screen */
+    position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
-    z-index: 9999; /* Ensure it is above the content and Navigation */
+    z-index: 9999;
   }
 `;
-
-export default Root;

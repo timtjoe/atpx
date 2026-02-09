@@ -9,7 +9,7 @@ type Props = {
 
 // Subscribes to PeopleService and merges incoming data into the existing list
 // without reordering. New accounts are appended to the end.
-export const PeopleLive = ({ people, setPeople, pollIntervalMs = 20000 }: Props) => {
+const PeopleLive = ({ people, setPeople, pollIntervalMs = 20000 }: Props) => {
   useEffect(() => {
     const unsub = PeopleService.subscribe(async (items: Person[]) => {
       const incoming = new Map(items.map((i) => [i.uri, i]));

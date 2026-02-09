@@ -2,12 +2,12 @@ import { AtpAgent } from "@atproto/api";
 import { bskyAgent } from "./authenticate";
 
 // Public agent for trending/public discovery (faster, no auth needed)
-export const publicAgent = new AtpAgent({
+const publicAgent = new AtpAgent({
   service: "https://public.api.bsky.app",
 });
 
 // Mastodon public API (no auth needed for public endpoints)
-export const mastodonAPI = "https://mastodon.social/api/v1";
+const mastodonAPI = "https://mastodon.social/api/v1";
 
 export const Agents = {
   bsky: bskyAgent,

@@ -132,5 +132,3 @@ const Carousel = styled.div`
   &::-webkit-scrollbar { display: none; }
   & > div { flex-shrink: 0; width: 340px; }
 `;
-
-export default Community;

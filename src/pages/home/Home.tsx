@@ -30,7 +30,7 @@ export const HomePage = ({ children }: HomeProps): React.JSX.Element => {
 
 
 
-export const HomeRoutes: RouteConfig = {
+const HomeRoutes: RouteConfig = {
   path: "/",
   element: <HomePage />,
 };

@@ -43,7 +43,7 @@ export async function addRemovedUri(uri: string): Promise<void> {
   }
 }
 
-export async function clearRemovedUris(): Promise<void> {
+async function clearRemovedUris(): Promise<void> {
   try {
     await fetch("/api/people/removed", { method: "DELETE" });
   } catch (e) {
@@ -52,4 +52,4 @@ export async function clearRemovedUris(): Promise<void> {
   localStorage.removeItem("people.removed");
 }
 
-export default { getRemovedUris, addRemovedUri, clearRemovedUris };
+

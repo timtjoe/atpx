@@ -20,7 +20,6 @@
   },
   "dependencies": {
     "@atproto/api": "^0.18.20",
-    "@headlessui/react": "^2.2.9",
     "framer-motion": "^10.12.5",
     "jotai": "^2.17.1",
     "lucide-react": "^0.563.0",

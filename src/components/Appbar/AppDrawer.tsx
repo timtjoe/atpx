@@ -41,9 +41,7 @@ export const AppDrawer = ({
   );
 };
 
-export default AppDrawer
 /* --- Updated Styled Components in Drawer.tsx --- */
-
 const Overlay = styled(Vaul.Overlay)`
   position: fixed;
   inset: 0; /* Cover 100% of the screen */

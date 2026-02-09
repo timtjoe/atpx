@@ -31,7 +31,7 @@ export const TrendPost = ({ post }: ITrendPost): React.JSX.Element => {
   );
 };
 
-export const ActorItem = ({ actor }: IActorItem): React.JSX.Element => {
+const ActorItem = ({ actor }: IActorItem): React.JSX.Element => {
   const identifier = actor.displayName || actor.handle || String(actor.id);
   
   return (

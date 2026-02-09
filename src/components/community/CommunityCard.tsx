@@ -15,7 +15,7 @@ const Dot = styled.span`
   flex-shrink: 0;
 `;
 
-export const formatCount = (num: number): string => {
+const formatCount = (num: number): string => {
   return new Intl.NumberFormat("en-US", {
     notation: "compact",
     maximumFractionDigits: 1,

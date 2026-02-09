@@ -78,4 +78,4 @@ export const TrendLive = {
   },
 };
 
-export default TrendLive;
+

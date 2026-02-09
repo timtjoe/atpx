@@ -119,4 +119,3 @@ class CommunityServiceClass {
 }
 
 export const CommunityService = new CommunityServiceClass();
-export default CommunityService;

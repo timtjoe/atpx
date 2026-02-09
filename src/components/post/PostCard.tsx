@@ -5,7 +5,7 @@ import { IPost as Post } from "@/types/post";
 
 export const PostCard = ({ post }: { post: Post }) => {
   const sourceEmoji = post.source === "bsky" ? "🦋" : "🐘";
-  
+
   // Clean reactions logic
   const totalReactions = (
     (post.likes || 0) +
@@ -41,7 +41,11 @@ export const PostCard = ({ post }: { post: Post }) => {
         </AuthorLink>
 
         <SourceBadge
-          href={post.source === "bsky" ? "https://bsky.app" : "https://joinmastodon.org"}
+          href={
+            post.source === "bsky"
+              ? "https://bsky.app"
+              : "https://joinmastodon.org"
+          }
           target="_blank"
         >
           {sourceEmoji}
@@ -54,9 +58,9 @@ export const PostCard = ({ post }: { post: Post }) => {
 
       <FooterSection>
         <FooterText>
-          <ReactionCount>{totalReactions} reactions</ReactionCount> 
+          <ReactionCount>{totalReactions} reactions</ReactionCount>
           <DotSeparator />
-          {post.category || "trending"} 
+          {post.category || "trending"}
           <DotSeparator />
           {formattedDate}
         </FooterText>
@@ -88,7 +92,9 @@ const AuthorLink = styled.a`
   align-items: center;
   gap: var(--spacing-md);
   min-width: 0;
-  &:hover span:first-child { text-decoration: underline; }
+  &:hover span:first-child {
+    text-decoration: underline;
+  }
 `;
 
 const Avatar = styled.img`
@@ -125,23 +131,27 @@ const SourceBadge = styled.a`
   padding: var(--spacing-xs);
   border-radius: var(--radius-sm);
   transition: background 0.2s;
-  &:hover { background: var(--bg-grey); }
+  &:hover {
+    background: var(--bg-grey);
+  }
 `;
 
 const ContentLink = styled.a`
   display: block;
   margin-bottom: var(--spacing-lg);
-  &:hover p { color: var(--text-blue); }
+  &:hover p {
+    color: var(--text-blue);
+  }
 `;
 
 const ContentText = styled.p`
-  font-size: 15px;
-  line-height: 1.6;
-  color: var(--text-main);
-  font-weight: 400;
   display: -webkit-box;
-  -webkit-line-clamp: 5;
-  -webkit-box-orient: vertical;
+  /* -webkit-line-clamp: 5; */
+  /* -webkit-box-orient: vertical; */
+  font-size: 30px;
+  line-height: 40px;
+  font-weight: 700;
+  color: var(--text-black);
   overflow: hidden;
 `;
 
@@ -165,6 +175,8 @@ const ReactionCount = styled.span`
 `;
 
 const DotSeparator = styled.span`
-  &::before { content: "•"; }
+  &::before {
+    content: "•";
+  }
   opacity: 0.5;
 `;

@@ -5,7 +5,7 @@ export const bskyAgent = new AtpAgent({ service: BSKY_SERVICE });
 
 let loginPromise: Promise<void> | null = null;
 
-export const authenticate = async (): Promise<void> => {
+const authenticate = async (): Promise<void> => {
   if (bskyAgent.hasSession) return;
 
   if (loginPromise) return loginPromise;

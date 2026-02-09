@@ -43,4 +43,3 @@ export const CommunityLive = ({
   return null;
 };
 
-export default CommunityLive;

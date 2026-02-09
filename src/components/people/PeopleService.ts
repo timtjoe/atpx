@@ -96,4 +96,4 @@ class PeopleServiceClass {
 
 export const PeopleService = new PeopleServiceClass();
 
-export default PeopleService;
+

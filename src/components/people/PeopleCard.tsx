@@ -11,7 +11,7 @@ type Props = {
   position?: number;
 };
 
-export const PeopleCard: React.FC<Props> = ({ person, onRemove, position }) => {
+const PeopleCard: React.FC<Props> = ({ person, onRemove, position }) => {
   const handleRemove = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();

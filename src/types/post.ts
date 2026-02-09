@@ -16,7 +16,7 @@ export type IPost = {
   category?: string;
 };
 
-export interface PostListResponse {
+interface PostListResponse {
   items: IPost[];
   cursor?: string;
 }
