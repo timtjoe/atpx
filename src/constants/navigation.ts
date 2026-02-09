@@ -40,7 +40,7 @@ export const HOME_TABS = [
   { label: "Trending", path: "/trendings" },
 ];
 
-export const BREAKPOINTS = {
+const BREAKPOINTS = {
   mobile: "768px",
   tablet: "1100px",
   desktop: "1280px",

@@ -43,5 +43,3 @@ export const Icons = {
   bluesky: CustomIcons.Bluesky,
   mastodon: CustomIcons.Mastodon,
 };
-
-export type IconType = typeof Icons.home;
