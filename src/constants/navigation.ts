@@ -39,9 +39,3 @@ export const HOME_TABS = [
   { label: "Actors", path: "/actors" },
   { label: "Trending", path: "/trendings" },
 ];
-
-const BREAKPOINTS = {
-  mobile: "768px",
-  tablet: "1100px",
-  desktop: "1280px",
-};

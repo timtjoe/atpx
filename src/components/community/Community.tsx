@@ -14,8 +14,10 @@ import {
   ErrorBoundary,
   TechnicalError,
   IconButton,
+  Subtitle,
 } from "@components";
 import { Comleton } from "./Comleton";
+import { HeadCol } from "../people/People";
 
 const CommunityContent = () => {
   const [communities, setCommunities] = useState<CommunityType[]>([]);
@@ -51,7 +53,10 @@ const CommunityContent = () => {
   return (
     <Container>
       <ComHead>
-        <Title>Trending Communities</Title>
+        <HeadCol>
+          <Title>Trending Communities</Title>
+          <Subtitle>Active hubs across the decentralized web</Subtitle>
+        </HeadCol>
         <HeadActions style={{ marginLeft: "auto" }}>
           {!isStart && (
             <IconButton
@@ -124,11 +129,12 @@ export const Community = () => {
 
 const Container = styled.div`
   width: 100%;
-  margin-top: var(--spacing-xl);
+  padding-bottom: var(--spacing-sm);
+  border-top: thin solid var(--border-subtle);
 `;
 
 const ComHead = styled(Header)`
-  padding: var(--spacing-xs) var(--spacing-sm);
+  padding: var(--spacing-md);
 `;
 
 const Content = styled.div`

@@ -1,13 +1,14 @@
 import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { Icons } from "@components/icons";
 import {
   IconButton,
   Header,
   Title,
   ErrorBoundary,
   TechnicalError,
+  Subtitle,
 } from "@components";
 import PeopleCard from "./PeopleCard";
 import PeopleLive from "./PeopleLive";
@@ -48,8 +49,12 @@ const PeopleContent = () => {
   return (
     <Container>
       <PeoHead>
-        <Title>Popular Creators</Title>
-        <div style={{ marginLeft: "auto", display: "flex", gap: "4px" }}>
+        <HeadCol>
+          <Title>Popular Actors</Title>
+          <Subtitle>Influential voices across the open social web</Subtitle>
+        </HeadCol>
+
+        <Actions>
           {!isStart && (
             <IconButton
               left
@@ -58,7 +63,8 @@ const PeopleContent = () => {
               }
               variant="trans"
             >
-              <ChevronLeft size={16} />
+              <Icons.caret_left size={16} />{" "}
+              {/* Updated to use your Icons abstraction */}
             </IconButton>
           )}
           {!isEnd && (
@@ -68,52 +74,78 @@ const PeopleContent = () => {
               }
               variant="trans"
             >
-              <ChevronRight size={16} />
+              <Icons.caret_right size={16} />{" "}
+              {/* Updated to use your Icons abstraction */}
             </IconButton>
           )}
-        </div>
+        </Actions>
       </PeoHead>
-      <Content>
-        <Carousel ref={container} onScroll={onScroll}>
-          <AnimatePresence>
-            {people.map((p, idx) => (
-              <motion.div
-                key={p.uri}
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, scale: 0.9 }}
-                transition={{ duration: 0.2, delay: idx * 0.04 }}
-              >
-                <PeopleCard
-                  person={p}
-                  onRemove={(uri) => {
-                    import("@/utils/peopleDb").then((m) =>
-                      m.addRemovedUri(uri),
-                    );
-                    PeopleService.remove(uri);
-                    setPeople((prev) => prev.filter((x) => x.uri !== uri));
-                  }}
-                />
-              </motion.div>
-            ))}
-          </AnimatePresence>
-        </Carousel>
-      </Content>
+
+      <Carousel ref={container} onScroll={onScroll}>
+        <AnimatePresence>
+          {people.map((p, idx) => (
+            <motion.div
+              key={p.uri}
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              transition={{ duration: 0.2, delay: idx * 0.04 }}
+            >
+              <PeopleCard
+                person={p}
+                onRemove={(uri) => {
+                  import("@/utils/peopleDb").then((m) => m.addRemovedUri(uri));
+                  PeopleService.remove(uri);
+                  setPeople((prev) => prev.filter((x) => x.uri !== uri));
+                }}
+              />
+            </motion.div>
+          ))}
+        </AnimatePresence>
+      </Carousel>
+
       <PeopleLive people={people} setPeople={setPeople} />
     </Container>
   );
 };
 
+export const People = () => (
+  <ErrorBoundary fallback={<TechnicalError message="Failed to load Actors." />}>
+    <PeopleContent />
+  </ErrorBoundary>
+);
+
 /* --- Styles --- */
 const Container = styled.section`
-  margin-top: var(--spacing-md);
   background-color: var(--bg-grey);
   width: 100%;
+  padding-bottom: var(--spacing-md);
+  border-top: thin solid var(--border-subtle);
 `;
 
-const Content = styled.div`
+const PeoHead = styled.div`
   display: flex;
-  margin-top: var(--spacing-sm);
+  gap: var(--spacing-md);
+  align-items: center;
+  padding: var(--spacing-md);
+  padding-top: var(--spacing-sm);
+
+  @media screen and (max-width: 768px) {
+    padding-bottom: 0;
+  }
+`;
+
+export const HeadCol = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+`;
+
+const Actions = styled.div`
+  margin-left: auto;
+  display: flex;
+  gap: var(--spacing-xxs);
+  align-items: center;
 `;
 
 const Carousel = styled.div`
@@ -121,7 +153,7 @@ const Carousel = styled.div`
   overflow-x: auto;
   scroll-behavior: smooth;
   padding: 0 var(--spacing-md);
-  gap: var(--spacing-xs);
+  gap: var(--spacing-md);
   scrollbar-width: none;
   &::-webkit-scrollbar {
     display: none;
@@ -130,15 +162,3 @@ const Carousel = styled.div`
     flex-shrink: 0;
   }
 `;
-
-const PeoHead = styled(Header)`
-  padding: var(--spacing-xs) var(--spacing-md);
-`;
-
-export const People = () => (
-  <ErrorBoundary
-    fallback={<TechnicalError message="Failed to load creators." />}
-  >
-    <PeopleContent />
-  </ErrorBoundary>
-);

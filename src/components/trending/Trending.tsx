@@ -2,18 +2,22 @@ import React, { useEffect, useState } from "react";
 import { useAtom } from "jotai";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { Icons } from "@/components/icons";
 import { withTrend, trendActions } from "./TrendStore";
 import { Treleton } from "./Treleton";
-import { Title, TechnicalError, Header, ErrorBoundary } from "@components";
+import {
+  Title,
+  TechnicalError,
+  ErrorBoundary,
+  Subtitle,
+} from "@components";
 import { TrendCard } from "./TrendCard";
-import { Icon } from "@components";
 import { Trend } from "@types";
 
 const TrendingContent = (): React.JSX.Element => {
   const [topics] = useAtom(withTrend);
   const [, fetchTrends] = useAtom(trendActions);
   const navigate = useNavigate();
+  // const forceError = (undefined as any).crash();
 
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<boolean>(false);
@@ -40,10 +44,8 @@ const TrendingContent = (): React.JSX.Element => {
   return (
     <Container>
       <TrendHead>
-        <TitleGroup>
           <Title>Trending Topics</Title>
-          <Icon as={Icons.trending} size={16} color="var(--text-muted)" />
-        </TitleGroup>
+        <Subtitle>Conversations surfacing right now in the Fediverse</Subtitle>
       </TrendHead>
 
       <Grid>
@@ -85,46 +87,30 @@ export const Trending = () => {
 };
 
 /* --- Styled Components --- */
-
 const Container = styled.div`
-  padding: var(--spacing-md) var(--spacing-lg);
+  padding: 0;
+  margin: 0;
   background-color: var(--bg-grey);
+  padding-bottom: var(--spacing-sm);
 `;
 
-const TrendHead = styled(Header)`
+const TrendHead = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  gap: var(--spacing-xs);
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: var(--spacing-lg);
+  margin: calc(var(--spacing-lg));
 `;
 
-const TitleGroup = styled.div`
+const Headrow = styled.div`
   display: flex;
   align-items: center;
-  gap: var(--spacing-sm);
-`;
-
-const SourceLegend = styled.div`
-  display: flex;
   gap: var(--spacing-md);
 `;
 
-const SourceItem = styled.span`
-  font-size: 10px;
-  font-weight: 700;
-  text-transform: uppercase;
-  color: var(--text-muted);
-  display: flex;
-  align-items: center;
-  gap: 4px;
-
-  svg {
-    flex-shrink: 0;
-  }
-`;
-
 const Grid = styled.div`
+  margin: 0 var(--spacing-md);
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
   gap: var(--spacing-md);

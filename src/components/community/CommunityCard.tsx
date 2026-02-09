@@ -1,9 +1,9 @@
 import React from "react";
 import styled from "styled-components";
-// import { X as XIcon, ExternalLink, Calendar } from "lucide-react";
 import { Icons } from "@/components/icons";
 import { Community } from "@/types/community";
 import { Dot, IconButton } from "@components";
+import { LinkButton } from "@components/Buttons";
 
 const formatCount = (num: number): string => {
   return new Intl.NumberFormat("en-US", {
@@ -11,6 +11,7 @@ const formatCount = (num: number): string => {
     maximumFractionDigits: 1,
   }).format(num);
 };
+
 
 export const CommunityCard = ({
   community,
@@ -25,43 +26,47 @@ export const CommunityCard = ({
     onRemove?.(community.uri);
   };
 
+  // Web placeholder if avatar is missing
+  const bannerUrl = community.avatar || "https://via.placeholder.com/280x140?text=No+Image";
+
   return (
     <CardContainer>
-      <Avatar src={community.avatar || ""} alt={community.displayName} />
+      <RemoveButton size="small" variant="trans" onClick={handleRemove}>
+        <Icons.close size={16} />
+      </RemoveButton>
+
+      {/* Top Section: Full Width Hero Banner */}
+      <Banner>
+        <BannerImage 
+          src={bannerUrl} 
+          loading="lazy" 
+          alt={community.displayName} 
+        />
+      </Banner>
 
       <Body>
-        <HeaderRow>
-          <Name>{community.displayName}</Name>
-          <IconButton size="small" variant="trans" onClick={handleRemove}>
-            <Icons.close size={16} />
-          </IconButton>
-        </HeaderRow>
-
-        <ContentLink href={community.feedUrl} target="_blank" rel="noopener">
-          <Description>{community.description}</Description>
-        </ContentLink>
-
-        <Footer>
-          <FooterSection>
-            <Stats>
-              <span>{formatCount(community.activeCount || 0)}</span> members
-            </Stats>
-            <Dot />
-            <UpdateTime>
-              {/* <Calendar size={12} /> */}
-              <span>Trending Now</span>
-            </UpdateTime>
-          </FooterSection>
-
-          <SourceLink
-            href={community.profileUrl}
-            target="_blank"
-            $source={community.source}
-          >
+        <TitleRow>
+          <NameLink href={community.feedUrl} target="_blank" rel="noopener">
+            {community.displayName}
+          </NameLink>
+          
+          <SourceBadge href={community.profileUrl} target="_blank" $source={community.source}>
             {community.source}
             <Icons.external size={10} />
-          </SourceLink>
-        </Footer>
+          </SourceBadge>
+        </TitleRow>
+
+        <MetaRow>
+          <span>{formatCount(community.activeCount || 0)} members</span>
+          <Dot />
+          <span className="trending">Trending Now</span>
+        </MetaRow>
+
+        <Description>{community.description}</Description>
+
+        <JoinButton href={community.feedUrl} target="_blank" rel="noopener noreferrer">
+          Join Community
+        </JoinButton>
       </Body>
     </CardContainer>
   );
@@ -71,121 +76,105 @@ export const CommunityCard = ({
 
 const CardContainer = styled.div`
   display: flex;
-  align-items: flex-start;
-  width: 300px;
-  height: 200px;
-  gap: 0;
-  padding: var(--spacing-md);
+  flex-direction: column;
+  width: 270px;
+  height: 330px;
   border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   background: var(--bg-white);
+  overflow: hidden;
   position: relative;
 `;
 
-const Avatar = styled.img`
-  width: 64px;
-  height: 64px;
-  border-radius: var(--radius-md);
-  object-fit: cover;
-  border: 1px solid var(--border-subtle);
-  background: var(--bg-soft);
+const Banner = styled.div`
+  width: 100%;
+  height: 140px;
+  background-color: var(--bg-soft);
+  overflow: hidden;
+  border-bottom: 1px solid var(--border-extra-light);
+`;
+
+const BannerImage = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover; 
+  display: block;
+`;
+
+const RemoveButton = styled(IconButton)`
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 10;
+
 `;
 
 const Body = styled.div`
   display: flex;
   flex-direction: column;
+  padding: var(--spacing-md);
   flex: 1;
-  height: 100%;
-  min-width: 0;
+  min-height: 0; 
 `;
 
-const HeaderRow = styled.div`
+const TitleRow = styled.div`
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 8px;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: var(--spacing-sm);
 `;
 
-const Name = styled.h4`
+const NameLink = styled.a`
   font-size: var(--font-md);
   font-weight: 800;
   color: var(--text-bold);
-  margin: 0;
+  text-decoration: none;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 `;
 
-const ContentLink = styled.a`
-  text-decoration: none;
-  color: inherit;
-  display: block;
-  flex: 1;
-  &:hover p {
-    color: var(--text-bold);
-  }
+const MetaRow = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--font-xs);
+  color: var(--text-muted);
+  margin-bottom: var(--spacing-sm);
 `;
 
 const Description = styled.p`
-  font-size: var(--font-sm);
-  color: var(--text-muted);
-  line-height: 1.5;
+    font-size: var(--font-sm);
+  color: var(--text-black);
+  line-height: 18px;
   display: -webkit-box;
-  -webkit-line-clamp: 5;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  margin: 0;
-  transition: color 0.2s;
 `;
 
-const Footer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 16px;
-  padding-top: 12px;
-  border-top: 1px solid var(--border-extra-light);
-`;
+const JoinButton = styled(LinkButton)`
+  width: 100%;
+  margin-top: auto; 
+  height: 38px;
+  border-radius: var(--radius-sm);
 
-const FooterSection = styled.div`
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-sm);
-  color: var(--text-muted);
-  font-size: var(--font-xs);
-`;
-
-const Stats = styled.div`
-  font-weight: 600;
-  span {
-    color: var(--text-bold);
+  &:visited {
+    color: var(--text-white);
   }
 `;
 
-const UpdateTime = styled.div`
+const SourceBadge = styled.a<{ $source: string }>`
   display: flex;
   align-items: center;
   gap: 4px;
-  font-weight: 500;
-`;
-
-const SourceLink = styled.a<{ $source: string }>`
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 10px;
+  font-size: 9px;
   font-weight: 700;
   text-transform: uppercase;
   text-decoration: none;
-  padding: 4px 8px;
-  border-radius: 20px;
+  padding: 2px 6px;
+  border-radius: 4px;
   background: var(--bg-soft);
-  color: var(--text-muted);
-  transition: all 0.2s;
-
-  &:hover {
-    background: ${(props) =>
-      props.$source === "bsky" ? "#0085ff20" : "#6364ff20"};
-    color: ${(props) => (props.$source === "bsky" ? "#0085ff" : "#6364ff")};
-  }
+  color: var(--text-black);
 `;

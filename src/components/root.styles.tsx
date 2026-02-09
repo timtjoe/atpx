@@ -33,7 +33,7 @@ const RootStyles = createGlobalStyle`
     --radius-xs: 4px;
     --radius-sm: 8px;
     --radius-md: 17px;
-    --radius-lg: 35%;
+    --radius-lg: 21px;
     --round: 50%;
     --squicle: 20px/20px;
 
@@ -49,11 +49,10 @@ const RootStyles = createGlobalStyle`
     --text-white: #e2e5e9;
     --text-blue: #0078FF;
     --text-red: #eb3b5a;
-    --text-black: var(--bg-black);
+    --text-black: #0C1015;
     --text-bold: #161525;
     --text-muted: #465a6a;
-    --text-grey: #757a80;    
-    /* --text-grey: #757575;   */
+    --text-grey: #757A80;    
 
     /* Border colors */
     --border-light: #EBEBEB;

@@ -7,7 +7,7 @@ const shimmer = keyframes`
   100% { background-position: 468px 0; }
 `;
 
-/* --- Reusable Skeleton Primitives --- */
+/* --- Reusable Skeleton Primitive --- */
 const SkeletonBase = styled.div<{ $width?: string; $height?: string; $radius?: string }>`
   width: ${props => props.$width || "100%"};
   height: ${props => props.$height || "20px"};
@@ -25,35 +25,33 @@ const SkeletonBase = styled.div<{ $width?: string; $height?: string; $radius?: s
 export const Comleton = () => (
   <Container>
     <HeaderSection>
-      <SkeletonBase $width="200px" $height="28px" />
+      <SkeletonBase $width="220px" $height="28px" />
     </HeaderSection>
     
     <ListContainer>
       {[1, 2, 3, 4].map((i) => (
         <SkeletonCard key={i}>
-          <SkeletonAvatar $width="64px" $height="64px" />
+          {/* Top Section: Full Width Image Placeholder */}
+          <SkeletonBase $height="140px" $radius="0" />
           
           <SkeletonBody>
             <SkeletonHeaderRow>
-              <SkeletonBase $width="70%" $height="20px" />
-              <SkeletonBase $width="24px" $height="24px" $radius="var(--round)" />
+              <SkeletonBase $width="60%" $height="20px" />
+              <SkeletonBase $width="40px" $height="16px" $radius="4px" />
             </SkeletonHeaderRow>
 
-            <SkeletonDescriptionStack>
-              <SkeletonBase $height="14px" />
-              <SkeletonBase $width="95%" $height="14px" />
-              <SkeletonBase $width="90%" $height="14px" />
-              <SkeletonBase $width="40%" $height="14px" />
-            </SkeletonDescriptionStack>
+            {/* Metadata Line */}
+            <SkeletonBase $width="80%" $height="12px" style={{ marginBottom: '16px' }} />
 
-            <SkeletonFooter>
-              <SkeletonFooterLeft>
-                 <SkeletonBase $width="60px" $height="12px" />
-                 <SkeletonBase $width="4px" $height="4px" $radius="var(--round)" />
-                 <SkeletonBase $width="80px" $height="12px" />
-              </SkeletonFooterLeft>
-              <SkeletonBase $width="50px" $height="22px" $radius="var(--squicle)" />
-            </SkeletonFooter>
+            {/* Description Lines (Direct stack) */}
+            <SkeletonDescription>
+              <SkeletonBase $height="10px" />
+              <SkeletonBase $height="10px" />
+              <SkeletonBase $width="70%" $height="10px" />
+            </SkeletonDescription>
+
+            {/* Bottom Button Placeholder */}
+            <SkeletonBase $height="38px" $radius="var(--radius-md)" />
           </SkeletonBody>
         </SkeletonCard>
       ))}
@@ -70,7 +68,6 @@ const Container = styled.div`
 `;
 
 const HeaderSection = styled.div`
-  padding: var(--spacing-xs) 0;
   margin-bottom: var(--spacing-md);
 `;
 
@@ -81,51 +78,34 @@ const ListContainer = styled.div`
 `;
 
 const SkeletonCard = styled.div`
-  min-width: 340px;
-  height: 252px;
-  padding: var(--spacing-md);
+  flex-shrink: 0;
+  width: 280px;
+  height: 380px;
   border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   background: var(--bg-white);
   display: flex;
-  gap: var(--spacing-md);
-`;
-
-const SkeletonAvatar = styled(SkeletonBase)`
-  flex-shrink: 0;
-  border: 1px solid var(--border-light);
+  flex-direction: column;
+  overflow: hidden;
 `;
 
 const SkeletonBody = styled.div`
+  padding: var(--spacing-md);
   flex: 1;
   display: flex;
   flex-direction: column;
-  min-width: 0;
 `;
 
 const SkeletonHeaderRow = styled.div`
   display: flex;
   justify-content: space-between;
-  margin-bottom: var(--spacing-md);
+  align-items: center;
+  margin-bottom: 12px;
 `;
 
-const SkeletonDescriptionStack = styled.div`
+const SkeletonDescription = styled.div`
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-sm);
-`;
-
-const SkeletonFooter = styled.div`
-  margin-top: auto;
-  padding-top: var(--spacing-md);
-  border-top: 1px solid var(--border-light);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-const SkeletonFooterLeft = styled.div`
-  display: flex;
-  gap: var(--spacing-sm);
-  align-items: center;
+  gap: 8px;
+  flex: 1; /* Pushes the button placeholder to the very bottom */
 `;

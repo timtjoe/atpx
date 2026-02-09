@@ -24,23 +24,21 @@ const Headbar = HeadActions;
 
 export const Title = styled.h2`
   margin: 0;
-  font-size: var(--font-xs);
+  font-size: var(--font-md);
   font-weight: 800;
   color: var(--text-dark);
-  text-transform: uppercase;
 
   @media (max-width: 768px) {
     font-size: var(--font-md);
   }
 `;
 
-const Tagline = styled.span`
-  font-size: var(--font-md);
-  color: var(--text-muted);
+export const Subtitle = styled.span`
+  font-size: var(--font-sm);
+  color: var(--text-grey);
 
   @media (max-width: 768px) {
     display: none !important;
   }
 `;
 
-const Subtitle = Tagline;
