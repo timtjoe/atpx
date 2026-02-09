@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.5](https://github.com/timtjoe/atpx/compare/v0.0.4...v0.0.5) (2026-02-09)
+
+
+### Bug Fixes
+
+* spaces between cards ([4b665c4](https://github.com/timtjoe/atpx/commit/4b665c47c33a000f3db9da1e00613fc671a328d4))
+
 ### [0.0.4](https://github.com/timtjoe/atpx/compare/v0.0.3...v0.0.4) (2026-02-09)
 
 
