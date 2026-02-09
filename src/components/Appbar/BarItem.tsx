@@ -10,7 +10,6 @@ interface IBarItem {
 }
 
 export const BarItem = ({ uri, label, icon: Icon, badge }: IBarItem) => {
-  // Show indicator if badge is a number > 0 or explicitly true
   const hasNotifications =
     badge !== undefined &&
     badge !== false &&
@@ -38,7 +37,6 @@ const IconContainer = styled.div`
 
 const NotificationDot = styled.div`
   position: absolute;
-  /* Positioned at the top right of the icon */
   top: -1px;
   right: -1px;
 
@@ -66,8 +64,7 @@ const Link = styled(NavLink)`
 
   &.active {
     ${IconContainer} {
-      color: var(--text-bold, #000);
-      /* Opt: thicker stroke for active icon if using Lucide */
+      color: var(--text-black);
       svg {
         stroke-width: 2.5;
       }

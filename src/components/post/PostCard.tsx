@@ -6,7 +6,6 @@ import { IPost as Post } from "@/types/post";
 export const PostCard = ({ post }: { post: Post }) => {
   const sourceEmoji = post.source === "bsky" ? "🦋" : "🐘";
 
-  // Clean reactions logic
   const totalReactions = (
     (post.likes || 0) +
     (post.reposts || 0) +
@@ -32,7 +31,6 @@ export const PostCard = ({ post }: { post: Post }) => {
     >
       <HeaderSection>
         <AuthorLink href={post.profileUrl} target="_blank">
-          {/* Fixed: prevents empty string src error */}
           <Avatar src={post.authorAvatar || undefined} alt="" />
           <AuthorMeta>
             <AuthorName>{post.authorName || post.authorHandle}</AuthorName>

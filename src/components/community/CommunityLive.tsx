@@ -3,7 +3,7 @@ import { Community } from "@/types/community";
 import { CommunityService } from "./CommunityService";
 
 interface Props {
-  communities: Community[]; // Added to match the parent's call
+  communities: Community[]; 
   setCommunities: React.Dispatch<React.SetStateAction<Community[]>>;
   pollIntervalMs?: number;
 }

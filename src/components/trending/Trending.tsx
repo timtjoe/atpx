@@ -11,12 +11,11 @@ import { TrendCard } from "./TrendCard";
 import { Icon } from "@components";
 import { Trend } from "@types";
 
-// Rename the inner component so we can wrap the export
 const TrendingContent = (): React.JSX.Element => {
   const [topics] = useAtom(withTrend);
   const [, fetchTrends] = useAtom(trendActions);
   const navigate = useNavigate();
-  // TODO: remove
+  // TODO: remove force error test
   // const forcedError = (undefined as any).crash();
 
   const [loading, setLoading] = useState<boolean>(true);

@@ -158,7 +158,7 @@ const Footer = styled.div`
 const FooterSection = styled.div`
   display: flex;
   align-items: center;
-  gap: var(--spacing-sm); /* Gap handles the spacing around the Dot automatically */
+  gap: var(--spacing-sm);
   color: var(--text-muted);
   font-size: var(--font-xs);
 `;

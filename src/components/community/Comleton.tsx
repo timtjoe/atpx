@@ -12,7 +12,6 @@ const SkeletonBase = styled.div<{ $width?: string; $height?: string; $radius?: s
   width: ${props => props.$width || "100%"};
   height: ${props => props.$height || "20px"};
   border-radius: ${props => props.$radius || "var(--radius-md)"};
-  /* Using your palette: bg-grey and border-subtle */
   background: linear-gradient(
     to right, 
     var(--bg-grey) 8%, 
@@ -85,7 +84,6 @@ const SkeletonCard = styled.div`
   min-width: 340px;
   height: 252px;
   padding: var(--spacing-md);
-  /* Matches your design system border and radius */
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
   background: var(--bg-white);

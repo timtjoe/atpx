@@ -34,15 +34,13 @@ export const Navbar = ({ title = "", showBack, tabs = [] }: INavbar) => {
 };
 
 /* --- Styled Components --- */
-
 const NavContent = styled.div`
   display: flex;
   align-items: center;
   height: 48px;
   padding: 0 16px;
   gap: 12px;
-  
-  /* Remove side padding on mobile for tabs to use full width */
+
   @media (max-width: 768px) {
     padding: 0;
   }
@@ -91,14 +89,13 @@ const TabItem = styled(NavLink)`
   position: relative;
   transition: all 0.1s ease-in-out;
 
-  /* Text size logic */
-  font-size: 0.95rem; /* Desktop default */
+  font-size: var(--font-sm);
 
   @media (max-width: 768px) {
-    font-size: 0.82rem; /* Reduced for small devices */
+    //TODO: remove this.
     letter-spacing: -0.01em;
   }
-  
+
   span {
     height: 100%;
     display: flex;
@@ -121,7 +118,7 @@ const TabItem = styled(NavLink)`
       bottom: 0;
       left: 0;
       right: 0;
-      height: 3px; /* Slightly thinner on mobile */
+      height: 3px; 
       background: var(--bg-black, #000);
       border-radius: 10px 10px 0 0;
     }

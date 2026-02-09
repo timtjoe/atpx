@@ -45,13 +45,8 @@ export const AppDrawer = ({
 const Overlay = styled(Vaul.Overlay)`
   position: fixed;
   inset: 0; /* Cover 100% of the screen */
-  background: rgba(0, 0, 0, 0.4); /* Slightly darker for better contrast */
+  background: rgba(0, 0, 0, 0.4); 
   backdrop-filter: blur(4px);
-
-  /* IMPORTANT: 
-     1. Remove bottom: 60px so it covers the MobileNav 
-     2. Ensure z-index is higher than MobileNav (9999) 
-  */
   z-index: 10000;
 `;
 
@@ -89,7 +84,7 @@ const HandleBar = styled.div`
 const Handle = styled.div`
   width: 36px;
   height: 4px;
-  background: var(--border-subtle, #efefef);
+  background: var(--border-subtle);
   border-radius: 99px;
 `;
 

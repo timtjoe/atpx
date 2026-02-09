@@ -21,19 +21,19 @@ export const Toolbar = ({ title, showBack, tabs }: IToolbar) => {
     <FixedContainer>
       <TopRow>
         {/* Left: Home button (Desktop only) */}
-        <LeftSection>
+        <Left>
           <DesktopHomeButton onClick={() => navigate("/")} title="Home">
             <Home size={22} strokeWidth={2.2} />
           </DesktopHomeButton>
-        </LeftSection>
+        </Left>
 
         {/* Center: Logo (Always centered) */}
-        <CenterSection>
+        <Mid>
           <Logo />
-        </CenterSection>
+        </Mid>
 
         {/* Right: Actions (Desktop only) */}
-        <RightSection>
+        <Right>
           <DesktopIcons>
             {NAV_ITEMS.map((item) => (
               <ErrorBoundary key={item.id}>
@@ -41,7 +41,7 @@ export const Toolbar = ({ title, showBack, tabs }: IToolbar) => {
               </ErrorBoundary>
             ))}
           </DesktopIcons>
-        </RightSection>
+        </Right>
       </TopRow>
 
       <Navbar title={title} showBack={showBack} tabs={tabs} />
@@ -71,19 +71,19 @@ const TopRow = styled.div`
   border-bottom: 1px solid var(--border-extra-light, #f0f0f0);
 `;
 
-const LeftSection = styled.div`
+const Left = styled.div`
   flex: 1;
   display: flex;
   justify-content: flex-start;
 `;
 
-const CenterSection = styled.div`
+const Mid = styled.div`
   flex: 0 0 auto;
   display: flex;
   justify-content: center;
 `;
 
-const RightSection = styled.div`
+const Right = styled.div`
   flex: 1;
   display: flex;
   justify-content: flex-end;

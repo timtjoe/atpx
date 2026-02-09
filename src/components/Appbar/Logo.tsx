@@ -22,13 +22,9 @@ const Container = styled(RouterLink)`
   align-items: center;
   justify-content: center;
   
-  /* Adjusted to fit inside the 54px Toolbar TopRow */
   width: 44px;
   height: 44px;
-  
-  /* Retains the squircle look but scaled down for the header */
   border-radius: 12px;
-  
   text-decoration: none;
   transition: all 0.2s ease;
   cursor: pointer;
@@ -43,10 +39,8 @@ const Container = styled(RouterLink)`
 `;
 
 const Icon = styled.img`
-  /* Standardized logo size for headers */
-  width: 28px; 
-  height: 28px;
-  
+  width: 39px; 
+  height: 39px;
   object-fit: contain;
   display: block;
   opacity: 0.95;

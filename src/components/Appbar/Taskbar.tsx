@@ -99,8 +99,6 @@ const ProfileTrigger = styled.div<{ $active: boolean }>`
 `;
 
 const DrawerContent = styled.div`
-  /* This ensures the drawer items start high enough so they don't 
-     feel "behind" the taskbar links */
   padding: 16px;
   padding-bottom: 80px;
   background: var(--bg-page);

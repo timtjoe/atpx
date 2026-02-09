@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { Post, ITrendPost, IActorItem } from "@types";
 
 export const TrendPost = ({ post }: ITrendPost): React.JSX.Element => {
-  // Use optional chaining directly on the post object to avoid the "{}" type error
+
   const author = post.author;
   const text = (post.record?.text || "").replace(/\s+/g, " ");
 

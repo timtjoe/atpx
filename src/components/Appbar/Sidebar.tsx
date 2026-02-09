@@ -16,7 +16,6 @@ export const Sidebar = () => {
   return (
     <Container>
       <Content>
-        {/* Seeking Work / Portfolio Section */}
         <Card>
           <Title>Seeking Work</Title>
           <Text>
@@ -30,33 +29,15 @@ export const Sidebar = () => {
           <ButtonGroup>
             <Button href="https://github.com/timtjoe" target="_blank" $primary>
               <Briefcase size={16} />
-              Hire timtjoe
+              Hire Me
             </Button>
-            <Button href="https://ko-fi.com" target="_blank">
+            {/* <Button href="https://ko-fi.com" target="_blank">
               <Heart size={16} fill="currentColor" />
               Support project
-            </Button>
+            </Button> */}
           </ButtonGroup>
         </Card>
 
-        {/* Roadmap / Goals Section */}
-        <Card>
-          <Title>The Way Forward</Title>
-          <List>
-            {roadmap.map((item, idx) => (
-              <RoadmapItem key={idx} $done={item.done}>
-                {item.done ? (
-                  <CheckCircle2 size={14} color="var(--text-blue)" />
-                ) : (
-                  <Circle size={14} />
-                )}
-                <span>{item.task}</span>
-              </RoadmapItem>
-            ))}
-          </List>
-        </Card>
-
-        {/* Expanded FAQ Section */}
         <Card>
           <Title>Protocol FAQ</Title>
           <Accordion>
@@ -71,6 +52,22 @@ export const Sidebar = () => {
             ))}
           </Accordion>
         </Card>
+
+        {/* <Card>
+          <Title>The Way Forward</Title>
+          <List>
+            {roadmap.map((item, idx) => (
+              <RoadmapItem key={idx} $done={item.done}>
+                {item.done ? (
+                  <CheckCircle2 size={14} color="var(--text-blue)" />
+                ) : (
+                  <Circle size={14} />
+                )}
+                <span>{item.task}</span>
+              </RoadmapItem>
+            ))}
+          </List>
+        </Card> */}
 
         {/* Main footer */}
         <Footer />

@@ -10,7 +10,6 @@ const cache = {
 
 export const TrendingService = {
   list: async (): Promise<Trend[]> => {
-    // Return cache if valid
     if (cache.trends && Date.now() - cache.trends.timestamp < cache.TTL) {
       return cache.trends.data;
     }
@@ -102,7 +101,6 @@ export const TrendingService = {
   },
 
   get: async (topicName: string): Promise<Trend | null> => {
-    // Check details cache
     const cachedDetail = cache.details.get(topicName);
     if (cachedDetail && Date.now() - cachedDetail.timestamp < cache.TTL) {
       return cachedDetail.data;
@@ -146,13 +144,11 @@ export const TrendingService = {
 
   getMastodonDetails: async (trend: any) => {
     try {
-      // 1. Fetch Posts with safety check
       const postRes = await fetch(
         `https://mastodon.social/api/v1/timelines/tag/${encodeURIComponent(trend.topic)}?limit=4`,
       );
       const statuses = postRes.ok ? await postRes.json() : [];
 
-      // 2. Fetch Actors with safety check
       const actorRes = await fetch(
         `https://mastodon.social/api/v2/search?q=${encodeURIComponent(trend.topic)}&type=accounts&limit=5`,
       );
