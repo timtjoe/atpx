@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.4](https://github.com/timtjoe/atpx/compare/v0.0.3...v0.0.4) (2026-02-09)
+
+
+### Features
+
+* Add two new button components ([956787a](https://github.com/timtjoe/atpx/commit/956787a138dff075fe23e474c1967e4e46ff49af))
+
 ### [0.0.3](https://github.com/timtjoe/atpx/compare/v0.0.2...v0.0.3) (2026-02-09)
 
 ### [0.0.2](https://github.com/timtjoe/atpx/compare/v0.0.1...v0.0.2) (2026-02-09)
