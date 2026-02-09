@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Outlet, useMatches, UIMatch } from "react-router-dom";
-import { Taskbar, Sidebar, Toolbar } from "@components/appbar";
+import { Taskbar, Sidebar, Toolbar } from "@components";
 import { RouteHandle, NavConfig, RootContextType } from "@types";
 import { HOME_TABS } from "@constants/navigation";
 
