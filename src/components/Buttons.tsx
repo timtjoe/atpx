@@ -1,6 +1,5 @@
 import styled from "styled-components";
 
-
 type Size = "small" | "medium" | "large";
 type Variant = "trans" | "primary";
 
@@ -58,7 +57,7 @@ const variantMap: Record<
   },
 };
 
-const Button = styled.button<{ size: Size; variant: Variant }>`
+export const Button = styled.button<{ size: Size; variant: Variant }>`
   background: ${({ variant }) => variantMap[variant].background};
   border: none;
   width: ${({ size }) => sizeMap[size].width};
@@ -68,39 +67,6 @@ const Button = styled.button<{ size: Size; variant: Variant }>`
   align-items: center;
   justify-content: center;
   cursor: pointer;
-`;
-
-
-export const RetryButton = styled.button`
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: var(--bg-black, #000);
-  color: #fff;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 12px;
-  font-weight: 600;
-  font-size: 0.85rem;
-  cursor: pointer;
-  transition: transform 0.1s ease, opacity 0.2s ease;
-
-  &:hover {
-    opacity: 0.9;
-  }
-
-  &:active {
-    transform: scale(0.96);
-  }
-
-  .spinning {
-    animation: rotate 1s linear infinite;
-  }
-
-  @keyframes rotate {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-  }
 `;
 
 export const LinkButton = styled.a`

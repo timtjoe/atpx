@@ -4,12 +4,7 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { withTrend, trendActions } from "./TrendStore";
 import { Treleton } from "./Treleton";
-import {
-  Title,
-  TechnicalError,
-  ErrorBoundary,
-  Subtitle,
-} from "@components";
+import { Title, TechnicalError, ErrorBoundary, Subtitle } from "@components";
 import { TrendCard } from "./TrendCard";
 import { Trend } from "@types";
 
@@ -44,7 +39,7 @@ const TrendingContent = (): React.JSX.Element => {
   return (
     <Container>
       <TrendHead>
-          <Title>Trending Topics</Title>
+        <Title>Trending Topics</Title>
         <Subtitle>Conversations surfacing right now in the Fediverse</Subtitle>
       </TrendHead>
 
@@ -88,6 +83,7 @@ export const Trending = () => {
 
 /* --- Styled Components --- */
 const Container = styled.div`
+  border: thin solid transparent;
   padding: 0;
   margin: 0;
   background-color: var(--bg-grey);
