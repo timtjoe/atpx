@@ -1,45 +1,30 @@
 import React from "react";
-import styled, { keyframes } from "styled-components";
+import styled from "styled-components";
 import { Person } from "./PeopleService";
-import { X as XIcon, ExternalLink } from "lucide-react";
-import { motion } from "framer-motion";
+import { Icons } from "@/components/icons";
 import { IconButton } from "@components/IconButton";
 
 type Props = {
   person: Person;
   onRemove?: (uri: string) => void;
-  position?: number;
 };
 
-const PeopleCard: React.FC<Props> = ({ person, onRemove, position }) => {
+const PeopleCard: React.FC<Props> = ({ person, onRemove }) => {
   const handleRemove = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     if (onRemove) onRemove(person.uri);
   };
 
-  const handleFollow = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (person.profileUrl) window.open(person.profileUrl, "_blank", "noopener");
-  };
-
   return (
-    <Card
-      as={motion.a}
-      href={person.profileUrl}
-      target="_blank"
-      rel="noopener noreferrer"
-      initial={{ opacity: 0, y: 8 }}
-      animate={{ opacity: 1, y: 0 }}
-      whileHover={{ scale: 1.02 }}
-    >
+    <Card href={person.profileUrl} target="_blank" rel="noopener noreferrer">
       <RemoveButton onClick={handleRemove} aria-label="remove">
-        <XIcon size={16} />
+        <Icons.close size={16} />
       </RemoveButton>
 
       <Avatar
         src={person.avatar || "https://via.placeholder.com/97"}
+        loading="lazy"
         alt={person.displayName}
       />
       <Name title={person.displayName}>{person.displayName}</Name>
@@ -51,29 +36,42 @@ const PeopleCard: React.FC<Props> = ({ person, onRemove, position }) => {
   );
 };
 
-const floatIn = keyframes`
-  from { transform: translateY(6px); opacity: 0 }
-  to { transform: translateY(0); opacity: 1 }
-`;
+/* --- Styled Components --- */
 
 const Card = styled.a`
+  width: 160px;
+  height: 200px;
+  padding: var(--spacing-sm);
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 160px;
-  height: 200px;
-  background: var(--bg-soft);
+  background-color: var(--bg-white);
   border-radius: calc(var(--radius-md) + 4px);
-  border: 1px solid var(--border-subtle);
-  padding: var(--spacing-sm);
+  border: 1px solid var(--border-light);
+  text-decoration: none;
+  transition: transform 0.15s ease-out;
+  will-change: transform;
 `;
 
 const RemoveButton = styled(IconButton)`
   position: absolute;
   top: 8px;
   right: 8px;
+  z-index: 2;
+  transition: color 0.15s ease;
+  color: var(--text-black);
+
+  svg {
+    transition: color 0.15s ease;
+  }
+
+  &:hover {
+    svg {
+      color: var(--text-red);
+    }
+  }
 `;
 
 const Avatar = styled.img`
@@ -91,8 +89,6 @@ const Name = styled.div`
   font-weight: 700;
   text-align: center;
   max-width: 140px;
-  overflow: hidden;
-  word-break: break-word;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -102,13 +98,11 @@ const Name = styled.div`
 const Handle = styled.div`
   max-width: 140px;
   font-size: var(--font-xs);
-  color: var(--text-bold);
+  color: var(--text-muted); /* Changed to muted for better visual hierarchy */
   margin-top: var(--spacing-xs);
-  word-break: break-word;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  color: var(--text-bold);
 `;
 
 export default PeopleCard;

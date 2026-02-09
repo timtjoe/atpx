@@ -10,10 +10,11 @@ export * from "./Root";
 export * from "./Middot";
 export * from "./Buttons";
 
-// Folder export 
-export * from "./post"
-export * from "./trending"
-export * from "./community"
-export * from "./people"
-export * from "./headless"
-export * from "./appbar"
+// Folder export
+export * from "./post";
+export * from "./trending";
+export * from "./community";
+export * from "./people";
+export * from "./headless";
+export * from "./appbar";
+export * from "./icons";

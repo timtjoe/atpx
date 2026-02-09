@@ -1,19 +1,9 @@
 import React from "react";
 import styled from "styled-components";
-import { X as XIcon, ExternalLink, Calendar } from "lucide-react";
+// import { X as XIcon, ExternalLink, Calendar } from "lucide-react";
+import { Icons } from "@/components/icons";
 import { Community } from "@/types/community";
-import { IconButton } from "@components";
-
-/* --- Sub-component: Appealing Mid-Dot --- */
-const Dot = styled.span`
-  display: inline-block;
-  width: 3px;
-  height: 3px;
-  border-radius: 50%;
-  background-color: var(--text-muted);
-  opacity: 0.4;
-  flex-shrink: 0;
-`;
+import { Dot, IconButton } from "@components";
 
 const formatCount = (num: number): string => {
   return new Intl.NumberFormat("en-US", {
@@ -22,9 +12,12 @@ const formatCount = (num: number): string => {
   }).format(num);
 };
 
-export const CommunityCard = ({ community, onRemove }: { 
-  community: Community; 
-  onRemove?: (uri: string) => void 
+export const CommunityCard = ({
+  community,
+  onRemove,
+}: {
+  community: Community;
+  onRemove?: (uri: string) => void;
 }) => {
   const handleRemove = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -35,12 +28,12 @@ export const CommunityCard = ({ community, onRemove }: {
   return (
     <CardContainer>
       <Avatar src={community.avatar || ""} alt={community.displayName} />
-      
+
       <Body>
         <HeaderRow>
           <Name>{community.displayName}</Name>
           <IconButton size="small" variant="trans" onClick={handleRemove}>
-            <XIcon size={16} />
+            <Icons.close size={16} />
           </IconButton>
         </HeaderRow>
 
@@ -53,22 +46,20 @@ export const CommunityCard = ({ community, onRemove }: {
             <Stats>
               <span>{formatCount(community.activeCount || 0)}</span> members
             </Stats>
-            
-            <Dot /> {/* Using the new Dot component here */}
-            
+            <Dot />
             <UpdateTime>
-              <Calendar size={12} />
+              {/* <Calendar size={12} /> */}
               <span>Trending Now</span>
             </UpdateTime>
           </FooterSection>
 
-          <SourceLink 
-            href={community.profileUrl} 
-            target="_blank" 
+          <SourceLink
+            href={community.profileUrl}
+            target="_blank"
             $source={community.source}
           >
             {community.source}
-            <ExternalLink size={10} />
+            <Icons.external size={10} />
           </SourceLink>
         </Footer>
       </Body>
@@ -81,14 +72,13 @@ export const CommunityCard = ({ community, onRemove }: {
 const CardContainer = styled.div`
   display: flex;
   align-items: flex-start;
-  width: 340px;
-  height: 252px;
-  gap: var(--spacing-md);
+  width: 300px;
+  height: 200px;
+  gap: 0;
   padding: var(--spacing-md);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
   background: var(--bg-white);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
   position: relative;
 `;
 
@@ -131,7 +121,9 @@ const ContentLink = styled.a`
   color: inherit;
   display: block;
   flex: 1;
-  &:hover p { color: var(--text-bold); }
+  &:hover p {
+    color: var(--text-bold);
+  }
 `;
 
 const Description = styled.p`
@@ -165,7 +157,9 @@ const FooterSection = styled.div`
 
 const Stats = styled.div`
   font-weight: 600;
-  span { color: var(--text-bold); }
+  span {
+    color: var(--text-bold);
+  }
 `;
 
 const UpdateTime = styled.div`
@@ -190,7 +184,8 @@ const SourceLink = styled.a<{ $source: string }>`
   transition: all 0.2s;
 
   &:hover {
-    background: ${props => props.$source === 'bsky' ? '#0085ff20' : '#6364ff20'};
-    color: ${props => props.$source === 'bsky' ? '#0085ff' : '#6364ff'};
+    background: ${(props) =>
+      props.$source === "bsky" ? "#0085ff20" : "#6364ff20"};
+    color: ${(props) => (props.$source === "bsky" ? "#0085ff" : "#6364ff")};
   }
 `;

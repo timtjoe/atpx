@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
-import { User } from "lucide-react";
+// import { User } from "lucide-react";
+import { Icons } from "@components/icons";
 import { TASKBAR_PRIMARY, TASKBAR_SECONDARY } from "@constants";
 import { AppDrawer } from "./AppDrawer";
 
@@ -22,7 +23,7 @@ export const Taskbar = () => {
           onOpenChange={setIsOpen}
           trigger={
             <ProfileTrigger $active={isOpen} aria-label="Menu">
-              <User size={26} strokeWidth={2} />
+              <Icons.user size={26} strokeWidth={2} />
             </ProfileTrigger>
           }
         >

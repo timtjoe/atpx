@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useAtom } from "jotai";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { TrendingUp, Cloud, Globe } from "lucide-react";
-
+import { Icons } from "@/components/icons";
 import { withTrend, trendActions } from "./TrendStore";
 import { Treleton } from "./Treleton";
 import { Title, TechnicalError, Header, ErrorBoundary } from "@components";
@@ -15,8 +14,6 @@ const TrendingContent = (): React.JSX.Element => {
   const [topics] = useAtom(withTrend);
   const [, fetchTrends] = useAtom(trendActions);
   const navigate = useNavigate();
-  // TODO: remove force error test
-  // const forcedError = (undefined as any).crash();
 
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<boolean>(false);
@@ -45,16 +42,8 @@ const TrendingContent = (): React.JSX.Element => {
       <TrendHead>
         <TitleGroup>
           <Title>Trending Topics</Title>
-          <Icon as={TrendingUp} size={16} color="var(--text-muted)" />
+          <Icon as={Icons.trending} size={16} color="var(--text-muted)" />
         </TitleGroup>
-        <SourceLegend>
-          <SourceItem>
-            <Cloud size={10} /> Bluesky
-          </SourceItem>
-          <SourceItem>
-            <Globe size={10} /> Mastodon
-          </SourceItem>
-        </SourceLegend>
       </TrendHead>
 
       <Grid>
@@ -77,7 +66,6 @@ const TrendingContent = (): React.JSX.Element => {
 
 export const Trending = () => {
   const [key, setKey] = useState(0);
-
   const handleRetry = () => setKey((prev) => prev + 1);
 
   return (
@@ -130,6 +118,10 @@ const SourceItem = styled.span`
   display: flex;
   align-items: center;
   gap: 4px;
+
+  svg {
+    flex-shrink: 0;
+  }
 `;
 
 const Grid = styled.div`

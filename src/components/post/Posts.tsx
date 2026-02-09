@@ -35,8 +35,6 @@ const PostsContent = () => {
 
   return (
     <Container>
-      <SectionHeader>trending posts</SectionHeader>
-
       <Grid>
         {posts.map((post) => (
           <PostCard key={post.uri} post={post} />
@@ -77,23 +75,16 @@ export const Posts = () => {
 /* --- Styles --- */
 const Container = styled.div`
   width: 100%;
-  padding: 0 16px;
+  padding: var(--spacing-md) 0;
   margin-bottom: 50px;
 `;
-const SectionHeader = styled.h3`
-  font-size: 11px;
-  font-weight: 700;
-  color: #ff6600;
-  text-transform: uppercase;
-  margin-bottom: 20px;
-  letter-spacing: 0.1em;
-`;
+
 const Grid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 1px;
-  background: var(--border-light);
-  border-top: 1px solid var(--border-light);
+  gap: 0;
+  background: var(--bg-white);
+  border-top: 1px solid var(--border-subtle);
 `;
 const ActionArea = styled.div`
   display: flex;

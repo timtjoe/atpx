@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { Post, ITrendPost, IActorItem } from "@types";
+import { ITrendPost, IActorItem } from "@types";
 
 export const TrendPost = ({ post }: ITrendPost): React.JSX.Element => {
 

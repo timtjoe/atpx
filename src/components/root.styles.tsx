@@ -37,32 +37,23 @@ const RootStyles = createGlobalStyle`
     --round: 50%;
     --squicle: 20px/20px;
 
-    --color-white: #ffffff;
-
     /* Background colors */
     --bg-white: #FFFFFF;
     --bg-grey: #FAFAFA;
     --bg-black: #0C1015;
     --bg-subtle: #ffffff66;
-
-    --bg-light: #ffffff99;
-    --bg-glass: #ffffff33;
     --bg-trans: rgba(0, 0, 0, 0.05);
 
 
     /* Text colors */
+    --text-white: #e2e5e9;
     --text-blue: #0078FF;
     --text-red: #eb3b5a;
     --text-black: var(--bg-black);
     --text-bold: #161525;
     --text-muted: #465a6a;
-    
-    --text-orange: #ff6600;
-    --text-white: #e2e5e9;
-    --text-main: #333333;
-    --text-deep: #1e2151;
-    --text-dark: #1d2733;
-    --text-glass: #16161633;
+    --text-grey: #757a80;    
+    /* --text-grey: #757575;   */
 
     /* Border colors */
     --border-light: #EBEBEB;

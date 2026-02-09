@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { NavLink, useNavigate } from "react-router-dom";
-import { ArrowLeft } from "lucide-react";
+import { Icons } from "@/components/icons";
 
 interface INavbar {
   title?: string;
@@ -16,7 +16,7 @@ export const Navbar = ({ title = "", showBack, tabs = [] }: INavbar) => {
     <NavContent>
       {showBack && (
         <BackButton onClick={() => navigate(-1)}>
-          <ArrowLeft size={22} />
+          <Icons.arrow_left size={22} />
         </BackButton>
       )}
       {!hasTabs && <Title>{title}</Title>}
@@ -118,7 +118,7 @@ const TabItem = styled(NavLink)`
       bottom: 0;
       left: 0;
       right: 0;
-      height: 3px; 
+      height: 3px;
       background: var(--bg-black, #000);
       border-radius: 10px 10px 0 0;
     }

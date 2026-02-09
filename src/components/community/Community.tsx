@@ -29,7 +29,9 @@ const CommunityContent = () => {
       try {
         const removedUris = await communityDb.getRemovedCommunityUris();
         const result = await CommunityService.list(50);
-        setCommunities(result.items.filter(c => !removedUris.includes(c.uri)));
+        setCommunities(
+          result.items.filter((c) => !removedUris.includes(c.uri)),
+        );
       } finally {
         setLoading(false);
       }
@@ -52,12 +54,23 @@ const CommunityContent = () => {
         <Title>Trending Communities</Title>
         <HeadActions style={{ marginLeft: "auto" }}>
           {!isStart && (
-            <IconButton left onClick={() => carousel.current?.scrollBy({ left: -700, behavior: "smooth" })} variant="trans">
+            <IconButton
+              left
+              onClick={() =>
+                carousel.current?.scrollBy({ left: -700, behavior: "smooth" })
+              }
+              variant="trans"
+            >
               <ChevronLeft size={16} />
             </IconButton>
           )}
           {!isEnd && (
-            <IconButton onClick={() => carousel.current?.scrollBy({ left: 700, behavior: "smooth" })} variant="trans">
+            <IconButton
+              onClick={() =>
+                carousel.current?.scrollBy({ left: 700, behavior: "smooth" })
+              }
+              variant="trans"
+            >
               <ChevronRight size={16} />
             </IconButton>
           )}
@@ -73,10 +86,13 @@ const CommunityContent = () => {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: idx * 0.05 }}
             >
-              <CommunityCard community={community} onRemove={(uri) => {
-                setCommunities(prev => prev.filter(c => c.uri !== uri));
-                communityDb.addRemovedCommunityUri(uri);
-              }} />
+              <CommunityCard
+                community={community}
+                onRemove={(uri) => {
+                  setCommunities((prev) => prev.filter((c) => c.uri !== uri));
+                  communityDb.addRemovedCommunityUri(uri);
+                }}
+              />
             </motion.div>
           ))}
         </Carousel>
@@ -122,13 +138,16 @@ const Content = styled.div`
   padding: 0 var(--spacing-sm);
 `;
 
-
 const Carousel = styled.div`
   display: flex;
   gap: 12px;
   overflow-x: auto;
   scroll-behavior: smooth;
   scrollbar-width: none;
-  &::-webkit-scrollbar { display: none; }
-  & > div { flex-shrink: 0; width: 340px; }
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  & > div {
+    flex-shrink: 0;
+  }
 `;

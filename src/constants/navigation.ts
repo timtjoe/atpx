@@ -1,44 +1,33 @@
-import {
-  Home,
-  Bell,
-  MessageCircle,
-  Bookmark,
-  User,
-  Settings,
-  Search,
-  Info,
-} from "lucide-react";
+import { Icons } from "@/components/icons";
 
 /**
  * TOOLBAR / PANE ITEMS (Main Header)
- * These appear in the top row on desktop and tablet.
  */
 export const NAV_ITEMS = [
-  // { id: "notifications", uri: "/notifications", label: "Notifications", icon: Bell },
-  // { id: "chat", uri: "/chat", label: "Chat", icon: MessageCircle },
-  // { id: "profile", uri: "/profile", label: "Profile", icon: User },
-  { id: "info", uri: "#", label: "Info", icon: Info },
+  { id: "info", uri: "#", label: "Info", icon: Icons.info },
 ];
 
 /**
  * TASKBAR PRIMARY (Mobile Bottom Bar)
- * Persistent items at the bottom of the screen.
  */
 export const TASKBAR_PRIMARY = [
-  { id: "explore", uri: "/explore", icon: Search },
-  { id: "notifications", uri: "/notifications", icon: Bell },
-  { id: "messages", uri: "/chat", icon: MessageCircle },
-  // Home removed as requested
+  { id: "explore", uri: "/explore", icon: Icons.search },
+  { id: "notifications", uri: "/notifications", icon: Icons.bell },
+  { id: "messages", uri: "/chat", icon: Icons.chat },
 ];
 
 /**
  * TASKBAR SECONDARY (Mobile Drawer)
- * Items tucked away inside the profile/more menu on mobile.
  */
 export const TASKBAR_SECONDARY = [
-  { id: "profile", uri: "/profile", label: "Profile", icon: User },
-  { id: "bookmarks", uri: "/bookmarks", label: "Bookmarks", icon: Bookmark },
-  { id: "settings", uri: "/settings", label: "Settings", icon: Settings },
+  { id: "profile", uri: "/profile", label: "Profile", icon: Icons.user },
+  {
+    id: "bookmarks",
+    uri: "/bookmarks",
+    label: "Bookmarks",
+    icon: Icons.bookmark,
+  },
+  { id: "settings", uri: "/settings", label: "Settings", icon: Icons.settings },
 ];
 
 /**
@@ -51,7 +40,7 @@ export const HOME_TABS = [
   { label: "Trending", path: "/trendings" },
 ];
 
-const BREAKPOINTS = {
+export const BREAKPOINTS = {
   mobile: "768px",
   tablet: "1100px",
   desktop: "1280px",

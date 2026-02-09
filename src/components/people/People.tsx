@@ -107,7 +107,7 @@ const PeopleContent = () => {
 /* --- Styles --- */
 const Container = styled.section`
   margin-top: var(--spacing-md);
-  background-color: var(--bg-white);
+  background-color: var(--bg-grey);
   width: 100%;
 `;
 
