@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.2](https://github.com/timtjoe/atpx/compare/v0.0.1...v0.0.2) (2026-02-09)
+
+
+### Features
+
+* Add new job to github actions ([d9aeecf](https://github.com/timtjoe/atpx/commit/d9aeecf4e2f58eb4912b0f208937b5c562f1b4b7))
+
 ### 0.0.1 (2026-02-09)
 
 
