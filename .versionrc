@@ -16,6 +16,6 @@
   "compareUrlFormat": "https://github.com/timtjoe/{{repository}}/compare/{{previousTag}}...{{currentTag}}",
   "releaseCommitMessageFormat": "chore(release): {{currentTag}}",
   "scripts": {
-    "posttag": "git push --follow-tags origin main"
+    "posttag": "git push --follow-tags origin master"
   }
 }
