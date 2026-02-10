@@ -126,13 +126,8 @@ const ActorsGrid = styled.div`
   gap: var(--spacing-md);
   justify-items: center;
 
-  @media screen and (max-width: 900px) {
+  @media screen and (max-width: 736px) {
     grid-template-columns: 1fr 1fr;
-  }
-
-  @media screen and (max-width: 580px) {
-    grid-template-columns: 1fr;
-    gap: var(--spacing-sm);
   }
 `;
 

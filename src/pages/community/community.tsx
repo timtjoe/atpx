@@ -84,8 +84,8 @@ export const CommunityRoutes: RouteConfig = {
   path: "/communities",
   element: <CommunityPage />,
   handle: {
-    showBack: false,
-    showTabs: true,
+    showBack: true,
+    showTabs: false,
   },
 };
 
