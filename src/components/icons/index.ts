@@ -26,6 +26,7 @@ export const Icons = {
   globe: Vendor.Globe,
   cloud: Vendor.Cloud,
   middot: Vendor.Dot,
+  github: Vendor.Github,
 
   // Directions
   arrow_right: Vendor.ArrowRight,

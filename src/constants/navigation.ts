@@ -4,7 +4,7 @@ import { Icons } from "@/components/icons";
  * TOOLBAR / PANE ITEMS (Main Header)
  */
 export const NAV_ITEMS = [
-  { id: "info", uri: "#", label: "Info", icon: Icons.info },
+  { id: "info", uri: "https://github.com/timtjoe/atpx", label: "Info", icon: Icons.github },
 ];
 
 /**
@@ -37,5 +37,5 @@ export const HOME_TABS = [
   { label: "Your Feed", path: "/" },
   { label: "Communities", path: "/communities" },
   { label: "Actors", path: "/actors" },
-  { label: "Trending", path: "/trendings" },
+  // { label: "Trending", path: "/trendings" },
 ];

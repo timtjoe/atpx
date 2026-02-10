@@ -1,6 +1,7 @@
 import { HomePage, TrendPage } from "@pages";
 import { Root } from "@components";
 import { CommunityRoutes } from "@pages/community";
+import { ActorsRoutes } from "@pages/actors";
 
 /**
  * Main application routing configuration.
@@ -25,6 +26,7 @@ export const AppRoutes = [
         handle: { showBack: true, showTabs: false },
       },
       CommunityRoutes,
+      ActorsRoutes
     ],
   },
 ];

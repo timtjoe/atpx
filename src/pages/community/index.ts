@@ -1,1 +1,2 @@
-export * from "./community"
+export { CommunityRoutes } from "./community";
+export * from "./community";

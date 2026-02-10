@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useOutletContext } from "react-router-dom";
-import styled, { keyframes, css } from "styled-components";
-import { ExternalLink } from "lucide-react";
-import { TrendingService, TrendPost, TechnicalError } from "@components";
-import { Trend, Post, Actor } from "@types";
-import { RootContextType } from "@types";
+import styled, { keyframes } from "styled-components";
+import { TrendingService, TechnicalError } from "@components";
+import { PostCard } from "@components/post"; 
+import { PeopleCard } from "@components/people";
+import { Trend, Post, Actor, RootContextType } from "@types";
+import { Person } from "@components/people/PeopleService";
+import { IPost } from "@/types/post";
 
 export const TrendPage = (): React.JSX.Element => {
   const { id } = useParams<{ id: string }>();
-
-  // Use the strict context type from root.ts
   const { setNavConfig } = useOutletContext<RootContextType>();
 
   const [topic, setTopic] = useState<Trend | null>(null);
@@ -22,11 +22,8 @@ export const TrendPage = (): React.JSX.Element => {
     setError(false);
     try {
       const details = await TrendingService.get(id);
-
       if (details) {
         setTopic(details);
-
-        // Push data up to the Global Navigation using the shared type structure
         setNavConfig((prev) => ({
           ...prev,
           title: details.displayName,
@@ -43,15 +40,32 @@ export const TrendPage = (): React.JSX.Element => {
 
   useEffect(() => {
     fetchData();
-    // No cleanup needed here anymore because Root.tsx watches
-    // the route and resets the title automatically!
   }, [id]);
 
-  const getPostLink = (post: Post) => {
-    if (post.url) return post.url;
-    const postId = post.uri.split("/").pop();
-    return `https://bsky.app/profile/${post.author.handle}/post/${postId}`;
-  };
+  const mapToPostCardData = (p: Post): IPost => ({
+    uri: p.uri,
+    cid: p.cid || "",
+    authorHandle: p.author.handle,
+    authorName: p.author.displayName || p.author.handle,
+    authorAvatar: p.author.avatar,
+    profileUrl: `https://bsky.app/profile/${p.author.handle}`,
+    content: p.record?.text || p.content || "",
+    createdAt: p.indexedAt || new Date().toISOString(),
+    postUrl: p.url || `https://bsky.app/profile/${p.author.handle}/post/${p.uri.split("/").pop()}`,
+    likes: p.likeCount || 0,
+    reposts: p.repostCount || 0,
+    replies: p.replyCount || 0,
+    source: topic?.source || "bsky",
+  });
+
+  const mapActorToPerson = (actor: Actor): Person => ({
+    uri: String(actor.id),
+    handle: actor.handle,
+    displayName: actor.displayName || actor.handle || "",
+    avatar: actor.avatar || null,
+    profileUrl: actor.url || `https://bsky.app/profile/${actor.handle || actor.id}`,
+    source: topic?.source || "bsky",
+  });
 
   if (loading && !topic) return <TrendPageSkeleton />;
   if (error || !topic) return <TechnicalError onRetry={fetchData} />;
@@ -71,14 +85,7 @@ export const TrendPage = (): React.JSX.Element => {
             <SectionHeader>Featured Discussions</SectionHeader>
             <PostGrid>
               {topic.posts.map((post) => (
-                <ExternalAnchor
-                  key={post.uri}
-                  href={getPostLink(post)}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <TrendPost post={post} />
-                </ExternalAnchor>
+                <PostCard key={post.uri} post={mapToPostCardData(post)} />
               ))}
             </PostGrid>
           </Section>
@@ -87,29 +94,11 @@ export const TrendPage = (): React.JSX.Element => {
         {topic.actors && topic.actors.length > 0 && (
           <Section>
             <SectionHeader>Key Voices</SectionHeader>
-            <ActorList>
+            <PeopleGrid>
               {topic.actors.map((actor: Actor) => (
-                <ActorLink
-                  key={actor.id}
-                  href={
-                    actor.url ||
-                    `https://bsky.app/profile/${actor.handle || actor.id}`
-                  }
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <Avatar
-                    src={actor.avatar}
-                    alt={actor.displayName || actor.handle}
-                  />
-                  <ActorMeta>
-                    <strong>{actor.displayName || actor.handle}</strong>
-                    <span>@{actor.handle || actor.id}</span>
-                  </ActorMeta>
-                  <ExternalLink size={12} />
-                </ActorLink>
+                <PeopleCard key={actor.id} person={mapActorToPerson(actor)} />
               ))}
-            </ActorList>
+            </PeopleGrid>
           </Section>
         )}
       </ScrollArea>
@@ -117,62 +106,15 @@ export const TrendPage = (): React.JSX.Element => {
   );
 };
 
-/* --- Skeleton Components & Styles --- */
-
-const shimmer = keyframes`
-  0% { background-position: -468px 0; }
-  100% { background-position: 468px 0; }
-`;
-
-const skeletonBase = css`
-  background: #f6f7f8;
-  background-image: linear-gradient(
-    to right,
-    #f6f7f8 0%,
-    #edeef1 20%,
-    #f6f7f8 40%,
-    #f6f7f8 100%
-  );
-  background-repeat: no-repeat;
-  background-size: 800px 104px;
-  animation: ${shimmer} 1.2s linear infinite forwards;
-  border-radius: 4px;
-`;
-
-const SkeletonLine = styled.div`
-  ${skeletonBase} height: 14px;
-  margin-bottom: 8px;
-`;
-const SkeletonBlock = styled.div`
-  ${skeletonBase} height: 120px;
-  width: 100%;
-  border-radius: 12px;
-`;
-
-const TrendPageSkeleton = () => (
-  <PageWrapper>
-    <Header>
-      <SkeletonLine style={{ width: "40%", height: "20px" }} />
-    </Header>
-    <ScrollArea>
-      <Section>
-        <SkeletonLine style={{ width: "120px", marginBottom: "20px" }} />
-        <PostGrid>
-          {[1, 2, 3, 4].map((i) => (
-            <SkeletonBlock key={i} />
-          ))}
-        </PostGrid>
-      </Section>
-    </ScrollArea>
-  </PageWrapper>
-);
+/* --- Styled Components --- */
 
 const PageWrapper = styled.div`
-  padding: 0 var(--spacing-lg) var(--spacing-lg);
+  padding-bottom:  var(--spacing-lg);
 `;
 
 const Header = styled.header`
   margin-bottom: 24px;
+  padding-top: var(--spacing-md);
 `;
 
 const MetaRow = styled.div`
@@ -186,80 +128,79 @@ const ScrollArea = styled.div`
 `;
 
 const Section = styled.section`
-  margin-bottom: 32px;
+  margin-bottom: 40px;
 `;
 
 const SectionHeader = styled.h4`
-  font-size: 11px;
+  font-size: var(--font-sm);
   font-weight: 800;
   text-transform: uppercase;
   color: var(--text-muted);
-  margin-bottom: 16px;
-  letter-spacing: 0.05em;
+  margin: 0 var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+  letter-spacing: 0.08em;
 `;
 
 const PostGrid = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 16px;
 `;
 
-const ExternalAnchor = styled.a`
-  text-decoration: none;
-  color: inherit;
-`;
-
-const ActorList = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-`;
-
-const ActorLink = styled.a`
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px;
-  border-radius: 12px;
-  background: var(--bg-soft);
-  text-decoration: none;
-  color: inherit;
-  transition: transform 0.1s;
-  &:hover {
-    transform: translateX(4px);
+const PeopleGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: var(--spacing-md);
+  justify-items: start;
+  @media (max-width: 480px) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-sm);
   }
-`;
-
-const Avatar = styled.img`
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  object-fit: cover;
-`;
-
-const ActorMeta = styled.div`
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  strong {
-    font-size: 14px;
-  }
-  span {
-    font-size: 12px;
-    color: var(--text-muted);
-  }
+  margin: 0 var(--spacing-md);
 `;
 
 const Badge = styled.span<{ $status?: string }>`
   font-size: 10px;
   font-weight: 800;
-  padding: 2px 8px;
+  padding: 4px 10px;
   border-radius: 99px;
-  background: #f1f5f9;
-  color: #64748b;
+  background: var(--bg-soft);
+  color: var(--text-muted);
   text-transform: uppercase;
 `;
 
 const SourceTag = styled(Badge)<{ $source?: string }>`
+  background: ${(props) =>
+    props.$source === "mastodon"
+      ? "rgba(140, 141, 255, 0.1)"
+      : "rgba(0, 133, 255, 0.1)"};
   color: ${(props) => (props.$source === "mastodon" ? "#8c8dff" : "#0085ff")};
 `;
+
+/* --- Skeleton --- */
+const shimmer = keyframes`
+  0% { background-position: -468px 0; }
+  100% { background-position: 468px 0; }
+`;
+
+const SkeletonBlock = styled.div`
+  width: 100%;
+  height: 150px;
+  background: var(--bg-soft);
+  border-radius: 12px;
+  animation: ${shimmer} 1.5s infinite linear;
+`;
+
+const TrendPageSkeleton = () => (
+  <PageWrapper>
+    <Header>
+      <SkeletonBlock style={{ height: "30px", width: "30%" }} />
+    </Header>
+    <Section>
+      <SkeletonBlock />
+    </Section>
+    <Section>
+      <SkeletonBlock />
+    </Section>
+  </PageWrapper>
+);

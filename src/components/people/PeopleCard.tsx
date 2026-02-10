@@ -9,7 +9,7 @@ type Props = {
   onRemove?: (uri: string) => void;
 };
 
-const PeopleCard: React.FC<Props> = ({ person, onRemove }) => {
+export const PeopleCard: React.FC<Props> = ({ person, onRemove }) => {
   const handleRemove = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -51,6 +51,8 @@ const PeopleCard: React.FC<Props> = ({ person, onRemove }) => {
 };
 
 /* --- Styled Components --- */
+
+// Changed from styled.a to styled.div
 const Card = styled.div`
   position: relative;
   flex-direction: column;
