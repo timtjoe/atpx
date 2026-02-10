@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useAtom } from "jotai";
 import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
+import styled, { keyframes, css } from "styled-components";
 import { withTrend, trendActions } from "./TrendStore";
 import { Treleton } from "./Treleton";
 import { Title, TechnicalError, ErrorBoundary, Subtitle } from "@components";
@@ -12,7 +12,6 @@ const TrendingContent = (): React.JSX.Element => {
   const [topics] = useAtom(withTrend);
   const [, fetchTrends] = useAtom(trendActions);
   const navigate = useNavigate();
-  // const forceError = (undefined as any).crash();
 
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<boolean>(false);
@@ -45,16 +44,17 @@ const TrendingContent = (): React.JSX.Element => {
 
       <Grid>
         {topics.slice(0, 12).map((item: Trend, i: number) => (
-          <TrendCard
-            key={`${item.source}-${item.topic}`}
-            topic={item}
-            rank={i + 1}
-            onClick={() =>
-              navigate(
-                `/trend/${encodeURIComponent(item.topic)}?source=${item.source}`,
-              )
-            }
-          />
+          <TrendItem key={`${item.source}-${item.topic}`} $idx={i}>
+            <TrendCard
+              topic={item}
+              rank={i + 1}
+              onClick={() =>
+                navigate(
+                  `/trend/${encodeURIComponent(item.topic)}?source=${item.source}`,
+                )
+              }
+            />
+          </TrendItem>
         ))}
       </Grid>
     </Container>
@@ -81,28 +81,32 @@ export const Trending = () => {
   );
 };
 
+/* --- Animations --- */
+
+const entry = keyframes`
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+`;
+
 /* --- Styled Components --- */
+
 const Container = styled.div`
-  border: thin solid transparent;
-  padding: 0;
-  margin: 0;
   background-color: var(--bg-grey);
   padding-bottom: var(--spacing-sm);
+  width: 100%;
 `;
 
 const TrendHead = styled.div`
   display: flex;
   flex-direction: column;
   gap: var(--spacing-xs);
-  justify-content: space-between;
-  align-items: flex-start;
-  margin: calc(var(--spacing-lg));
-`;
-
-const Headrow = styled.div`
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-md);
+  margin: var(--spacing-lg);
 `;
 
 const Grid = styled.div`
@@ -110,4 +114,12 @@ const Grid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
   gap: var(--spacing-md);
+`;
+
+const TrendItem = styled.div<{ $idx: number }>`
+  opacity: 0;
+  animation: ${entry} 0.2s ease-out forwards;
+  ${({ $idx }) => css`
+    animation-delay: ${$idx * 0.04}s;
+  `}
 `;

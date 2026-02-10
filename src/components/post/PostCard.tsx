@@ -1,43 +1,70 @@
-import React from "react";
-import styled from "styled-components";
-import { motion } from "framer-motion";
+import React, { useMemo } from "react";
+import styled, { keyframes } from "styled-components";
 import { IPost as Post } from "@/types/post";
+import { Icons } from "@/components/icons";
+import { Chip, Dot, LinkButton } from "@components";
+
+/* --- Utilities --- */
+const getSourceIcon = (source: string) => {
+  switch (source.toLowerCase()) {
+    case "bsky":
+      return <Icons.bluesky size={14} />;
+    case "mastodon":
+      return <Icons.mastodon size={14} />;
+    default:
+      return <Icons.globe />;
+  }
+};
+
+const decodeHTMLEntities = (text: string) => {
+  const textArea = document.createElement("textarea");
+  textArea.innerHTML = text;
+  return textArea.value;
+};
+
+/* --- Main Component --- */
 
 export const PostCard = ({ post }: { post: Post }) => {
-  const sourceEmoji = post.source === "bsky" ? "🦋" : "🐘";
+  const Icon = useMemo(() => getSourceIcon(post.source), [post.source]);
 
-  const totalReactions = (
-    (post.likes || 0) +
-    (post.reposts || 0) +
-    (post.replies || 0)
-  ).toLocaleString();
+  const decodedContent = useMemo(
+    () => decodeHTMLEntities(post.content || ""),
+    [post.content],
+  );
 
-  const formattedDate = new Date(post.createdAt)
-    .toLocaleString("en-US", {
+  const meta = useMemo(() => {
+    const total = (post.likes || 0) + (post.reposts || 0) + (post.replies || 0);
+    const date = new Date(post.createdAt).toLocaleString("en-US", {
+      month: "numeric",
+      day: "numeric",
+      year: "numeric",
       hour: "numeric",
       minute: "2-digit",
       hour12: true,
-      day: "numeric",
-      month: "short",
-      year: "numeric",
-    })
-    .toUpperCase();
+    });
+
+    return { total: total.toLocaleString(), date };
+  }, [post.likes, post.reposts, post.replies, post.createdAt]);
 
   return (
-    <CardWrapper
-      as={motion.div}
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-    >
-      <HeaderSection>
-        <AuthorLink href={post.profileUrl} target="_blank">
-          <Avatar src={post.authorAvatar || undefined} alt="" />
+    <Card>
+      <Header>
+        <Author
+          href={post.profileUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <Avatar
+            src={post.authorAvatar || "/fallback-avatar.png"}
+            alt=""
+            loading="lazy"
+          />
           <AuthorMeta>
             <AuthorName>{post.authorName || post.authorHandle}</AuthorName>
+            <Middot />
             <AuthorHandle>@{post.authorHandle}</AuthorHandle>
           </AuthorMeta>
-        </AuthorLink>
-
+        </Author>
         <SourceBadge
           href={
             post.source === "bsky"
@@ -46,74 +73,94 @@ export const PostCard = ({ post }: { post: Post }) => {
           }
           target="_blank"
         >
-          {sourceEmoji}
+          {Icon}
         </SourceBadge>
-      </HeaderSection>
+      </Header>
 
-      <ContentLink href={post.postUrl} target="_blank">
-        <ContentText>{post.content}</ContentText>
-      </ContentLink>
+      <ContentWrapper>
+        <ContentText>{decodedContent}</ContentText>
+      </ContentWrapper>
 
-      <FooterSection>
+      <Footer>
         <FooterText>
-          <ReactionCount>{totalReactions} reactions</ReactionCount>
-          <DotSeparator />
-          {post.category || "trending"}
-          <DotSeparator />
-          {formattedDate}
+          <ExternalButton
+            href={post.postUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {Icon}
+            <span>Open Link</span>
+            <Icons.external size={10} />
+          </ExternalButton>
+          <IconChip>
+            <IconStack>
+              <Icons.heart size={13} />
+              <Icons.comment size={13} />
+            </IconStack>
+            {meta.total} Reactions
+          </IconChip>
+
+          <RightMeta>
+            <time dateTime={post.createdAt}>{meta.date}</time>
+          </RightMeta>
         </FooterText>
-      </FooterSection>
-    </CardWrapper>
+      </Footer>
+    </Card>
   );
 };
 
-/* --- Styled Components --- */
+/* --- Animations --- */
+const slideDown = keyframes`
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+`;
 
-const CardWrapper = styled.div`
+/* --- Styled Components --- */
+const Card = styled.article`
   display: flex;
   flex-direction: column;
-  padding: var(--spacing-md);
+  padding: 0;
   background: var(--bg-white);
   width: 100%;
-  border-bottom: 1px solid var(--border-light);
+  animation: ${slideDown} 0.2s ease-out forwards;
 `;
 
-const HeaderSection = styled.div`
+const Header = styled.header`
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: var(--spacing-md);
+  padding: var(--spacing-sm) var(--spacing-md);
 `;
 
-const AuthorLink = styled.a`
+const Author = styled.a`
   display: flex;
   align-items: center;
-  gap: var(--spacing-md);
+  gap: 2.5px;
+  text-decoration: none;
   min-width: 0;
-  &:hover span:first-child {
-    text-decoration: underline;
-  }
 `;
 
 const Avatar = styled.img`
-  width: 36px;
-  height: 36px;
-  border-radius: var(--round);
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
   object-fit: cover;
   background: var(--bg-grey);
+  border: thin solid var(--border-subtle);
+  margin-right: var(--spacing-xs);
 `;
 
 const AuthorMeta = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  align-items: center;
   min-width: 0;
+  gap: var(--spacing-sm);
 `;
 
 const AuthorName = styled.span`
   font-size: var(--font-sm);
   font-weight: 700;
   color: var(--text-bold);
-  line-height: 1.2;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -121,60 +168,115 @@ const AuthorName = styled.span`
 
 const AuthorHandle = styled.span`
   font-size: var(--font-xs);
-  color: var(--text-muted);
+  color: var(--text-grey);
 `;
 
 const SourceBadge = styled.a`
-  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
   padding: var(--spacing-xs);
   border-radius: var(--radius-sm);
-  transition: background 0.2s;
-  &:hover {
-    background: var(--bg-grey);
-  }
+  margin-left: auto;
 `;
 
-const ContentLink = styled.a`
-  display: block;
-  margin-bottom: var(--spacing-lg);
-  &:hover p {
-    color: var(--text-blue);
-  }
+const Middot = styled(Dot)`
+  padding: 0;
+  margin: 0;
+  width: 2px;
+  height: 2px;
+  background-color: var(--text-muted);
 `;
 
-const ContentText = styled.p`
-  display: -webkit-box;
-  /* -webkit-line-clamp: 5; */
-  /* -webkit-box-orient: vertical; */
-  font-size: 30px;
-  line-height: 40px;
-  font-weight: 700;
+const ContentWrapper = styled.div`
+  margin: var(--spacing-sm) var(--spacing-md);
+  margin-top: 0;
+  cursor: default;
+`;
+
+const ContentText = styled.div`
+  font-size: 15px;
+  line-height: 20px;
+  font-weight: 600;
   color: var(--text-black);
+  margin: 0;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
   overflow: hidden;
+  text-overflow: ellipsis;
+
+  hyphens: auto;
+  overflow-wrap: break-word;
+  text-align: left;
+  white-space: pre-wrap;
+
+  font-family:
+    "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+
+  @media screen and (max-width: 768px) {
+    font-size: 21px;
+    line-height: 26px;
+  }
 `;
 
-const FooterSection = styled.div`
-  padding-top: var(--spacing-md);
-`;
+const Footer = styled(Header)``;
 
 const FooterText = styled.div`
-  font-size: 10px;
-  color: var(--text-muted);
+  font-size: var(--font-xs);
+  color: var(--text-grey);
   text-transform: uppercase;
   letter-spacing: 0.05em;
   display: flex;
   align-items: center;
-  gap: 6px;
+  width: 100%;
+  gap: var(--spacing-sm);
 `;
 
-const ReactionCount = styled.span`
-  font-weight: 700;
-  color: var(--text-bold);
+const RightMeta = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
 `;
 
-const DotSeparator = styled.span`
-  &::before {
-    content: "•";
+const IconStack = styled.div`
+  display: flex;
+  align-items: center;
+  margin-right: 4px;
+  & > svg {
+    margin-left: -4px;
+    background: var(--bg-white);
   }
-  opacity: 0.5;
+`;
+
+const ExternalButton = styled.a`
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: var(--bg-soft);
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  font-weight: 700;
+  font-size: var(--font-sm);
+  border: unset;
+  text-transform: capitalize;
+  color: var(--text-black);
+
+  &:hover {
+    opacity: 0.8;
+  }
+`;
+
+const IconChip = styled(Chip)`
+  text-transform: capitalize;
+  font-weight: normal;
+  padding-right: var(--spacing-md);
+  padding-left: var(--spacing-md);
+  font-weight: bold;
+  color: var(--text-black);
+  border: unset;
 `;
