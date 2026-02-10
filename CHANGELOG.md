@@ -1,6 +1,17 @@
 # Changelog
 
-All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+All notable changes to this project will be documented in this file.
+## [0.1.0](https://github.com/timtjoe/atprotosy/compare/v0.0.8...v0.1.0) (2026-02-10)
+
+
+### Features
+
+* Add .versionrc file and updated package.json ([095951f](https://github.com/timtjoe/atprotosy/commit/095951f78459d2b98c674a896bb2c800307fbfab))
+
+
+### Bug Fixes
+
+* PostCard font appearance. ([c8b220e](https://github.com/timtjoe/atprotosy/commit/c8b220e3a6aeeacf67c1da34cdc41b8385ebd2d5))
 
 ### [0.0.8](https://github.com/timtjoe/atpx/compare/v0.0.7...v0.0.8) (2026-02-10)
 

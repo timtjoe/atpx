@@ -1,6 +1,6 @@
 {
   "name": "atprotosy",
-  "version": "0.0.8",
+  "version": "0.1.0",
   "description": "A high-performance discovery hub and analytics suite for the AT Protocol and Fediverse ecosystem.",
   "type": "module",
   "private": true,
