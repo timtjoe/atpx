@@ -1,6 +1,13 @@
 # Changelog
 
 All notable changes to this project will be documented in this file.
+### [0.3.3](https://github.com/timtjoe/atprotosy/compare/v0.3.2...v0.3.3) (2026-02-10)
+
+
+### Bug Fixes
+
+*  Grid layout mobile view ([6c566c9](https://github.com/timtjoe/atprotosy/commit/6c566c93daf25019be800ba72ee75adbef2a9970))
+
 ### [0.3.2](https://github.com/timtjoe/atprotosy/compare/v0.3.1...v0.3.2) (2026-02-10)
 
 ### [0.3.1](https://github.com/timtjoe/atprotosy/compare/v0.3.0...v0.3.1) (2026-02-10)
