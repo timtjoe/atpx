@@ -1,6 +1,13 @@
 # Changelog
 
 All notable changes to this project will be documented in this file.
+## [0.2.0](https://github.com/timtjoe/atprotosy/compare/v0.1.0...v0.2.0) (2026-02-10)
+
+
+### Features
+
+* Add documentation for contributors and automation loop ([11d2bba](https://github.com/timtjoe/atprotosy/commit/11d2bbadcdcf0e4d4e3c33b1a2f8891687b6a770))
+
 ## [0.1.0](https://github.com/timtjoe/atprotosy/compare/v0.0.8...v0.1.0) (2026-02-10)
 
 
