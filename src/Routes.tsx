@@ -1,5 +1,6 @@
 import { HomePage, TrendPage } from "@pages";
 import { Root } from "@components";
+import { CommunityPage, CommunityRoutes } from "@pages/community";
 
 /**
  * Main application routing configuration.
@@ -23,6 +24,7 @@ export const AppRoutes = [
         element: <TrendPage />,
         handle: { showBack: true, showTabs: false },
       },
+      CommunityRoutes,
     ],
   },
 ];

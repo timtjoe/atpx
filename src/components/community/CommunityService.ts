@@ -8,7 +8,10 @@ class CommunityServiceClass {
   /**
    * Fetches communities from BlueSky and Mastodon
    */
-  public async list(limit: number = 30, cursor?: string): Promise<CommunityListResponse> {
+  public async list(
+    limit: number = 30,
+    cursor?: string,
+  ): Promise<CommunityListResponse> {
     const results: Community[] = [];
 
     // 1. BlueSky popular feed generators
@@ -37,7 +40,7 @@ class CommunityServiceClass {
             };
           });
           results.push(...mapped);
-          break; 
+          break;
         } catch (err) {
           continue;
         }
@@ -50,22 +53,26 @@ class CommunityServiceClass {
     try {
       const mastodonBase = Agents.mastodon as string | undefined;
       if (mastodonBase) {
-        const base = mastodonBase.replace(/\/$/, "").replace(/\/api\/v1.*$/, "");
+        const base = mastodonBase
+          .replace(/\/$/, "")
+          .replace(/\/api\/v1.*$/, "");
         const res = await fetch(`${base}/api/v1/trends/tags`);
-        
+
         if (res.ok) {
           const data = await res.json();
-          const mapped: Community[] = (data || []).slice(0, limit).map((tag: any) => ({
-            uri: `mastodon:tag:${tag.name}`,
-            displayName: `#${tag.name}`,
-            description: `${tag.history?.[0]?.accounts || 0} people talking about this`,
-            avatar: null,
-            creatorHandle: "",
-            feedUrl: `${base}/tags/${tag.name}`,
-            profileUrl: `${base}/tags/${tag.name}`,
-            source: "mastodon",
-            activeCount: tag.history?.[0]?.uses || 0,
-          }));
+          const mapped: Community[] = (data || [])
+            .slice(0, limit)
+            .map((tag: any) => ({
+              uri: `mastodon:tag:${tag.name}`,
+              displayName: `#${tag.name}`,
+              description: `${tag.history?.[0]?.accounts || 0} people talking about this`,
+              avatar: null,
+              creatorHandle: "",
+              feedUrl: `${base}/tags/${tag.name}`,
+              profileUrl: `${base}/tags/${tag.name}`,
+              source: "mastodon",
+              activeCount: tag.history?.[0]?.uses || 0,
+            }));
           results.push(...mapped);
         }
       }
@@ -87,7 +94,10 @@ class CommunityServiceClass {
   /**
    * Real-time subscription for UI updates
    */
-  public subscribe(callback: (items: Community[]) => void, intervalMs: number = 25000): () => void {
+  public subscribe(
+    callback: (items: Community[]) => void,
+    intervalMs: number = 25000,
+  ): () => void {
     let mounted = true;
 
     const run = async () => {

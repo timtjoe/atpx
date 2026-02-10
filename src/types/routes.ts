@@ -15,4 +15,6 @@ export interface RouteConfig {
 
   /** Nested sub-routes for this branch. */
   children?: RouteConfig[];
+
+  handle?: {}
 }
