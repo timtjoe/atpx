@@ -1,6 +1,8 @@
 # Changelog
 
 All notable changes to this project will be documented in this file.
+### [0.3.2](https://github.com/timtjoe/atprotosy/compare/v0.3.1...v0.3.2) (2026-02-10)
+
 ### [0.3.1](https://github.com/timtjoe/atprotosy/compare/v0.3.0...v0.3.1) (2026-02-10)
 
 
