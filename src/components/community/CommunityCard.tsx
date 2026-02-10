@@ -4,7 +4,7 @@ import { Icons } from "@/components/icons";
 import { Community } from "@/types/community";
 import { Clamp, Dot, IconButton, LinkButton } from "@components";
 
-const formatCount = (num: number): string => {
+export const formatCount = (num: number): string => {
   return new Intl.NumberFormat("en-US", {
     notation: "compact",
     maximumFractionDigits: 1,

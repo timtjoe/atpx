@@ -78,6 +78,7 @@ const entry = keyframes`
 const Container = styled.div`
   width: 100%;
   margin-bottom: 50px;
+  border-top: thin solid var(--border-subtle);
 `;
 
 const Grid = styled.div`

@@ -26,7 +26,6 @@ const decodeHTMLEntities = (text: string) => {
 
 export const PostCard = ({ post }: { post: Post }) => {
   const Icon = useMemo(() => getSourceIcon(post.source), [post.source]);
-
   const decodedContent = useMemo(
     () => decodeHTMLEntities(post.content || ""),
     [post.content],
@@ -45,6 +44,16 @@ export const PostCard = ({ post }: { post: Post }) => {
 
     return { total: total.toLocaleString(), date };
   }, [post.likes, post.reposts, post.replies, post.createdAt]);
+
+  const reactions =
+    Number(meta.total) < 1000
+      ? meta.total
+      : new Intl.NumberFormat("en", {
+          notation: "compact",
+          maximumFractionDigits: 1,
+        })
+          .format(Number(meta.total))
+          .toLowerCase();
 
   return (
     <Card>
@@ -65,7 +74,7 @@ export const PostCard = ({ post }: { post: Post }) => {
             <AuthorHandle>@{post.authorHandle}</AuthorHandle>
           </AuthorMeta>
         </Author>
-        <SourceBadge
+        {/* <SourceBadge
           href={
             post.source === "bsky"
               ? "https://bsky.app"
@@ -74,7 +83,7 @@ export const PostCard = ({ post }: { post: Post }) => {
           target="_blank"
         >
           {Icon}
-        </SourceBadge>
+        </SourceBadge> */}
       </Header>
 
       <ContentWrapper>
@@ -83,18 +92,18 @@ export const PostCard = ({ post }: { post: Post }) => {
 
       <Footer>
         <FooterText>
-          <ExternalButton
+          <ExButton
             href={post.postUrl}
             target="_blank"
             rel="noopener noreferrer"
           >
             {Icon}
-            <span>Open Link</span>
+            <span>Open link</span>
             <Icons.external size={10} />
-          </ExternalButton>
+          </ExButton>
           <IconChip>
             <IconStack>
-              <Icons.heart size={13} />
+              {/* <Icons.heart size={13} /> */}
               <Icons.comment size={13} />
             </IconStack>
             {meta.total} Reactions
@@ -172,12 +181,6 @@ const AuthorHandle = styled.span`
 `;
 
 const SourceBadge = styled.a`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--text-muted);
-  padding: var(--spacing-xs);
-  border-radius: var(--radius-sm);
   margin-left: auto;
 `;
 
@@ -186,7 +189,7 @@ const Middot = styled(Dot)`
   margin: 0;
   width: 2px;
   height: 2px;
-  background-color: var(--text-muted);
+  background-color: var(--text-grey);
 `;
 
 const ContentWrapper = styled.div`
@@ -198,85 +201,80 @@ const ContentWrapper = styled.div`
 const ContentText = styled.div`
   font-size: 15px;
   line-height: 20px;
-  font-weight: 600;
+  font-weight: normal;
   color: var(--text-black);
-  margin: 0;
-
   display: -webkit-box;
   -webkit-line-clamp: 5;
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
-
   hyphens: auto;
   overflow-wrap: break-word;
   text-align: left;
   white-space: pre-wrap;
 
-  font-family:
-    "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+  /* font-family:
+    "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif; */
 
   @media screen and (max-width: 768px) {
-    font-size: 21px;
-    line-height: 26px;
   }
 `;
 
-const Footer = styled(Header)``;
+const Footer = styled(Header)`
+  padding: 0 var(--spacing-sm);
+  margin-bottom: var(--spacing-sm);
+`;
 
 const FooterText = styled.div`
-  font-size: var(--font-xs);
-  color: var(--text-grey);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
   display: flex;
   align-items: center;
   width: 100%;
   gap: var(--spacing-sm);
 `;
 
-const RightMeta = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-left: auto;
-`;
-
-const IconStack = styled.div`
-  display: flex;
-  align-items: center;
-  margin-right: 4px;
-  & > svg {
-    margin-left: -4px;
-    background: var(--bg-white);
-  }
-`;
-
-const ExternalButton = styled.a`
+const ExButton = styled.a`
   display: flex;
   align-items: center;
   gap: var(--spacing-sm);
   padding: var(--spacing-sm) var(--spacing-md);
   background: var(--bg-soft);
   border-radius: var(--radius-md);
-  text-decoration: none;
-  font-weight: 700;
-  font-size: var(--font-sm);
-  border: unset;
-  text-transform: capitalize;
+  font-size: var(--font-xs);
   color: var(--text-black);
+  border: thin solid var(--border-subtle);
 
   &:hover {
     opacity: 0.8;
   }
+
+  @media screen and (max-width: 768px) {
+    padding: var(--spacing-sm);
+  }
 `;
 
 const IconChip = styled(Chip)`
-  text-transform: capitalize;
+  padding: var(--spacing-sm) var(--spacing-md);
   font-weight: normal;
-  padding-right: var(--spacing-md);
-  padding-left: var(--spacing-md);
-  font-weight: bold;
   color: var(--text-black);
+  font-size: var(--font-xs);
   border: unset;
+
+  @media screen and (max-width: 768px) {
+    padding: var(--spacing-sm);
+  }
+`;
+
+const IconStack = styled.div`
+  display: flex;
+  align-items: center;
+  & > svg {
+    background: var(--bg-white);
+  }
+`;
+
+const RightMeta = styled.div`
+  margin-left: auto;
+  text-transform: uppercase;
+  color: var(--text-grey);
+  font-size: var(--font-xs);
 `;
