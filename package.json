@@ -1,6 +1,6 @@
 {
   "name": "atpx",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "A high-performance discovery hub and analytics suite for the AT Protocol and Fediverse ecosystem.",
   "type": "module",
   "private": true,

@@ -1,6 +1,14 @@
 # Changelog
 
 All notable changes to this project will be documented in this file.
+### [0.3.1](https://github.com/timtjoe/atprotosy/compare/v0.3.0...v0.3.1) (2026-02-10)
+
+
+### Bug Fixes
+
+* Branch name mismatch in .versionrc ([533baf8](https://github.com/timtjoe/atprotosy/commit/533baf89f71f129889a092802cec797938bbc093))
+* Change project name in package.json ([8acc32f](https://github.com/timtjoe/atprotosy/commit/8acc32f2d506e48f4b6371024a54b8cca596fee5))
+
 ## [0.3.0](https://github.com/timtjoe/atprotosy/compare/v0.2.0...v0.3.0) (2026-02-10)
 
 ## [0.2.0](https://github.com/timtjoe/atprotosy/compare/v0.1.0...v0.2.0) (2026-02-10)
