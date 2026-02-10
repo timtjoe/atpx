@@ -15,9 +15,9 @@
 
  export const faqs = [
     { q: "What is ATProto?", a: "The Authenticated Transfer Protocol is a foundation for social networking that gives users control over their data, identity, and algorithms." },
-    { q: "How is this different from Mastodon?", a: "Mastodon uses ActivityPub. ATProto (used here) is built for better performance, easier server switching, and global search capabilities." },
+    // { q: "How is this different from Mastodon?", a: "Mastodon uses ActivityPub. ATProto (used here) is built for better performance, easier server switching, and global search capabilities." },
     { q: "Is my data secure?", a: "Yes. All data is signed cryptographically. Soon, you'll be able to host your own Personal Data Server (PDS) for total ownership." },
     { q: "What is the 'Metaverse' in this context?", a: "It is the open, interconnected web of decentralized servers where users can talk across different platforms without borders." },
     { q: "How do I find communities?", a: "That is a core goal of this project! I am building a curated, user-friendly directory to help you find your niche in the Fediverse." },
-    { q: "Can I use my existing handle?", a: "Yes, once OAuth is implemented, you can sign in with any ATProto-compatible handle (like Bluesky)." }
+    // { q: "Can I use my existing handle?", a: "Yes, once OAuth is implemented, you can sign in with any ATProto-compatible handle (like Bluesky)." }
   ];

@@ -1,77 +1,91 @@
 import { useState } from "react";
 import styled from "styled-components";
 import {
-  Heart,
   ChevronDown,
-  CheckCircle2,
-  Circle,
+  Github,
   Briefcase,
+  MessageCircle,
 } from "lucide-react";
-import { Footer } from "@components";
-import { faqs, roadmap } from "@/constants";
+import { Footer, LinkButton } from "@components";
+import { faqs } from "@/constants";
 
-export const Sidebar = () => {
+// --- Exported Content for the Mobile Drawer ---
+export const SidebarContent = () => {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   return (
+    <Content>
+      <Card>
+        <Title>Protocol FAQ</Title>
+        <Accordion>
+          {faqs.map((faq, i) => (
+            <FaqItem key={i}>
+              <FaqHeader onClick={() => setOpenFaq(openFaq === i ? null : i)}>
+                <span>{faq.q}</span>
+                <ChevronIcon $isOpen={openFaq === i} size={14} />
+              </FaqHeader>
+              {openFaq === i && <FaqBody>{faq.a}</FaqBody>}
+            </FaqItem>
+          ))}
+        </Accordion>
+      </Card>
+
+      <Card>
+        <Title>Seeking Work</Title>
+        <Text>
+          I built this platform because I’m
+          <strong> obsessed with crafting pixel-perfect UIs </strong>
+          and seamless digital experiences. While this project dives into
+          <em> atproto</em>, my true passion lies in pushing the boundaries of
+          what's possible with high-fidelity frontend engineering and fluid
+          animations.
+        </Text>
+        <Text>
+          I am currently looking for my next challenge and am specifically
+          interested in
+          <strong> Remote-first roles </strong> or
+          <strong> Relocation-friendly </strong>
+          Frontend Engineering opportunities where UI excellence is a
+          priority.
+        </Text>
+
+        <ButtonGroup>
+          <Button
+            href="mailto:timtjoe@gmail.com"
+            target="_blank"
+            $primary
+            style={{
+              backgroundColor: "#0085ff",
+              color: "#fff",
+              border: "none",
+            }}
+          >
+            <Briefcase size={16} />
+            Hire Me
+          </Button>
+
+          {/* <Button href="https://wa.me/+231770934646" target="_blank">
+            <MessageCircle size={16} />
+            WhatsApp
+          </Button> */}
+
+          <Button href="https://github.com/timtjoe" target="_blank">
+            <Github size={16} />
+            GitHub
+          </Button>
+        </ButtonGroup>
+      </Card>
+
+      <Footer />
+    </Content>
+  );
+};
+
+// --- Desktop Sidebar Container ---
+export const Sidebar = () => {
+  return (
     <Container>
-      <Content>
-        <Card>
-          <Title>Seeking Work</Title>
-          <Text>
-            I built this project to demonstrate full-stack expertise for the
-            <strong> Hacker News "Who wants to be hired"</strong> thread.
-          </Text>
-          <Text>
-            Inspired by Dan Abramov's dive into <em>atproto</em>, this platform
-            aims to be the central discovery hub for the decentralized web.
-          </Text>
-          <ButtonGroup>
-            <Button href="https://github.com/timtjoe" target="_blank" $primary>
-              <Briefcase size={16} />
-              Hire Me
-            </Button>
-            {/* <Button href="https://ko-fi.com" target="_blank">
-              <Heart size={16} fill="currentColor" />
-              Support project
-            </Button> */}
-          </ButtonGroup>
-        </Card>
-
-        <Card>
-          <Title>Protocol FAQ</Title>
-          <Accordion>
-            {faqs.map((faq, i) => (
-              <FaqItem key={i}>
-                <FaqHeader onClick={() => setOpenFaq(openFaq === i ? null : i)}>
-                  <span>{faq.q}</span>
-                  <ChevronIcon $isOpen={openFaq === i} size={14} />
-                </FaqHeader>
-                {openFaq === i && <FaqBody>{faq.a}</FaqBody>}
-              </FaqItem>
-            ))}
-          </Accordion>
-        </Card>
-
-        {/* <Card>
-          <Title>The Way Forward</Title>
-          <List>
-            {roadmap.map((item, idx) => (
-              <RoadmapItem key={idx} $done={item.done}>
-                {item.done ? (
-                  <CheckCircle2 size={14} color="var(--text-blue)" />
-                ) : (
-                  <Circle size={14} />
-                )}
-                <span>{item.task}</span>
-              </RoadmapItem>
-            ))}
-          </List>
-        </Card> */}
-
-        {/* Main footer */}
-        <Footer />
-      </Content>
+      <SidebarContent />
     </Container>
   );
 };
@@ -96,20 +110,10 @@ const Container = styled.aside`
 
 const Content = styled.div`
   flex: 1;
-  overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: var(--spacing-md);
   padding-bottom: 120px;
-
-  &::-webkit-scrollbar {
-    width: 4px;
-  }
-  &::-webkit-scrollbar-thumb {
-    background: var(--border-subtle);
-    border-radius: 10px;
-  }
-  scrollbar-width: thin;
 `;
 
 const Card = styled.div`
@@ -139,50 +143,18 @@ const Text = styled.p`
 
 const ButtonGroup = styled.div`
   display: flex;
-  flex-direction: column;
-  gap: 8px;
+  flex-direction: row;
+  gap: var(--spacing-xs);
   margin-top: 4px;
+  /* justify-content: center; */
+  flex-wrap: wrap;
 `;
 
-const Button = styled.a<{ $primary?: boolean }>`
+const Button = styled(LinkButton)<{ $primary?: boolean }>`
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  background: ${(props) =>
-    props.$primary ? "var(--text-bold)" : "transparent"};
-  color: ${(props) =>
-    props.$primary ? "var(--bg-white)" : "var(--text-bold)"};
-  border: 1px solid var(--text-bold);
-  padding: 10px;
-  border-radius: 30px;
-  font-weight: 700;
-  font-size: var(--font-sm);
-  text-decoration: none;
-  transition: all 0.2s ease;
-
-  &:hover {
-    background: var(--text-bold);
-    color: var(--bg-white);
-  }
-`;
-
-const List = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-`;
-
-const RoadmapItem = styled.div<{ $done?: boolean }>`
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 13px;
-  color: ${(props) => (props.$done ? "var(--text-muted)" : "var(--text-main)")};
-  text-decoration: ${(props) => (props.$done ? "line-through" : "none")};
-  svg {
-    flex-shrink: 0;
-  }
 `;
 
 const Accordion = styled.div`
@@ -210,10 +182,6 @@ const FaqHeader = styled.button`
   border: none;
   cursor: pointer;
   line-height: 1.3;
-
-  &:hover {
-    color: var(--text-blue);
-  }
 `;
 
 const FaqBody = styled.div`

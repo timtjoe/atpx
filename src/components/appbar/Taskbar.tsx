@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
-// import { User } from "lucide-react";
 import { Icons } from "@components/icons";
-import { TASKBAR_PRIMARY, TASKBAR_SECONDARY } from "@constants";
+import { Sidebar } from "./Sidebar"; // Import your existing Sidebar
+import { SidebarContent } from "./Sidebar";
 import { AppDrawer } from "./AppDrawer";
+import { Info } from "lucide-react";
 
 export const Taskbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -12,35 +13,23 @@ export const Taskbar = () => {
   return (
     <Container>
       <BarRow>
-        {TASKBAR_PRIMARY.map((item) => (
-          <TabLink key={item.id} to={item.uri} onClick={() => setIsOpen(false)}>
-            <item.icon size={26} strokeWidth={2} />
-          </TabLink>
-        ))}
+        {/* Tab 1: Home */}
+        <TabLink to="/" onClick={() => setIsOpen(false)}>
+          <Icons.home size={26} strokeWidth={2} />
+        </TabLink>
 
         <AppDrawer
           open={isOpen}
           onOpenChange={setIsOpen}
           trigger={
-            <ProfileTrigger $active={isOpen} aria-label="Menu">
-              <Icons.user size={26} strokeWidth={2} />
+            <ProfileTrigger $active={isOpen} aria-label="Information">
+              <Info size={26} strokeWidth={2} />
             </ProfileTrigger>
           }
         >
-          <DrawerContent>
-            <DrawerList>
-              {TASKBAR_SECONDARY.map((item) => (
-                <DrawerItem
-                  key={item.id}
-                  to={item.uri}
-                  onClick={() => setIsOpen(false)}
-                >
-                  <item.icon size={22} />
-                  <span>{item.label}</span>
-                </DrawerItem>
-              ))}
-            </DrawerList>
-          </DrawerContent>
+          <div style={{ padding: "0 16px 40px" }}>
+            <SidebarContent />
+          </div>
         </AppDrawer>
       </BarRow>
     </Container>
@@ -58,7 +47,7 @@ const Container = styled.nav`
   background: var(--bg-page-alpha, rgba(255, 255, 255, 0.9));
   backdrop-filter: blur(15px) saturate(160%);
   border-top: 1px solid var(--border-subtle);
-  padding-bottom: env(safe-area-inset-bottom); /* iOS support */
+  padding-bottom: env(safe-area-inset-bottom);
 `;
 
 const BarRow = styled.div`
@@ -93,42 +82,20 @@ const ProfileTrigger = styled.div<{ $active: boolean }>`
   height: 100%;
   cursor: pointer;
   transition: color 0.2s ease;
-
-  &:hover {
-    color: var(--text-bold);
-  }
 `;
 
-const DrawerContent = styled.div`
-  padding: 16px;
-  padding-bottom: 80px;
-  background: var(--bg-page);
-  border-radius: 24px 24px 0 0;
-`;
-
-const DrawerList = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-`;
-
-const DrawerItem = styled(NavLink)`
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  text-decoration: none;
-  color: var(--text-main);
-  font-weight: 600;
-  padding: 16px;
-  border-radius: 12px;
-  transition: background 0.2s;
-
-  &:active {
-    background: var(--bg-soft);
+/**
+ * This wrapper ensures the Sidebar looks correct inside a mobile drawer
+ * by overriding any desktop-only fixed widths or borders.
+ */
+const DrawerSidebarWrapper = styled.div`
+  /* Ensure the sidebar takes full width of the drawer content */
+  aside {
+    width: 100% !important;
+    border-right: none !important;
+    padding: 0;
   }
 
-  &.active {
-    color: var(--text-bold);
-    background: var(--bg-soft);
-  }
+  /* Make sure the "Seeking Work" card within the sidebar has room */
+  padding: 0 var(--spacing-md) 40px;
 `;

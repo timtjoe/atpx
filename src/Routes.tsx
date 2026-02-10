@@ -1,6 +1,6 @@
 import { HomePage, TrendPage } from "@pages";
 import { Root } from "@components";
-import { CommunityPage, CommunityRoutes } from "@pages/community";
+import { CommunityRoutes } from "@pages/community";
 
 /**
  * Main application routing configuration.

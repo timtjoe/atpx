@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Outlet, useMatches, UIMatch } from "react-router-dom";
-import { Taskbar, Sidebar, Toolbar } from "@components";
+import {
+  Taskbar,
+  Sidebar,
+  Toolbar,
+  ErrorBoundary,
+  TechnicalError,
+} from "@components";
 import { RouteHandle, NavConfig, RootContextType } from "@types";
 import { HOME_TABS } from "@constants/navigation";
 
@@ -45,7 +51,11 @@ export const Root = (): React.JSX.Element => {
       <Sidebar />
 
       <MobileWrap>
-        <Taskbar />
+        <ErrorBoundary
+          fallback={<TechnicalError message="Navigation failed to load." />}
+        >
+          <Taskbar />
+        </ErrorBoundary>
       </MobileWrap>
     </Body>
   );
