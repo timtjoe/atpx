@@ -42,21 +42,29 @@ export const TrendPage = (): React.JSX.Element => {
     fetchData();
   }, [id]);
 
-  const mapToPostCardData = (p: Post): IPost => ({
-    uri: p.uri,
-    cid: p.cid || "",
-    authorHandle: p.author.handle,
-    authorName: p.author.displayName || p.author.handle,
-    authorAvatar: p.author.avatar,
+const mapToPostCardData = (p: Post): IPost => {
+  // Explicitly cast numbers to ensure they aren't treated as unknown
+  const likes = Number(p.likeCount || 0);
+  const reposts = Number(p.repostCount || 0);
+  const replies = Number(p.replyCount || 0);
+  
+  return {
+    uri: String(p.uri),
+    cid: String(p.cid || ""),
+    authorHandle: String(p.author.handle || ""),
+    authorName: String(p.author.displayName || p.author.handle || ""),
+    authorAvatar: p.author.avatar ? String(p.author.avatar) : undefined,
     profileUrl: `https://bsky.app/profile/${p.author.handle}`,
-    content: p.record?.text || p.content || "",
-    createdAt: p.indexedAt || new Date().toISOString(),
-    postUrl: p.url || `https://bsky.app/profile/${p.author.handle}/post/${p.uri.split("/").pop()}`,
-    likes: p.likeCount || 0,
-    reposts: p.repostCount || 0,
-    replies: p.replyCount || 0,
-    source: topic?.source || "bsky",
-  });
+    content: String(p.record?.text || p.content || ""),
+    createdAt: String(p.indexedAt || new Date().toISOString()),
+    postUrl: p.url || `https://bsky.app/profile/${p.author.handle}/post/${String(p.uri).split("/").pop()}`,
+    likes,
+    reposts,
+    replies,
+    engagement: likes + reposts + replies,
+    source: (topic?.source || "bsky") as "bsky" | "mastodon",
+  };
+};
 
   const mapActorToPerson = (actor: Actor): Person => ({
     uri: String(actor.id),
