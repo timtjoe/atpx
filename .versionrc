@@ -14,5 +14,8 @@
   "header": "# Changelog\n\nAll notable changes to this project will be documented in this file.",
   "commitUrlFormat": "https://github.com/timtjoe/{{repository}}/commit/{{hash}}",
   "compareUrlFormat": "https://github.com/timtjoe/{{repository}}/compare/{{previousTag}}...{{currentTag}}",
-  "releaseCommitMessageFormat": "chore(release): {{currentTag}}"
+  "releaseCommitMessageFormat": "chore(release): {{currentTag}}",
+  "scripts": {
+    "posttag": "git push --follow-tags origin main"
+  }
 }

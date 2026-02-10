@@ -21,8 +21,9 @@
     "type:check": "tsc --noEmit",
     "pre:commit": "bun run type:check && bun run build",
     "release": "standard-version",
-    "release:minor": "standard-version --release-as minor",
-    "release:patch": "standard-version --release-as patch"
+    "patch": "standard-version --release-as patch",
+    "minor": "standard-version --release-as minor",
+    "major": "standard-version --release-as major"
   },
   "devDependencies": {
     "@types/bun": "^1.3.8",
