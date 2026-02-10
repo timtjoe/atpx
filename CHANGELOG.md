@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.6](https://github.com/timtjoe/atpx/compare/v0.0.5...v0.0.6) (2026-02-10)
+
+
+### Features
+
+* Add community routes handler ([23be2f2](https://github.com/timtjoe/atpx/commit/23be2f27f687612c2ed396b3e36abb96229a4a4c))
+
+
+### Bug Fixes
+
+* Single post card layout. ([f5a9610](https://github.com/timtjoe/atpx/commit/f5a96103fa780de3c16163d84beec37ed076c347))
+* sync skeleton loaders ([15d0a41](https://github.com/timtjoe/atpx/commit/15d0a41d4ef055caf32f6e3482649412fad1557e))
+
 ### [0.0.5](https://github.com/timtjoe/atpx/compare/v0.0.4...v0.0.5) (2026-02-09)
 
 
