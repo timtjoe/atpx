@@ -1,38 +1,54 @@
 import React from "react";
 import styled, { keyframes } from "styled-components";
 
+/* --- Animations --- */
+const shimmer = keyframes`
+  0% { background-position: -468px 0; }
+  100% { background-position: 468px 0; }
+`;
+
+/* --- Reusable Skeleton Primitive --- */
+const SkeletonBase = styled.div<{ $width?: string; $height?: string; $radius?: string }>`
+  width: ${props => props.$width || "100%"};
+  height: ${props => props.$height || "20px"};
+  border-radius: ${props => props.$radius || "var(--radius-xs)"};
+  background: linear-gradient(
+    to right, 
+    var(--bg-grey) 8%, 
+    var(--border-subtle) 18%, 
+    var(--bg-grey) 33%
+  );
+  background-size: 800px 104px;
+  animation: ${shimmer} 1.5s linear infinite forwards;
+`;
+
 export const Treleton = (): React.JSX.Element => (
   <Frame>
-    <Header />
+    <HeaderSection>
+      <SkeletonBase $width="150px" $height="24px" />
+    </HeaderSection>
     <Grid>
       {Array.from({ length: 12 }).map((_, i) => (
         <Item key={i}>
-          <div className="head" />
-          <div className="body" />
+          <SkeletonBase $width="80%" $height="12px" $radius="2px" />
+          <SkeletonBase $width="50%" $height="10px" $radius="2px" />
         </Item>
       ))}
     </Grid>
   </Frame>
 );
 
-const shimmer = keyframes`
-  0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; }
-`;
+/* --- Styled Components --- */
 
 const Frame = styled.div`
   max-width: 100%;
   min-height: 33px;
   background-color: var(--bg-soft);
   padding: var(--spacing-md);
-  animation: ${shimmer} 1.5s infinite;
 `;
 
-const Header = styled.div`
-  height: 24px;
-  width: 150px;
-  background: var(--border-subtle);
+const HeaderSection = styled.div`
   margin-bottom: var(--spacing-lg);
-  border-radius: var(--radius-xs);
 `;
 
 const Grid = styled.div`
@@ -46,16 +62,4 @@ const Item = styled.div`
   display: flex;
   flex-direction: column;
   gap: 8px;
-  .head {
-    height: 12px;
-    width: 80%;
-    background: var(--border-subtle);
-    border-radius: 2px;
-  }
-  .body {
-    height: 10px;
-    width: 50%;
-    background: var(--border-light);
-    border-radius: 2px;
-  }
 `;

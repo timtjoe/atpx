@@ -2,32 +2,26 @@ import React from "react";
 import styled, { keyframes } from "styled-components";
 
 /* --- Animations --- */
+/* Identical to Peoleton for visual sync */
 const shimmer = keyframes`
   0% { background-position: -468px 0; }
   100% { background-position: 468px 0; }
 `;
 
 /* --- Reusable Skeleton Primitive --- */
-const SkeletonBase = styled.div<{
-  $width?: string;
-  $height?: string;
-  $radius?: string;
-}>`
-  width: ${(props) => props.$width || "100%"};
-  height: ${(props) => props.$height || "20px"};
-  border-radius: ${(props) => props.$radius || "var(--radius-md)"};
-  
-  /* UPDATED: Higher contrast gradient to stand out against var(--bg-grey) */
+/* Borrowed exactly from your Peoleton logic */
+const SkeletonBase = styled.div<{ $width?: string; $height?: string; $radius?: string }>`
+  width: ${props => props.$width || "100%"};
+  height: ${props => props.$height || "20px"};
+  border-radius: ${props => props.$radius || "var(--radius-xs)"};
   background: linear-gradient(
-    to right,
-    var(--border-subtle) 8%,
-    var(--bg-soft) 18%,
-    var(--border-subtle) 33%
+    to right, 
+    var(--bg-grey) 8%, 
+    var(--border-subtle) 18%, 
+    var(--bg-grey) 33%
   );
   background-size: 800px 104px;
   animation: ${shimmer} 1.5s linear infinite forwards;
-  position: relative;
-  overflow: hidden;
 `;
 
 export const Comleton = () => (
@@ -39,7 +33,7 @@ export const Comleton = () => (
     <ListContainer>
       {[1, 2, 3, 4].map((i) => (
         <SkeletonCard key={i}>
-          {/* Banner Placeholder */}
+          {/* Banner Placeholder using SkeletonBase */}
           <SkeletonBase $height="115px" $radius="0" />
 
           <SkeletonBody>
@@ -94,8 +88,7 @@ const SkeletonCard = styled.div`
   height: 250px;
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-lg);
-  /* The Card background */
-  background: var(--border-subtle); 
+  background: var(--bg-white); 
   display: flex;
   flex-direction: column;
   overflow: hidden;
