@@ -1,0 +1,18 @@
+{
+  "types": [
+    { "type": "feat", "section": "Features", "bump": "minor" },
+    { "type": "fix", "section": "Bug Fixes", "bump": "patch" },
+    { "type": "perf", "section": "Performance Improvements", "bump": "patch" },
+    { "type": "refactor", "section": "Code Refactoring", "bump": "patch" },
+    { "type": "docs", "section": "Documentation", "bump": "patch" },
+    { "type": "build", "section": "Build System", "bump": "patch" },
+    { "type": "ci", "section": "Continuous Integration", "hidden": true },
+    { "type": "chore", "hidden": true },
+    { "type": "test", "hidden": true },
+    { "type": "style", "hidden": true }
+  ],
+  "header": "# Changelog\n\nAll notable changes to this project will be documented in this file.",
+  "commitUrlFormat": "https://github.com/timtjoe/{{repository}}/commit/{{hash}}",
+  "compareUrlFormat": "https://github.com/timtjoe/{{repository}}/compare/{{previousTag}}...{{currentTag}}",
+  "releaseCommitMessageFormat": "chore(release): {{currentTag}}"
+}

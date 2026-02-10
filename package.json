@@ -1,14 +1,28 @@
 {
   "name": "atprotosy",
-  "private": true,
   "version": "0.0.8",
+  "description": "A high-performance discovery hub and analytics suite for the AT Protocol and Fediverse ecosystem.",
   "type": "module",
+  "private": true,
+  "author": "Tim T. Joe (https://github.com/timtjoe)",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/timtjoe/atprotosy.git"
+  },
+  "bugs": {
+    "url": "https://github.com/timtjoe/atprotosy/issues"
+  },
+  "homepage": "https://timtjoe.github.io/atpx/",
   "scripts": {
     "dev": "vite --host",
     "build": "tsc && vite build",
     "preview": "vite preview",
     "type:check": "tsc --noEmit",
-    "pre:commit": "bun run type:check && bun run build"
+    "pre:commit": "bun run type:check && bun run build",
+    "release": "standard-version",
+    "release:minor": "standard-version --release-as minor",
+    "release:patch": "standard-version --release-as patch"
   },
   "devDependencies": {
     "@types/bun": "^1.3.8",
@@ -16,6 +30,7 @@
     "@types/react": "^19.2.11",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.3",
+    "standard-version": "^9.5.0",
     "typescript": "^5.9.3",
     "vite": "^7.3.1",
     "vite-tsconfig-paths": "^6.0.5"
