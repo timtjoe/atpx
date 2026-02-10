@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.7](https://github.com/timtjoe/atpx/compare/v0.0.6...v0.0.7) (2026-02-10)
+
+
+### Features
+
+* Add routes for toolbar ([d3493b3](https://github.com/timtjoe/atpx/commit/d3493b397d083ce648c6ad322a194fcc14e1eb02))
+
+
+### Bug Fixes
+
+* Updated taskbar content ([0443920](https://github.com/timtjoe/atpx/commit/0443920a4b86f8c077f7d73a2b46c6d6e774e072))
+
 ### [0.0.6](https://github.com/timtjoe/atpx/compare/v0.0.5...v0.0.6) (2026-02-10)
 
 
